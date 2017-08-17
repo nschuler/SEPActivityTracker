@@ -25,7 +25,7 @@ const app = express();
 const users = require('./routes/users'); // Contains our User Routes
 
 // PORT Number
-const port = 3000;
+const port = process.env.PORT || 8080;
 
 // CORS Middleware
 app.use(cors()); // Alows us to make a request to our API with a different domain name
@@ -47,6 +47,10 @@ app.use('/users', users); // Use /users for all our user routes
 // Index Route
 app.get('/', (req, res) => {
   res.send('GET request to the homepage');
+});
+
+app.get('*', () => {
+	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 // Start Server
