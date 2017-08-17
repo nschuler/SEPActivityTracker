@@ -1,4 +1,4 @@
 module.exports = {
-	database: 'mongodb://localhost:27017/activitytracker',
+	database: 'mongodb://root:Ab123456@ds139791.mlab.com:39791/activitytracker',
 	secret: 'oursecret'
 }
