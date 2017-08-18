@@ -4,20 +4,39 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const passport = require('passport');
 const mongoose = require('mongoose');
+const mysql = require('mysql');
 const config = require('./config/database');
 
-
+// FOR MONGODB
 // Connect to Database
-mongoose.connect(config.database, {useMongoClient: true});
+// mongoose.connect(config.database, {useMongoClient: true});
 
-// On Connection
-mongoose.connection.on('connected', () => {
-	console.log('Connected to database '+config.database);
+// // On Connection
+// mongoose.connection.on('connected', () => {
+// 	console.log('Connected to database '+config.database);
+// });
+
+// // On Error
+// mongoose.connection.on('error', (err) => {
+// 	console.log('Database error: '+err);
+// });
+
+// FOR MYSQL
+// Create Connection
+const connection = mysql.createConnection({
+	host		: config.host,
+	user		: config.user,
+	password	: config.password,
+	database	: config.database
 });
 
-// On Error
-mongoose.connection.on('error', (err) => {
-	console.log('Database error: '+err);
+// Connect to Database
+connection.connect((err) => {
+	if (err) {
+	    console.error('MySQL Error connecting: ' + err.stack);
+	    return;
+  	}
+	console.log('MySQL Database Connected...');
 });
 
 const app = express();
