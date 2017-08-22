@@ -1,8 +1,7 @@
 module.exports = {
-	database: 'mongodb://root:Ab123456@ds139791.mlab.com:39791/activitytracker',
 	secret: 'oursecret',
-	host: 'localhost',
-	user: 'root',
-	password:'',
+	host: '35.202.122.174',
+	user: 'activitytracker',
+	password:'2<6p~X2%C=)D%qY-',
 	database:'activitytracker'
 }

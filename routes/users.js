@@ -4,17 +4,11 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
-const User = require('../models/user')
+var User = require('../models/user')
 
 // Register 
 router.post('/register', (req, res, next) => {
-	let newUser = new User({
-		name: req.body.name,
-		email: req.body.email,
-		username: req.body.username,
-		password: req.body.password
-	});
-
+	let newUser = new User(req.body.name, req.body.email, req.body.username, req.body.password);
 	User.addUser(newUser, (err, user) => {
 		if(err){
 			res.json({success: false, msg:'Failed to register user'});
@@ -31,25 +25,25 @@ router.post('/authenticate', (req, res, next) => {
 
 	User.getUserByUsername(username, (err, user) => {
 		if(err) throw err;
-		if (!user){
+		if (user.length == 0){
 			return res.json({success:false, msg: "User not found"});
 		}
 
-		User.comparePassword(password, user.password, (err, isMatch) => {
+		User.comparePassword(password, user[0].password, (err, isMatch) => {
 			if(err) throw err;
 			if (isMatch){
-				const token = jwt.sign(user, config.secret, {
-					expiresIn: 604800 // A week
+				const token = jwt.sign(user[0], config.secret, {
+					expiresIn: 1800 // 30 mins
 				});
 
 				res.json({
 					success: true,
 					token: 'Bearer '+token,
 					user: {
-						id: user._id,
-						name: user.name,
-						username: user.username,
-						email: user.email
+						id: user[0].id,
+						name: user[0].name,
+						username: user[0].username,
+						email: user[0].email
 					}
 				})
 			} else {
@@ -61,7 +55,7 @@ router.post('/authenticate', (req, res, next) => {
 
 // Profile 
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	res.json({user: req.user})
+	res.json({user: req.user[0]})
 });
 
 

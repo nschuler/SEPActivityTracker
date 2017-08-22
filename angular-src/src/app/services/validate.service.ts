@@ -11,7 +11,6 @@ export class ValidateService {
     } else if (user.name.length < 1 || user.email.length < 1 || user.username.length < 1 || user.password.length < 1) {
       return false;
   	} else {
-      console.log(user.username);
   		return true;
   	}
   }
