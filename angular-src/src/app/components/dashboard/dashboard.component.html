@@ -1,2 +1,52 @@
-<h2 class="page-header">Dashboard</h2>
-<p>Welcome to your dashboard</p>
+<md-toolbar color="primary">
+  <span>Room Selector</span>
+  <span class="spacer"></span>
+  <button md-icon-button [mdMenuTriggerFor]="menu">
+    <md-icon>more_vert</md-icon>
+  </button>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item>
+      <md-icon>fingerprint</md-icon>
+      <span>Login</span>
+    </button>
+    <button md-menu-item disabled>
+      <md-icon>announcement</md-icon>
+      <span>Issues</span>
+    </button>
+    <button md-menu-item>
+      <md-icon>notifications_off</md-icon>
+      <span>Disable Alerts</span>
+    </button>
+  </md-menu>
+</md-toolbar>
+
+<md-tab-group>
+  <md-tab label="Room1">
+    <a (click)="getDataObservable()" md-button>Room1</a>
+  </md-tab>
+  <md-tab label="Room2">
+    <a (click)="getDataObservable()" md-button>Room2</a>
+  </md-tab>
+  <md-tab label="Room3">
+    <a (click)="getDataObservable()" md-button>Room3</a>
+  </md-tab>
+  <md-tab label="Room4">
+    <a (click)="getDataObservable()" md-button>Room4</a>
+  </md-tab>
+  <md-tab label="Room5">
+    <a (click)="getDataObservable()" md-button>Room5</a>
+  </md-tab>
+  <md-tab label="Room6">
+    <a (click)="getDataObservable()" md-button>Room6</a>
+  </md-tab>
+  <md-tab label="Room7">
+    <a (click)="getDataObservable()" md-button>Room7</a>
+  </md-tab>
+  <md-tab label="Room8">
+    <a (click)="getDataObservable()" md-button>Room8</a>
+  </md-tab>
+  <md-tab label="Room9">
+    <a (click)="getDataObservable()" md-button>Room9</a>
+  </md-tab>
+</md-tab-group>
+

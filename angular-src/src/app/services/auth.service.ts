@@ -25,8 +25,8 @@ export class AuthService {
   }
 
   getProfile(){
-	let headers = new Headers();
-	this.loadToken(); // Grab auth token from local storage
+	  let headers = new Headers();
+	  this.loadToken(); // Grab auth token from local storage
 
   	headers.append('Content-Type', 'application/json');
   	headers.append('Authorization', this.authToken);

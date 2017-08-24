@@ -7,20 +7,6 @@ const mongoose = require('mongoose');
 // const mysql = require('mysql');
 const config = require('./config/database');
 
-// FOR MONGODB
-//Connect to Database
-// mongoose.connect(config.database, {useMongoClient: true});
-
-// // On Connection
-// mongoose.connection.on('connected', () => {
-// 	console.log('Connected to database '+config.database);
-// });
-
-// // On Error
-// mongoose.connection.on('error', (err) => {
-// 	console.log('Database error: '+err);
-// });
-
 
 const app = express();
 
