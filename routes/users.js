@@ -8,12 +8,23 @@ var User = require('../models/user')
 
 // Register 
 router.post('/register', (req, res, next) => {
-	let newUser = new User(req.body.name, req.body.email, req.body.username, req.body.password);
-	User.addUser(newUser, (err, user) => {
-		if(err){
-			res.json({success: false, msg:'Failed to register user'});
+	let newUser = new User(req.body.username, req.body.password, req.body.first_name, req.body.last_name, req.body.email, req.body.mobile, req.body.dob);
+
+	// Check that there isnt an existing user with the same username
+	User.getUserByUsername(req.body.username, (err,user) => {
+		if(err) throw err;
+		if(user.length == 0){
+			// Add User
+			User.addUser(newUser, (err, user) => {
+				if(err){
+					console.log(err);
+					res.json({success: false, msg:'Failed to register user'});
+				} else {
+					res.json({success: true, msg:'User Registered'});
+				}
+			});
 		} else {
-			res.json({success: true, msg:'User Registered'});
+			res.json({success: false, msg:'Username Taken'});
 		}
 	});
 });
@@ -41,16 +52,18 @@ router.post('/authenticate', (req, res, next) => {
 					token: 'Bearer '+token,
 					user: {
 						id: user[0].id,
-						name: user[0].name,
+						first_name: user[0].first_name,
+						last_name: user[0].last_name,
 						username: user[0].username,
-						email: user[0].email
+						email: user[0].email,
+						mobile: user[0].mobile
 					}
-				})
+				});
 			} else {
 				return res.json({success:false, msg: "Wrong Password"});
 			}
 		});
-	})
+	});
 });
 
 // Profile 
