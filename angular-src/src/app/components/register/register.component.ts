@@ -11,9 +11,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  name: String;
+  first_name: String;
+  last_name: String;
   username: String;
   email: String;
+  mobile: String;
   password: String;
 
   // Any time we inject a service into a component we need to add it to the constructor
@@ -29,8 +31,10 @@ export class RegisterComponent implements OnInit {
 
   onRegisterSubmit(){
   	const user = {
-  		name: this.name,
+  		first_name: this.first_name,
+      last_name: this.last_name,
   		email: this.email,
+      mobile: this.mobile,
   		username: this.username,
   		password: this.password
   	}
@@ -54,7 +58,7 @@ export class RegisterComponent implements OnInit {
   			this.flashMessage.show('You are now registered and can log in', {cssClass:'alert-success', timeout:3000});
   			this.router.navigate(['/login'])
   		} else {
-  			this.flashMessage.show('Something went wrong', {cssClass:'alert-danger', timeout:3000});
+        this.flashMessage.show(data.msg, {cssClass:'alert-danger', timeout:3000});
   			this.router.navigate(['/register'])
   		}
   	});
