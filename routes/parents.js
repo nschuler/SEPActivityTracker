@@ -16,10 +16,9 @@ router.get('/family', passport.authenticate('jwt', {session:false}), (req, res, 
 	// Using req.user[0].id check get children
 	Parent.getFamily(req.user[0].id, (err, data) => {
 		if(err){
-			console.log(err);
-			res.json({success: false, msg:'Failed to get children'});
+			res.json({success: false, msg:'Request Failed'});
 		} else {
-			res.json({success: true, msg:'Children data', family:data});
+			res.json({success: true, msg:'Family data', family:data});
 		}
 	});
 });
