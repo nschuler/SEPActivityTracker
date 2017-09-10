@@ -18,9 +18,11 @@ import { TimetableComponent } from './components/timetable/timetable.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
+import { ParentService } from './services/parent.service';
+import { EducatorService } from './services/educator.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
-import { ParentService } from './services/parent.service';
+
 
 
 const appRoutes: Routes = [
@@ -52,7 +54,7 @@ const appRoutes: Routes = [
     MaterialModule,
     BrowserAnimationsModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, ParentService],
+  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
