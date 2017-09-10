@@ -71,9 +71,4 @@ router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res,
 	res.json({user: req.user[0]})
 });
 
-// Timetable
-router.get('/timetable', (req, res, next) => {
-	res.json({msg: "Timetable will go here!"});
-});
-
 module.exports = router;
