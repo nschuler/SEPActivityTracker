@@ -14,11 +14,15 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { TimetableComponent } from './components/timetable/timetable.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
+import { ParentService } from './services/parent.service';
+import { EducatorService } from './services/educator.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
+
 
 
 const appRoutes: Routes = [
@@ -27,6 +31,7 @@ const appRoutes: Routes = [
 	{path:'login', component:LoginComponent},
 	{path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
 	{path:'profile', component:ProfileComponent, canActivate:[AuthGuard]},
+  {path:'timetable', component:TimetableComponent}
 ]
 
 @NgModule({
@@ -37,7 +42,8 @@ const appRoutes: Routes = [
     RegisterComponent,
     HomeComponent,
     DashboardComponent,
-    ProfileComponent
+    ProfileComponent,
+    TimetableComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +55,7 @@ const appRoutes: Routes = [
     MaterialModule,
     BrowserAnimationsModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
