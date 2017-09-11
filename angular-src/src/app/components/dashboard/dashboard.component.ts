@@ -3,7 +3,7 @@ import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule, MdButtonModule, MdGrid
 import {FormControl} from '@angular/forms';
 import { Http } from '@angular/http';
 import { FlashMessagesService } from 'angular2-flash-messages';
-
+import { EducatorService } from '../../services/educator.service';
 
 import 'rxjs/add/operator/startWith';
 
@@ -24,18 +24,12 @@ export class DashboardComponent implements OnInit {
   childrenCtrl: FormControl;
   filteredChildren: any;
 
-  allChildren = [
-    'Corey Stidston',
-    'Nicholas Schuler',
-    'Alan Bootheeeee',
-    'Chris Kerdad',
-    'Isaac the Rich Man',
-    'Tex the bad Handshaker'
-  ];
+  allChildren = [];
 
   constructor(
     private http: Http, 
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private educatorService: EducatorService
     ){
     this.childrenCtrl = new FormControl();
     this.filteredChildren = this.childrenCtrl.valueChanges
@@ -46,6 +40,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getRooms();
+    this.getAllChildren();    
   }
 
   getRooms() {
@@ -56,6 +51,18 @@ export class DashboardComponent implements OnInit {
           'content': "The data you are seeing here is for the room with room ID: " + i
         });
     }
+  }
+
+  getAllChildren() {
+    this.educatorService.getChildren().subscribe(data => {
+      for (var i = 0; i < data.children.length; i++) {
+        this.allChildren.push(
+          {
+            'id' : data.children[i].id,
+            'name' : data.children[i].first_name + " " + data.children[i].last_name
+          });
+      }
+    }, err => {console.log(err);});
   }
 
   removeRoom(room) {

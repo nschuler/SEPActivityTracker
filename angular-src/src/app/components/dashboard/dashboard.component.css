@@ -79,3 +79,11 @@ md-sidenav-layout.m2app-dark {
 .purple {
     background: #ff66b8;
 }
+
+.bottom-right {
+    top: auto;
+    right: 20px;
+    bottom: 20px;
+    left: auto;
+    position: fixed;
+}
