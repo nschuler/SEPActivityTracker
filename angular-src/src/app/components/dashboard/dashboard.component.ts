@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   filteredChildren: any;
 
   allChildren = [];
+  enrolledChildren = [];
 
   constructor(
     private http: Http, 
@@ -44,11 +45,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getRooms() {
+    // NEEDS TO PULL FROM DB THIS IS JUST STATIC DATA
     for (var i = 0; i < 5; i++) {
       this.roomsArray.push(
         {
           'title':"Room ID: "+ i,
-          'content': "The data you are seeing here is for the room with room ID: " + i
+          'content': this.enrolledChildren,
+          'activities' : 'Gabbering at Defqon'
         });
     }
   }
@@ -59,7 +62,7 @@ export class DashboardComponent implements OnInit {
         this.allChildren.push(
           {
             'id' : data.children[i].id,
-            'name' : data.children[i].first_name + " " + data.children[i].last_name
+            'name' : data.children[i].id + ". " + data.children[i].first_name + " " + data.children[i].last_name
           });
       }
     }, err => {console.log(err);});
@@ -76,9 +79,12 @@ export class DashboardComponent implements OnInit {
   }
 
   onSelectChange($event: any) {
-    console.log('event => ', $event.tab.textLabel);
+    var room_name = $event.tab.textLabel;
+    console.log('event => ', room_name);
     console.log('index => ', this.roomsArray[$event.index].content);
-    this.roomsArray[$event.index].content = "YOLO : " + $event.index;
+    this.educatorService.getChildrenInRoom(room_name).subscribe(data => {
+      this.roomsArray[$event.index].content = data.children;
+    }, err => {console.log(err);});
   }
 
   filterChildren(val: string) {
