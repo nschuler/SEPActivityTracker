@@ -37,7 +37,14 @@
 			<md-grid-tile class="blue">
 				<div style="padding: 25px; text-align: center;">
 					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Children</h2>
-					<a (click)="getDataObservable(room)" md-button>{{room.content}}</a>
+					<md-list dense>
+						<md-list-item *ngFor="let child of room.content">
+						  <h4>{{ child.first_name }} {{ child.last_name }}</h4>
+						  <button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
+						    <md-icon class="md-24 size-5">clear</md-icon>
+						  </button>
+						</md-list-item>
+					</md-list>
 					<br>
 					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
 
@@ -47,7 +54,7 @@
 						</md-input-container>
 						<md-autocomplete #auto="mdAutocomplete">
 							<md-option *ngFor="let child of filteredChildren | async" [value]="child.name">
-								{{ child.name }}
+								<!-- {{ child.name }} -->
 							</md-option>
 						</md-autocomplete>
 					</form>

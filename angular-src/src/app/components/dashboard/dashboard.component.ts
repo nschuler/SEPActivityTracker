@@ -1,5 +1,5 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule, MdButtonModule, MdGridListModule, MdAutocompleteModule } from '@angular/material';
+import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule, MdButtonModule, MdGridListModule, MdAutocompleteModule, MdIconModule } from '@angular/material';
 import {FormControl} from '@angular/forms';
 import { Http } from '@angular/http';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -72,6 +72,13 @@ export class DashboardComponent implements OnInit {
     var index = this.roomsArray.indexOf(room);
     this.roomsArray.splice(index, 1);
   }
+
+  removeChild(room, child) {
+    var index = room.content.indexOf(child);
+    room.content.splice(index, 1);
+    // CALL FUNCTION TO SET ROOM ID OF CHILD TO NULL IN DATABASE
+  }
+
 
   addRoom(title, description) {
     var view = description || title + " Content View";

@@ -12,7 +12,7 @@ router.get('/allchildren', passport.authenticate('jwt', {session:false}), (req, 
 		if(err){
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Children data', children:data});
+			res.json({success: true, msg:'All Children data', children:data});
 		}
 	});
 });
@@ -25,7 +25,7 @@ router.post('/childrenroom', passport.authenticate('jwt', {session:false}), (req
 		if(err){
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Children data', children:data});
+			res.json({success: true, msg:'Room Children data', children:data});
 		}
 	});
 });

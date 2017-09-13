@@ -87,3 +87,16 @@ md-sidenav-layout.m2app-dark {
     left: auto;
     position: fixed;
 }
+
+.size-16 {
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+md-icon.size-5 {
+  height: 10px;
+  margin-top: -10px;
+  font-size: 20px;
+  margin-left:-4px;
+}
