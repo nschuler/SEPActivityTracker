@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
+import { OrderModule } from 'ngx-order-pipe';
+
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -53,7 +55,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
     MaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    OrderModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService],
   bootstrap: [AppComponent]

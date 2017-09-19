@@ -23,13 +23,13 @@
 
 <md-tab-group (selectChange)="onSelectChange($event)">
 	<md-tab *ngFor="let room of roomsArray" label="{{room.title}}" >
-		<md-grid-list cols="2" rowHeight="1:1">
+		<md-grid-list cols="2" rowHeight="1:1.5">
 			<md-grid-tile class="blue">
 				<div style="padding: 25px; text-align: center;">
 					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Children</h2>
-					<div style="height: 300px; width: 400px; overflow-y: auto">
+					<div style="height: 500px; width: 450px; overflow-y: auto">
 						<md-list dense>
-							<md-list-item *ngFor="let child of room.content">
+							<md-list-item *ngFor="let child of room.content | orderBy: order">
 							  <h4>{{ child.first_name }} {{ child.last_name }}</h4>
 							  <div style="margin-left:auto; margin-right:0;">
 							  <button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
@@ -39,8 +39,9 @@
 							</md-list-item>
 						</md-list>
 					</div>
+					<h5><b>Total Children: {{ room.content.length }}</b></h5>
 					<br>
-					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
+
 
 					<form>
 						<md-input-container style="width:50%; bottom: 0; left:0; right:0; margin:auto; position: absolute;  text-align: center;">
@@ -56,11 +57,22 @@
 				</div>
 			</md-grid-tile>
 			<md-grid-tile class="purple">
-				<div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+				<div style="padding: 25px; text-align: center;">
 					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Activties</h2>
 					<!-- <a (click)="getDataObservable(room)" md-button>{{room.content}}</a> -->
 					<br>
 					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
+
+					<form>
+						<md-input-container style="width:50%; bottom: 0; left:0; right:0; margin:auto; position: absolute;  text-align: center;">
+							<input mdInput placeholder="Activity Name" [disabled]="true" [mdAutocomplete]="auto" [formControl]="childrenCtrl">
+						</md-input-container>
+						<md-autocomplete #auto="mdAutocomplete">
+							<md-option *ngFor="let child of filteredChildren | async" [value]="child.name">
+								{{ child.name }}
+							</md-option>
+						</md-autocomplete>
+					</form>
 				</div>
 			</md-grid-tile>
 		</md-grid-list>

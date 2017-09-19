@@ -19,6 +19,7 @@ import 'rxjs/add/operator/startWith';
 export class DashboardComponent implements OnInit {
   spaceScreens: Array<any>;
   roomsArray = [];
+  order: string = 'last_name';
 
 
   childrenCtrl: FormControl;
