@@ -27,14 +27,18 @@
 			<md-grid-tile class="blue">
 				<div style="padding: 25px; text-align: center;">
 					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Children</h2>
-					<md-list dense>
-						<md-list-item *ngFor="let child of room.content">
-						  <h4>{{ child.first_name }} {{ child.last_name }}</h4>
-						  <button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
-						    <md-icon class="md-24 size-5">clear</md-icon>
-						  </button>
-						</md-list-item>
-					</md-list>
+					<div style="height: 300px; width: 400px; overflow-y: auto">
+						<md-list dense>
+							<md-list-item *ngFor="let child of room.content">
+							  <h4>{{ child.first_name }} {{ child.last_name }}</h4>
+							  <div style="margin-left:auto; margin-right:0;">
+							  <button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
+							    <md-icon class="md-24 size-5">clear</md-icon>
+							  </button>
+							  </div>
+							</md-list-item>
+						</md-list>
+					</div>
 					<br>
 					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
 
