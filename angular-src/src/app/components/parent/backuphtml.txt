@@ -1,0 +1,64 @@
+<html>
+<body>
+
+  <div class = "TopBoys">
+        <div class="Oshell">
+            <div class="BodyShell">
+                <input type="image" src = "picture.jpg" >
+
+            </div>
+            <div class="footerShell">
+              kids name
+            </div>
+        </div>
+        <div class="Oshell">
+            <div class="BodyShell">
+              picture of kid
+            </div>
+            <div class="footerShell">
+              kids name
+            </div>
+        </div>
+
+    <div class="Oshell">
+        <div class="BodyShell">
+          picture of kid
+        </div>
+        <div class="footerShell">
+          kids name
+        </div>
+    </div>
+  </div>
+<div></div>
+
+<div class = "BottomBoys">
+    <div class="Oshell">
+        <div class="BodyShell">
+          picture of kid
+        </div>
+        <div class="footerShell">
+          kids name
+        </div>
+    </div>
+    <div class="Oshell">
+        <div class="BodyShell">
+          picture of kid
+        </div>
+        <div class="footerShell">
+          kids name
+        </div>
+    </div>
+
+<div class="Oshell">
+    <div class="BodyShell">
+      picture of kid
+    </div>
+    <div class="footerShell">
+      kids name
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { ParentService } from '../../services/parent.service';
+import { EducatorService } from '../../services/educator.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-parent',
+  templateUrl: './parent.component.html',
+  styleUrls: ['./parent.component.css']
+})
+export class ParentComponent implements OnInit {
+  childno: number ;
+  //children: Child[];
+
+  constructor(private authService: AuthService, private parentService: ParentService, private educatorService: EducatorService, private router: Router) { }
+
+  ngOnInit() {
+  	this.parentService.getTimetable().subscribe(data => {
+  		console.log(data.msg);
+  	},
+  	err => {
+  		console.log(err);
+  		return false;
+  	});
+
+    this.parentService.getFamily().subscribe(data => {
+      console.log(data.family.children);
+     this.childno = data.family.children.length;
+     //make some kids
+
+    },
+    err => {
+      console.log(err);
+      return false;
+    });
+    /////
+
+  }
+
+  makeChildren(){
+
+
+
+  }
+
+}
+
+class Child {
+  firstName: string;
+  familyName: string;
+  dob: string;
+  address: string;
+  famId: string;
+  childId: string;
+  roomId: string;
+
+  constructor(firstname: string, familyName: string, dob: string, address: string, famId: string, childId: string, roomId: string ) {
+    this.firstName = firstname;
+    this.familyName = familyName;
+    this.dob = dob;
+    this.address =  address;
+    this.childId = childId;
+    this.roomId = roomId;
+
+  }
+
+  sendName (){
+    return this.firstName + " " + this.familyName;
+  }
+
+}
