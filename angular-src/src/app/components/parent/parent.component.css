@@ -1,7 +1,7 @@
 
 div.TopBoys{
-width: 100%;
-height: 100%;
+  margin-top: 10px;
+
 }
 
 div.BottomBoys{
@@ -10,25 +10,16 @@ div.BottomBoys{
   }
 
 div.Oshell{
-  float: left;
+  position:relative;
   border: 2px solid black;
   border-radius: 5px;
  width: 30%;
- height: 300px;
- margin: 30px 10px;
-}
-div.BodyShell a{
-
-display: block;
-
 }
 div.BodyShell{
-  height: 200px;
   text-align: center;
   vertical-align:middle;
 }
 div.footerShell{
-  height: 100px;
   text-align: center;
   vertical-align:bottom;
   border: 2px solid black;

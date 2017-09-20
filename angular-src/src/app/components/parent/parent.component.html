@@ -1,58 +1,18 @@
 <html>
 <body>
-
-  <div class = "TopBoys">
-        <div class="Oshell">
-
-        </div>
+<div class = "TopBoys">
+    <md-list>
+          <md-list-item *ngFor="let child of children">
         <div class="Oshell">
             <div class="BodyShell">
               picture of kid
             </div>
             <div class="footerShell">
-              kids name
+              {{child.firstName}} {{child.familyName}}
             </div>
         </div>
-
-    <div class="Oshell">
-        <div class="BodyShell">
-          picture of kid
-        </div>
-        <div class="footerShell">
-          kids name
-        </div>
-    </div>
+      </md-list-item>
+    </md-list>
   </div>
-<div></div>
-
-<div class = "BottomBoys">
-    <div class="Oshell">
-        <div class="BodyShell">
-          picture of kid
-        </div>
-        <div class="footerShell">
-          kids name
-        </div>
-    </div>
-    <div class="Oshell">
-        <div class="BodyShell">
-          picture of kid
-        </div>
-        <div class="footerShell">
-          kids name
-        </div>
-    </div>
-
-<div class="Oshell">
-    <div class="BodyShell">
-      picture of kid
-    </div>
-    <div class="footerShell">
-      kids name
-    </div>
-</div>
-</div>
-
-
 </body>
 </html>
