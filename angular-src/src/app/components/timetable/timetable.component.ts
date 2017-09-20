@@ -4,14 +4,20 @@ import { ParentService } from '../../services/parent.service';
 import { EducatorService } from '../../services/educator.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-timetable',
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
 export class TimetableComponent implements OnInit {
-
-  constructor(private authService: AuthService, private parentService: ParentService, private educatorService: EducatorService, private router: Router) { }
+  
+  constructor(
+    private authService: AuthService, 
+    private parentService: ParentService, 
+    private educatorService: EducatorService, 
+    private router: Router,
+  ) { }
 
   ngOnInit() {
   	this.parentService.getTimetable().subscribe(data => {

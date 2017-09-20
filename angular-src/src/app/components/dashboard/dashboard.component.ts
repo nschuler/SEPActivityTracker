@@ -4,6 +4,8 @@ import {FormControl} from '@angular/forms';
 import { Http } from '@angular/http';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { EducatorService } from '../../services/educator.service';
+import { DndModule } from 'ng2-dnd';
+
 
 import 'rxjs/add/operator/startWith';
 
@@ -40,6 +42,23 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  // BELOW FOR DRAG AND DROP
+  sourceList: Widget[] = [
+        new Widget('1'), new Widget('2'),
+        new Widget('3'), new Widget('4'),
+        new Widget('5'), new Widget('6')
+    ];
+    listActivities: Array<string> = ['Painting', 'Counting', 'Nappy Change', 'Breakfast', 'Building Sand Castles', 'Ball Games'];
+
+    targetList: Widget[] = [];
+    addTo($event: any) {
+        this.targetList.push($event.dragData);
+    }
+  // ABOVE FOR DRAG AND DROP
+
+
+
+
   ngOnInit() {
     this.getRooms();
     this.getAllChildren();    
@@ -52,7 +71,7 @@ export class DashboardComponent implements OnInit {
         {
           'title':"Room ID: "+ i,
           'content': this.enrolledChildren,
-          'activities' : 'Gabbering at Defqon'
+          'activities' : []
         });
     }
   }
@@ -99,4 +118,8 @@ export class DashboardComponent implements OnInit {
     return val ? this.allChildren.filter(s => new RegExp(`^${val}`, 'gi').test(s))
                : this.allChildren;
   }
+}
+
+class Widget {
+  constructor(public name: string) {}
 }

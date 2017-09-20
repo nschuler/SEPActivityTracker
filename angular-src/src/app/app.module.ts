@@ -7,6 +7,7 @@ import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { OrderModule } from 'ngx-order-pipe';
+import { DndModule } from 'ng2-dnd';
 
 
 import { AppComponent } from './app.component';
@@ -56,9 +57,10 @@ const appRoutes: Routes = [
     FlashMessagesModule,
     MaterialModule,
     BrowserAnimationsModule,
-    OrderModule
+    OrderModule,
+    DndModule.forRoot()
   ],
-  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService],
+  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

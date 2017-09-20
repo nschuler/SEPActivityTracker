@@ -10,13 +10,9 @@
 			<md-icon>fingerprint</md-icon>
 			<span>Add a Room</span>
 		</button>
-		<button md-menu-item disabled>
-			<md-icon>announcement</md-icon>
-			<span>Issues</span>
-		</button>
 		<button md-menu-item>
-			<md-icon>notifications_off</md-icon>
-			<span>Disable Alerts</span>
+			<md-icon>fingerprint</md-icon>
+			<span>Add a Activity</span>
 		</button>
 	</md-menu>
 </md-toolbar>
@@ -30,12 +26,12 @@
 					<div style="height: 500px; width: 450px; overflow-y: auto">
 						<md-list dense>
 							<md-list-item *ngFor="let child of room.content | orderBy: order">
-							  <h4>{{ child.first_name }} {{ child.last_name }}</h4>
-							  <div style="margin-left:auto; margin-right:0;">
-							  <button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
-							    <md-icon class="md-24 size-5">clear</md-icon>
-							  </button>
-							  </div>
+								<h4>{{ child.first_name }} {{ child.last_name }}</h4>
+								<div style="margin-left:auto; margin-right:0;">
+									<button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
+										<md-icon class="md-24 size-5">clear</md-icon>
+									</button>
+								</div>
 							</md-list-item>
 						</md-list>
 					</div>
@@ -59,9 +55,32 @@
 			<md-grid-tile class="purple">
 				<div style="padding: 25px; text-align: center;">
 					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Activties</h2>
-					<!-- <a (click)="getDataObservable(room)" md-button>{{room.content}}</a> -->
-					<br>
-					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
+					<!-- <button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button> -->
+
+
+					<div style="width:400px;">
+						<!-- <div class="panel-body" dnd-droppable (onDropSuccess)="addTo($event)" [dropZones]="['source-dropZone']"> -->
+
+						<div class="panel panel-info">
+							<div class="panel-heading">Planned Activities</div>
+							<div class="panel-body" dnd-sortable-container [dropZones]="['activities-zone']" [sortableData]="room.activities">
+								<ul class="list-group">
+									<li *ngFor="let item of room.activities; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i"><b>{{item}}</b></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div style="width:400px;">
+						<div class="panel panel-warning">
+							<div class="panel-heading">Available Activities</div>
+							<div class="panel-body" dnd-sortable-container [dropZones]="['activities-zone']" [sortableData]="listActivities">
+								<ul class="list-group" >
+									<li *ngFor="let item of listActivities; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i"><b>{{item}}</b></li>
+								</ul>
+							</div>
+						</div>
+					</div>
 
 					<form>
 						<md-input-container style="width:50%; bottom: 0; left:0; right:0; margin:auto; position: absolute;  text-align: center;">
@@ -78,6 +97,7 @@
 		</md-grid-list>
 	</md-tab>
 </md-tab-group>
+
 
 <form (submit)="addRoom(rTitle,rDescription)" layout="column" class="md-padding" style="padding-top: 0;">
 	<div class="bottom-right">

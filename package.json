@@ -8,6 +8,7 @@
     "start": "node app"
   },
   "dependencies": {
+    "angularjs-datepicker": "^2.1.23",
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
