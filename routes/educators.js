@@ -6,13 +6,26 @@ const config = require('../config/database');
 
 var Educator = require('../models/educator')
 
-// Children
-router.get('/children', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+// All Children
+router.get('/allchildren', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Educator.getChildren(req.user[0].id, (err, data) => {
 		if(err){
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Children data', children:data});
+			res.json({success: true, msg:'All Children data', children:data});
+		}
+	});
+});
+
+// Children Associated with a Room
+router.post('/childrenroom', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	const room_name = req.body.room_name;
+
+	Educator.getChildrenInRoom(req.user[0].id, room_name, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Room Children data', children:data});
 		}
 	});
 });

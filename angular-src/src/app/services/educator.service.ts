@@ -16,12 +16,27 @@ export class EducatorService {
 
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
-    return this.http.get('http://localhost:8080/educators/children', {headers: headers})
+    return this.http.get('http://localhost:8080/educators/allchildren', {headers: headers})
       .map(res => res.json());
-  }
+  };
+
+  getChildrenInRoom(room_name) {
+    this.loadToken(); // Grab auth token from local storage
+
+    var bodyString = JSON.stringify({
+        room_name: room_name
+    });
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/childrenroom', bodyString, {headers: headers})
+      .map(res => res.json())
+  };
 
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;
-  }
+  };
 }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '@angular/material';
@@ -8,6 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdCardModule } from '@angular/material';
 import { MdDatepickerModule } from '@angular/material';
 import 'hammerjs';
+import { OrderModule } from 'ngx-order-pipe';
+import { DndModule } from 'ng2-dnd';
+
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -23,6 +26,7 @@ import { AuthService } from './services/auth.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { ParentService } from './services/parent.service';
+import { EducatorService } from './services/educator.service';
 
 
 const appRoutes: Routes = [
@@ -48,15 +52,18 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
     MaterialModule,
     BrowserAnimationsModule,
     MdCardModule,
-    MdDatepickerModule
+    MdDatepickerModule,
+    OrderModule,
+    DndModule.forRoot()
   ],
-  providers: [ValidateService, AuthService, AuthGuard, ParentService],
+  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

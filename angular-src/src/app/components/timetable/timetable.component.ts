@@ -6,12 +6,14 @@ import { AuthService } from '../../services/auth.service';
 import { ParentService } from '../../services/parent.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-timetable',
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
 export class TimetableComponent implements OnInit {
+  family: Object;
   firstName: string;
   familyName: string;
   dob: string;
@@ -22,9 +24,11 @@ export class TimetableComponent implements OnInit {
   roomId: string;
   boolLike: boolean;
 
-  constructor(private authService: AuthService, private parentService: ParentService, private router: Router) {
-
-  }
+  constructor(
+    private authService: AuthService, 
+    private parentService: ParentService,
+    private router: Router
+    ) {}
 
   ngOnInit() {
     this.parentService.getTimetable().subscribe(data => {
@@ -37,6 +41,7 @@ export class TimetableComponent implements OnInit {
 
     this.parentService.getFamily().subscribe(data => {
       console.log(data.family);
+      this.family = data.family;
       this.firstName = data.family.children[0].first_name;
       this.familyName = data.family.familyName;
       this.dob = data.family.children[0].dob;
