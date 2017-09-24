@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./room-list.component.css']
 })
 export class RoomListComponent implements OnInit {
-
+  Rooms = ["yolo", "yep"];
   constructor() { }
 
   ngOnInit() {
+  }
+
+  deleteRoom(room) {
+  	var index = this.Rooms.indexOf(room);
+    this.Rooms.splice(index, 1);
   }
 
 }

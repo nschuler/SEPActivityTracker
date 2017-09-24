@@ -6,10 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./activities-list.component.css']
 })
 export class ActivitiesListComponent implements OnInit {
-
+  Activities = ["yolo", "yep"];
   constructor() { }
 
   ngOnInit() {
   }
 
+  deleteActivity(activity) {
+  	var index = this.Activities.indexOf(activity);
+    this.Activities.splice(index, 1);
+  }
 }
