@@ -27,7 +27,12 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { ParentService } from './services/parent.service';
 import { EducatorService } from './services/educator.service';
-
+import { RoomListComponent } from './components/rooms/room-list.component';
+import { RoomEditComponent } from './components/rooms/room-edit.component';
+import { RoomAddComponent } from './components/rooms/room-add.component';
+import { ActivitiesListComponent } from './components/activities/activities-list.component';
+import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
+import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
 
 const appRoutes: Routes = [
   {path:'', component:HomeComponent},
@@ -35,7 +40,13 @@ const appRoutes: Routes = [
   {path:'login', component:LoginComponent},
   {path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
   {path:'profile', component:ProfileComponent, canActivate:[AuthGuard]},
-  {path:'timetable', component:TimetableComponent}
+  {path:'timetable', component:TimetableComponent},
+  {path:'rooms', component:RoomListComponent, canActivate:[AuthGuard]},
+  {path:'rooms/edit/:room', component:RoomEditComponent, canActivate:[AuthGuard]},
+  {path:'rooms/create', component:RoomAddComponent, canActivate:[AuthGuard]},
+  {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
+  {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
+  {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
 ]
 
 @NgModule({
@@ -47,7 +58,13 @@ const appRoutes: Routes = [
     HomeComponent,
     DashboardComponent,
     ProfileComponent,
-    TimetableComponent
+    TimetableComponent,
+    RoomListComponent,
+    RoomEditComponent,
+    RoomAddComponent,
+    ActivitiesListComponent,
+    ActivitiesCreateComponent,
+    ActivitiesEditComponent
   ],
   imports: [
     BrowserModule,

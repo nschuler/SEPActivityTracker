@@ -99,7 +99,7 @@
 </md-tab-group>
 
 
-<form (submit)="addRoom(rTitle,rDescription)" layout="column" class="md-padding" style="padding-top: 0;">
+<!-- <form (submit)="addRoom(rTitle,rDescription)" layout="column" class="md-padding" style="padding-top: 0;">
 	<div class="bottom-right">
 		<label for="label">Room Title: </label>
 		<input type="text" id="label"  [(ngModel)]="rTitle" name="title">
@@ -108,4 +108,38 @@
 		<input type="text" id="content"  [(ngModel)]="rDescription" name="description">
 		<button  md-raised-button color="primary" type="submit">Add Room</button>
 	</div>
-</form>
+</form> -->
+
+<div class="tab-content">
+	<div role="tabpanel" class="tab-pane active" id="home">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>DOB</th>
+				<th>Gender</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let child of filteredChildren | async">
+					<td>THIS IS A TEST</td>
+					<td>THIS IS A TEST</td>
+					<td>THIS IS A TEST</td>
+					<td>THIS IS A TEST</td>
+					<td>
+						<form editable-form name="rowform" class="form-buttons form-inline">
+							<input type="submit" value="Save" class=" btn btn-primary btn-xs">
+							<input type="button" value="Cancel" class="btn btn-default btn-xs">
+						</form>
+						<span class="pull-right" id="childActions">
+							<input type="button" class="btn btn-primary btn-xs" value="Edit">
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
