@@ -42,8 +42,18 @@ router.get('/rooms', passport.authenticate('jwt', {session:false}), (req, res, n
 });
 
 // Activities
-router.post('/activities', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getActivities(req.user[0].id, req.body.room_id, (err, data) => { 
+router.get('/allactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.getAllActivities(req.user[0].id, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Activity Data', data});
+		}
+	});
+});
+
+router.post('/activitiesbyid', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.getActivitiesByRoomId(req.user[0].id, req.body.room_id, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {

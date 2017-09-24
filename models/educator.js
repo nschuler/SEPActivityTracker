@@ -59,7 +59,37 @@ module.exports.getChildrenInRoom = function(id, room_name, callback) {
 	});
 }
 
-module.exports.getActivities = function(id, room_id, callback) {
+module.exports.getAllActivities = function(id, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Activity', (err, activityData) => { 
+				let queryData = [];
+				for (i in activityData) {
+					queryData.push(activityData[i].id);
+				}
+
+				query = 'SELECT * FROM ActivityMeta WHERE activity_id = '.concat(queryData.join(" OR activity_id ="));
+
+				mysql_query(query, (err, activityMetaData) => { 
+					let data = {
+						activityData: activityData,
+						activityMetaData: activityMetaData,
+					}; 
+
+					callback(err, data);
+				});
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.getActivitiesByRoomId = function(id, room_id, callback) {
 	this.validateEducator(id, (err, valid) => { 
 		if(err) callback(err, null);
 		if(valid)
@@ -73,6 +103,7 @@ module.exports.getActivities = function(id, room_id, callback) {
 				query = 'SELECT * FROM ActivityMeta WHERE activity_id = '.concat(queryData.join(" OR activity_id ="));
 
 				mysql_query(query, (err, activityMetaData) => { 
+
 					let data = {
 						activityData: activityData,
 						activityMetaData: activityMetaData,

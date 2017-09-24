@@ -45,14 +45,25 @@ export class EducatorService {
       .map(res => res.json())
   };
 
-  getActivities(room_id) {
+  getAllActivities() {
     this.loadToken();
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
 
-    return this.http.post('http://localhost:8080/educators/activities', {room_id: room_id}, {headers: headers})
+    return this.http.get('http://localhost:8080/educators/allactivities', {headers: headers})
+      .map(res => res.json())
+  }
+
+  getActivitiesById(room_id) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/activitiesbyid', {room_id: room_id}, {headers: headers})
       .map(res => res.json())
   }
 
