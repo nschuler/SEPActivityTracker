@@ -28,7 +28,6 @@ module.exports.getRooms = function(id, callback) {
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Room', (err, rooms) => { 
-				console.log(rooms);
 				callback(err, rooms);
 			});
 		}

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { BrowserXhr, HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +10,7 @@ import { MdDatepickerModule } from '@angular/material';
 import 'hammerjs';
 import { OrderModule } from 'ngx-order-pipe';
 import { DndModule } from 'ng2-dnd';
+import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 
 
 import { AppComponent } from './app.component';
@@ -78,9 +79,10 @@ const appRoutes: Routes = [
     MdCardModule,
     MdDatepickerModule,
     OrderModule,
-    DndModule.forRoot()
+    DndModule.forRoot(),
+    NgProgressModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule],
+  providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
