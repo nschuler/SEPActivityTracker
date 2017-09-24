@@ -17,7 +17,24 @@ module.exports.getChildren = function(id, callback) {
 		}
 		else
 		{
-			callback(new Error('User is not an Educator'),null)
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.getRooms = function(id, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Room', (err, rooms) => { 
+				console.log(rooms);
+				callback(err, rooms);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
 		}
 	});
 }
@@ -31,13 +48,43 @@ module.exports.getChildrenInRoom = function(id, room_name, callback) {
 				if (err) callback(err, null);
 				this.fetchChildrenFromDB(room_id[0].id, (err, children) => {
 					if (err) callback(err, null);
-					callback(err, children)
+					callback(err, children);
 				});
 			});
 		}
 		else
 		{
-			callback(new Error('User is not an Educator'),null)
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.getActivities = function(id, room_id, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Activity WHERE room_id = ?', room_id, (err, activityData) => { 
+				let queryData = [];
+				for (i in activityData) {
+					queryData.push(activityData[i].id);
+				}
+
+				query = 'SELECT * FROM ActivityMeta WHERE activity_id = '.concat(queryData.join(" OR activity_id ="));
+
+				mysql_query(query, (err, activityMetaData) => { 
+					let data = {
+						activityData: activityData,
+						activityMetaData: activityMetaData,
+					}; 
+
+					callback(err, data);
+				});
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
 		}
 	});
 }

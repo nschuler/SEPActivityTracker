@@ -10,6 +10,16 @@ export class EducatorService {
 
   constructor(private http:Http) { }
 
+  getRooms(){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.get('http://localhost:8080/educators/rooms', {headers: headers})
+      .map(res => res.json());
+  };
+
   getChildren(){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage
@@ -34,6 +44,17 @@ export class EducatorService {
     return this.http.post('http://localhost:8080/educators/childrenroom', bodyString, {headers: headers})
       .map(res => res.json())
   };
+
+  getActivities(room_id) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/activities', {room_id: room_id}, {headers: headers})
+      .map(res => res.json())
+  }
 
   loadToken(){
   	const token = localStorage.getItem('id_token');
