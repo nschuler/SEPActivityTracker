@@ -67,6 +67,22 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  storeActivities(activities){
+    localStorage.setItem('activities', JSON.stringify(activities));
+  }
+
+  storeRooms(rooms){
+    localStorage.setItem('rooms', JSON.stringify(rooms));
+  }
+
+  loadActivities(){
+    return localStorage.getItem('activities');
+  }
+
+  loadRooms(){
+    return localStorage.getItem('rooms');
+  }
+
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;

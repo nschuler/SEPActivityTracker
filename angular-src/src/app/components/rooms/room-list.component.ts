@@ -13,22 +13,32 @@ export class RoomListComponent implements OnInit {
   constructor(private educatorService: EducatorService) { }
 
   ngOnInit() {
-    this.getAllRooms();    
+    let rooms = JSON.parse(this.educatorService.loadRooms());
+    if(rooms)
+      this.displayRooms(rooms);
+
+    this.getAllRooms(); // Refresh from DB
   }
 
   getAllRooms() {
     this.educatorService.getRooms().subscribe(data => {
       let roomData = data.data
-      for (var i = 0; i < roomData.length; i++) {
-        this.rooms.push(
-          {
-            'id' : roomData[i].id,
-            'name' : roomData[i].room_name,
-            'schedule_id' : roomData[i].schedule_id,
-            'description' : roomData[i].room_description
-          });
-      }
+      this.educatorService.storeRooms(roomData);
+      this.displayRooms(roomData);
     }, err => {console.log(err);});
+  }
+
+  displayRooms(rooms) {
+    this.rooms = []; // Clear existing array of rooms
+    for (var i = 0; i < rooms.length; i++) {
+      this.rooms.push(
+        {
+          'id' : rooms[i].id,
+          'name' : rooms[i].room_name,
+          'schedule_id' : rooms[i].schedule_id,
+          'description' : rooms[i].room_description
+        });
+    }
   }
 
   deleteRoom(room) {

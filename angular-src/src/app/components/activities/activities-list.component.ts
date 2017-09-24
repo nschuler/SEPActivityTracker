@@ -12,23 +12,32 @@ export class ActivitiesListComponent implements OnInit {
   constructor(private educatorService: EducatorService) { }
 
   ngOnInit() {
-    this.getAllActivities();
+    let activities = JSON.parse(this.educatorService.loadActivities());
+    if(activities)
+      this.displayActivities(activities);
+
+    this.getAllActivities(); // Refresh from DB
   }
 
   getAllActivities() {
     this.educatorService.getAllActivities().subscribe(data => {
       let activityData = data.data.activityData
-      console.log(activityData);
-      for (var i = 0; i < activityData.length; i++) {
-        this.activities.push(
-          {
-            'id' : activityData[i].id,
-            'type' : activityData[i].type,
-            'name' : activityData[i].name,
-            'description' : activityData[i].description
-          });
-      }
+      this.educatorService.storeActivities(activityData);
+      this.displayActivities(activityData);
     }, err => {console.log(err);});
+  }
+
+  displayActivities(activities) {
+    this.activities = []; // Clear existing array of activities
+    for (var i = 0; i < activities.length; i++) {
+      this.activities.push(
+        {
+          'id' : activities[i].id,
+          'type' : activities[i].type,
+          'name' : activities[i].name,
+          'description' : activities[i].description
+        });
+    }
   }
 
   deleteActivity(activity) {
