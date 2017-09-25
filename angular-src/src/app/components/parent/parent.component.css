@@ -1,16 +1,18 @@
 
-div.TopBoys{
-  margin-top: 10px;
-
+div.Lshell{
+  float:left;
+  border: 2px solid black;
+  border-radius: 5px;
+ width: 30%;
 }
-
-div.BottomBoys{
-  width: 100%;
-  height: 100%;
-  }
-
-div.Oshell{
-  position:relative;
+div.Mshell{
+  float:left;
+  border: 2px solid black;
+  border-radius: 5px;
+ width: 30%;
+}
+div.Rshell{
+  float:left;
   border: 2px solid black;
   border-radius: 5px;
  width: 30%;

@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 })
 export class ParentComponent implements OnInit {
   childno: number ;
-  children: Child[] = [];
-
-
+  children: any[] = [];
+  tempOfThree: Child[] = [];
+  tempNumb: number = 0;
   constructor(private authService: AuthService, private parentService: ParentService, private educatorService: EducatorService, private router: Router) { }
 
   ngOnInit() {
@@ -22,13 +22,16 @@ export class ParentComponent implements OnInit {
      this.childno = data.family.children.length;
      //make some kids
 
-
       for(let i in data.family.children){
-
-      this.children.push(new Child(data.family.children[i].first_name , data.family.familyName, data.family.children[i].dob, data.family.address, data.family.children[i].family_id, data.family.children[i].id, data.family.children[i].room_id));
-
+        if(this.tempNumb > 3){
+          this.tempNumb =0;
+          this.children.push(this.tempOfThree);
+          this.tempOfThree = [];
+        }
+      this.tempOfThree.push(new Child(data.family.children[i].first_name , data.family.familyName, data.family.children[i].dob, data.family.address, data.family.children[i].family_id, data.family.children[i].id, data.family.children[i].room_id));
+        this.tempNumb ++;
     }
-
+    console.log(this.children);
 
      //stop making kids
     },

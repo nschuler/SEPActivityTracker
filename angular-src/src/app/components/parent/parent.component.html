@@ -1,17 +1,30 @@
 <html>
 <body>
 <div class = "TopBoys">
+  <h1>this is working</h1>
     <md-list>
-          <md-list-item *ngFor="let child of children">
-        <div class="Oshell">
-            <div class="BodyShell">
-              picture of kid
-            </div>
-            <div class="footerShell">
-              {{child.firstName}} {{child.familyName}}
-            </div>
-        </div>
-      </md-list-item>
+          <md-grid-list cols = "3"  *ngFor="let child of children">
+
+              <div class = "RowBoy">
+
+                  <div class="Lshell">
+                      <div class="name">
+                        {{child[0].firstName}} {{child[0].familyName}}
+                      </div>
+                    </div>
+                    <div class="Mshell">
+                        <div class="name">
+                          {{child[1].firstName}} {{child[1].familyName}}
+                        </div>
+                      </div>
+                      <div class="Rshell">
+                          <div class="name">
+                            {{child[2].firstName}} {{child[2].familyName}}
+                          </div>
+                        </div>
+                    </div>
+
+      </md-grid-list>
     </md-list>
   </div>
 </body>
