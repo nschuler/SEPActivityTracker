@@ -1,29 +1,34 @@
 
 div.Lshell{
-  float:left;
+  margin-left: 5%;;
+  float: left;
   border: 2px solid black;
   border-radius: 5px;
  width: 30%;
 }
 div.Mshell{
-  float:left;
+  float: left;
   border: 2px solid black;
   border-radius: 5px;
  width: 30%;
+ margin-right: auto;
+ margin-left: auto;
 }
 div.Rshell{
-  float:left;
+  float: left;
   border: 2px solid black;
   border-radius: 5px;
  width: 30%;
 }
-div.BodyShell{
+h1{
   text-align: center;
-  vertical-align:middle;
 }
-div.footerShell{
+div.name{
   text-align: center;
   vertical-align:bottom;
-  border: 2px solid black;
-  border-radius: 5px;
+
+}
+a{
+color: black;
+
 }

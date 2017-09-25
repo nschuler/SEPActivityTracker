@@ -1,26 +1,34 @@
 <html>
 <body>
-<div class = "TopBoys">
-  <h1>this is working</h1>
+<h1>Your Kids:</h1>
+<div>
     <md-list>
           <md-grid-list cols = "3"  *ngFor="let child of children">
 
               <div class = "RowBoy">
 
                   <div class="Lshell">
+                    <a href ="/timetable/{{child[0].childId}}">
                       <div class="name">
                         {{child[0].firstName}} {{child[0].familyName}}
                       </div>
+                    </a>
                     </div>
+
                     <div class="Mshell">
+                        <a href ="/timetable/{{child[0].childId}}">
                         <div class="name">
                           {{child[1].firstName}} {{child[1].familyName}}
                         </div>
+                        </a>
                       </div>
+
                       <div class="Rshell">
+                          <a href ="/timetable/{{child[0].childId}}">
                           <div class="name">
                             {{child[2].firstName}} {{child[2].familyName}}
                           </div>
+                          </a>
                         </div>
                     </div>
 

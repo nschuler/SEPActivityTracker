@@ -31,7 +31,7 @@ export class ParentComponent implements OnInit {
       this.tempOfThree.push(new Child(data.family.children[i].first_name , data.family.familyName, data.family.children[i].dob, data.family.address, data.family.children[i].family_id, data.family.children[i].id, data.family.children[i].room_id));
         this.tempNumb ++;
     }
-    console.log(this.children);
+
 
      //stop making kids
     },
