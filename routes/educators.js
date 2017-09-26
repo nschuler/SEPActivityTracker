@@ -41,6 +41,16 @@ router.get('/rooms', passport.authenticate('jwt', {session:false}), (req, res, n
 	});
 });
 
+router.post('/updateroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.updateRoom(req.user[0].id, req.body.room, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Room Updated'});
+		}
+	});
+});
+
 // Activities
 router.get('/allactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
 	Educator.getAllActivities(req.user[0].id, (err, data) => { 
@@ -77,9 +87,9 @@ router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (r
 	res.json({success: true, msg:'delete activity', data});
 });
 
-router.post('/editactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	console.log('edit activity');
-	res.json({success: true, msg:'edit activity', data});
+router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	console.log('update activity');
+	res.json({success: true, msg:'update activity', data});
 });
 
 module.exports = router;

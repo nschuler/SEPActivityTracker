@@ -58,6 +58,22 @@ module.exports.getChildrenInRoom = function(id, room_name, callback) {
 	});
 }
 
+module.exports.updateRoom = function(id, room, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('UPDATE Room Set room_name = ?, room_description = ? WHERE id = ?',[room.name, room.description, room.id],(err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.getAllActivities = function(id, callback) {
 	this.validateEducator(id, (err, valid) => { 
 		if(err) callback(err, null);

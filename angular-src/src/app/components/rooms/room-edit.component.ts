@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EducatorService } from '../../services/educator.service';
 
 @Component({
   selector: 'app-room-edit',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoomEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(private educatorService: EducatorService) { }
 
   ngOnInit() {
+  	// EXAMPLE
+  	// this.educatorService.updateRoom({name: "Opal Room", description: "New Description here", id: 3}).subscribe(data => {
+	  //     console.log(data);
+	  //   }, err => {console.log(err);
+   //  });
   }
-
 }
