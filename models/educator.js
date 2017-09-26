@@ -135,6 +135,22 @@ module.exports.getActivitiesByRoomId = function(id, room_id, callback) {
 	});
 }
 
+module.exports.getRoomById = function(id, room_id, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Room WHERE id = ?', room_id, (err, roomData) => { 
+				callback(err, roomData);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
+
 module.exports.createActivity = function(id, activityData, callback){
 	this.validateEducator(id, (err,valid) => { 
 		if(err) callback(err, null);
