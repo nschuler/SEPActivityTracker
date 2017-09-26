@@ -119,6 +119,42 @@ module.exports.getActivitiesByRoomId = function(id, room_id, callback) {
 	});
 }
 
+module.exports.createActivity = function(id, activityData, callback){
+	this.validateEducator(id, (err,valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// TODO validate activityData, especially meta data
+			let activity = {
+				room_id: null,
+				type: activityData.type,
+				name: activityData.name,
+				description: activityData.description
+			}
+
+			let activityMetaData = activityData.meta;
+
+			mysql_query('INSERT INTO Activity SET ?', activity, (err, data) => {
+
+				let queryData = [];
+				
+				for(i in activityMetaData)
+				{
+					queryData.push('(' + data.insertId + "," + activityMetaData[i].meta_key + "," + activityMetaData[i].meta_value + ")");
+				}
+
+				query = "INSERT INTO ActivityMeta (activity_id, meta_key, meta_value) VALUES ".concat(queryData.join(", "));
+
+				mysql_query(query, callback);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.fetchChildrenFromDB = function(room_id, callback) {
 	mysql_query('SELECT * FROM Child WHERE room_id = ?', room_id, (err, data) => {
 		if (data) 

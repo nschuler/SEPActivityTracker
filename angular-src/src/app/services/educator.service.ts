@@ -67,6 +67,17 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  createActivity(activity) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/createactivity', {activity: activity}, {headers: headers})
+      .map(res => res.json())
+  }
+
   storeActivities(activities){
     localStorage.setItem('activities', JSON.stringify(activities));
   }

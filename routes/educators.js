@@ -62,4 +62,24 @@ router.post('/activitiesbyid', passport.authenticate('jwt', {session:false}), (r
 	});
 });
 
+router.post('/createactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.createActivity(req.user[0].id, req.body.activity, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Activity Created'});
+		}
+	});
+});
+
+router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	console.log('delete activity');
+	res.json({success: true, msg:'delete activity', data});
+});
+
+router.post('/editactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	console.log('edit activity');
+	res.json({success: true, msg:'edit activity', data});
+});
+
 module.exports = router;
