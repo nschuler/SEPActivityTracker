@@ -18,18 +18,22 @@ export class RoomEditComponent implements OnInit {
 
   ngOnInit() {
     this.room_id = +this.route.snapshot.params['room'];
-    this.room_name = "HELLOO";
+
     this.educatorService.getRoomById(this.room_id)
       .subscribe(data => {
-        console.log(data);
-      }, err => {console.log(err);
+        data = data.data[0];
+        this.room_name = data.room_name
+        this.room_description = data.room_description
+      }, 
+      err => {
+        console.log("Failed to load Room By ID" + err);
     });
   }
 
   updateRoom() { 
     this.educatorService.updateRoom({name: this.room_name, description: this.room_description, id: this.room_id})
       .subscribe(data => {
-        console.log(data);
+        console.log(data); // MAKE A MESSAGE COME UP SAYING ROOM UPDATED
       }, err => {console.log(err);
     });
   }
