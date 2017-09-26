@@ -5,25 +5,16 @@ var mysql_query = require('../connection');
 
 var PARENT = 1;
 
-// Not sure if we will need a parent object..
-function Parent(family_id) {
-	this.family_id = family_id;
-}
-	
-
-module.exports = Parent;
-
 module.exports.getFamily = function(id, callback) {
-
 	this.validateParent(id, (err, valid) => { 
-		if(err) throw err;
+		if(err) callback(err, null);
 		if(valid)
 		{
 			mysql_query('SELECT family_id FROM FamilyMember WHERE id = ?', id, (err, familyMember) => { 
-				if(err) throw err;
+				if(err) callback(err, null);
 
 				mysql_query('SELECT * FROM Family WHERE id = ?', familyMember[0].family_id, (err, family) => {
-					if(err) throw err;
+					if(err) callback(err, null);
 
 					mysql_query('SELECT * FROM Child WHERE family_id = ?', family[0].id, (err, children) => {
 
@@ -44,6 +35,33 @@ module.exports.getFamily = function(id, callback) {
 	});
 }
 
+module.exports.getActivityRecords = function(id, child_id, callback) {
+	this.validateParent(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// query ChildActivityRecord by DATE and the associated ActivityRecord
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
+module.exports.getCurrentActivities = function(id, room_id, callback) {
+	this.validateParent(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// query Activity table for the activities related to the Room the Child is in and for the activities on the current day...
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
 
 module.exports.validateParent = function(id, callback) {
 	mysql_query('SELECT role_type FROM Role WHERE id = ?', id, (err, data) => {

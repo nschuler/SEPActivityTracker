@@ -13,12 +13,33 @@ router.get('/timetable', passport.authenticate('jwt', {session:false}), (req, re
 
 // Family
 router.get('/family', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	// Using req.user[0].id check get children
 	Parent.getFamily(req.user[0].id, (err, data) => {
 		if(err){
 			res.json({success: false, msg:'Request Failed'});
 		} else {
 			res.json({success: true, msg:'Family data', family:data});
+		}
+	});
+});
+
+// Child Activity Records
+router.post('/activityrecords', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.getActivityRecords(req.user[0].id, req.body.child_id, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Activity Records', records:data});
+		}
+	});
+});
+
+// Child Current Activities
+router.post('/currentactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.getCurrentActivities(req.user[0].id, req.body.room_id, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Current Activities', activities:data});
 		}
 	});
 });
