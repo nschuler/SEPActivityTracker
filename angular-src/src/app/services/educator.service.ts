@@ -89,6 +89,17 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  deleteRoomById(room_id) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/deleteroom', {room_id: room_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
   createActivity(activity) {
     this.loadToken();
 

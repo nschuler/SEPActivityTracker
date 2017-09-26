@@ -82,6 +82,16 @@ router.post('/roombyid', passport.authenticate('jwt', {session:false}), (req, re
 	});
 });
 
+router.post('/deleteroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.deleteRoomByID(req.user[0].id, req.body.room_id, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Room Deleted' + data});
+		}
+	});
+});
+
 router.post('/createactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
 	Educator.createActivity(req.user[0].id, req.body.activity, (err, data) => { 
 		if(err){ 

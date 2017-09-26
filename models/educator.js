@@ -213,6 +213,22 @@ module.exports.getRoomID = function(room_name, callback) {
 	});
 }
 
+module.exports.deleteRoomByID = function(id, room_id, callback) {
+
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('DELETE FROM Room WHERE id = ?', room_id, (err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
 
 module.exports.validateEducator = function(id, callback) {
 
