@@ -60,8 +60,8 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getRooms();
-    this.getAllChildren();    
+    // this.getRooms();
+    // this.getAllChildren();    
   }
 
   getRooms() {

@@ -38,17 +38,14 @@ module.exports.getRooms = function(id, callback) {
 	});
 }
 
-module.exports.getChildrenInRoom = function(id, room_name, callback) {
+module.exports.getChildrenInRoom = function(id, room_id, callback) {
 	this.validateEducator(id, (err, valid) => { 
 		if(err) callback(err, null);
 		if(valid)
 		{
-			this.getRoomID(room_name, (err, room_id) => {
+			this.fetchChildrenFromDB(room_id, (err, children) => {
 				if (err) callback(err, null);
-				this.fetchChildrenFromDB(room_id[0].id, (err, children) => {
-					if (err) callback(err, null);
-					callback(err, children);
-				});
+				callback(err, children);
 			});
 		}
 		else

@@ -11,6 +11,8 @@ import 'hammerjs';
 import { OrderModule } from 'ngx-order-pipe';
 import { DndModule } from 'ng2-dnd';
 import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
+import { MnFullpageModule } from 'ngx-fullpage';
+import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 
 
 import { AppComponent } from './app.component';
@@ -31,6 +33,7 @@ import { EducatorService } from './services/educator.service';
 import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
+import { RoomPlanComponent } from './components/rooms/room-plan.component';
 import { ActivitiesListComponent } from './components/activities/activities-list.component';
 import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
@@ -43,8 +46,9 @@ const appRoutes: Routes = [
   {path:'profile', component:ProfileComponent, canActivate:[AuthGuard]},
   {path:'timetable', component:TimetableComponent},
   {path:'rooms', component:RoomListComponent, canActivate:[AuthGuard]},
-  {path:'rooms/edit/:room', component:RoomEditComponent, canActivate:[AuthGuard]},
   {path:'rooms/create', component:RoomAddComponent, canActivate:[AuthGuard]},
+  {path:'rooms/edit/:room', component:RoomEditComponent, canActivate:[AuthGuard]},
+  {path:'rooms/plan/:room', component:RoomPlanComponent, canActivate:[AuthGuard]},
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
@@ -63,6 +67,7 @@ const appRoutes: Routes = [
     RoomListComponent,
     RoomEditComponent,
     RoomAddComponent,
+    RoomPlanComponent,
     ActivitiesListComponent,
     ActivitiesCreateComponent,
     ActivitiesEditComponent
@@ -80,7 +85,9 @@ const appRoutes: Routes = [
     MdDatepickerModule,
     OrderModule,
     DndModule.forRoot(),
-    NgProgressModule
+    NgProgressModule,
+    MnFullpageModule.forRoot(),
+    NgxPaginationModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent]

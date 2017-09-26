@@ -30,18 +30,14 @@ export class EducatorService {
       .map(res => res.json());
   };
 
-  getChildrenInRoom(room_name) {
+  getChildrenInRoom(room_id) {
     this.loadToken(); // Grab auth token from local storage
-
-    var bodyString = JSON.stringify({
-        room_name: room_name
-    });
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
 
-    return this.http.post('http://localhost:8080/educators/childrenroom', bodyString, {headers: headers})
+    return this.http.post('http://localhost:8080/educators/childrenroom', {room_id: room_id}, {headers: headers})
       .map(res => res.json())
   };
 
