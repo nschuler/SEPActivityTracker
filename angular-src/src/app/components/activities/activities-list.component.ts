@@ -7,6 +7,10 @@ import { EducatorService } from '../../services/educator.service';
   styleUrls: ['./activities-list.component.css']
 })
 export class ActivitiesListComponent implements OnInit {
+  activityTypes = {};
+
+  
+
   activities = [];
   
   constructor(private educatorService: EducatorService) { }
@@ -17,6 +21,9 @@ export class ActivitiesListComponent implements OnInit {
       this.displayActivities(activities);
 
     this.getAllActivities(); // Refresh from DB
+    this.activityTypes[1] = "Care";
+    this.activityTypes[2] = "Learning";
+    this.activityTypes[3] = "Leisure";
   }
 
   getAllActivities() {
@@ -36,7 +43,7 @@ export class ActivitiesListComponent implements OnInit {
       this.activities.push(
         {
           'id' : activities[i].id,
-          'type' : activities[i].type,
+          'type' : this.activityTypes[activities[i].type],
           'name' : activities[i].name,
           'description' : activities[i].description
         });

@@ -15,7 +15,7 @@ export class ActivitiesEditComponent implements OnInit {
   activity_description: string;
 
   // Make this dynamically pulled from DB
-  activityTypes = [{id:1, name: "care"}, {id:2, name: "learning"}, {id:1, name: "leisure"}];
+  activityTypes = [{id:1, name: "Care"}, {id:2, name: "Learning"}, {id:3, name: "Leisure"}];
 
   constructor(private route: ActivatedRoute, private location: Location, private educatorService: EducatorService) { }
 

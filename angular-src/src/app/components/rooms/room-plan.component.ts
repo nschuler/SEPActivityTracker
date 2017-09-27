@@ -56,7 +56,7 @@ export class RoomPlanComponent implements OnInit {
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [{
-    title: 'Editable event',
+    title: 'Painting',
     color: colors.yellow,
     start: new Date(),
     end: new Date(),
@@ -77,7 +77,7 @@ export class RoomPlanComponent implements OnInit {
     ]
   }];
 
-    refresh: Subject<any> = new Subject();
+  refresh: Subject<any> = new Subject();
 
 
   public options: MnFullpageOptions = new MnFullpageOptions({
@@ -216,7 +216,8 @@ export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
     }
   `
   ],
-  providers: [DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR]
+  providers: [DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR],
+  encapsulation: ViewEncapsulation.None
 })
 export class DateTimePickerComponent implements ControlValueAccessor {
   @Input() placeholder: string;
@@ -231,7 +232,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
 
   datePicker: any;
 
-  private onChangeCallback: (date: Date) => void = () => {console.log(this.date)};
+  private onChangeCallback: (date: Date) => void = () => {};
 
   constructor(private cdr: ChangeDetectorRef) {
   }
@@ -271,10 +272,6 @@ export class DateTimePickerComponent implements ControlValueAccessor {
       ),
       this.timeStruct.hour
     );
-    console.log(this.date)
-    console.log(this.timeStruct.second)
-    console.log(this.timeStruct.minute)
-    console.log(this.timeStruct.hour);
     this.onChangeCallback(newDate);
   }
 }

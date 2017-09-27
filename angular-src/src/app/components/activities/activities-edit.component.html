@@ -1,5 +1,5 @@
 <div class="row container">
-    <h5>Edit Activity</h5>
+    <legend>Edit Activity</legend>
     <form #form="ngForm" class="col s12" novalidate>
       <div class="row">
         <div class="input-field col s6 m6">
@@ -19,9 +19,12 @@
 
       <div class="row">
 			<div class="input-field col s6 m6">
-				<select class="form-control" required #activity_type>
-					<option *ngFor="let type of activityTypes" [value]="type.id">{{type.name}}</option>
-				</select>
+        <div class="form-group">
+          <label>Activity Description</label>
+  				<select class="form-control" required #activity_type>
+  					<option *ngFor="let type of activityTypes" [value]="type.id">{{type.name}}</option>
+  				</select>
+        </div>
 			</div>      
 	  </div>
 

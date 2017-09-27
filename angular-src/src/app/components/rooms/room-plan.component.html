@@ -173,9 +173,9 @@
     <tr>
       <th>Activity</th>
       <th>Colours</th>
-      <th>Options</th>
       <th>Starts at</th>
       <th>Ends at</th>
+      <th>Options</th>
       <th>Remove</th>
     </tr>
   </thead>
@@ -200,9 +200,6 @@
           (change)="refresh.next()">
       </td>
       <td>
-        
-      </td>
-      <td>
         <mwl-demo-utils-date-time-picker
           [(ngModel)]="event.start"
           (ngModelChange)="refresh.next()"
@@ -215,6 +212,9 @@
           (ngModelChange)="refresh.next()"
           placeholder="Not set">
         </mwl-demo-utils-date-time-picker>
+      </td>
+      <td>
+        
       </td>
       <td>
         <button
