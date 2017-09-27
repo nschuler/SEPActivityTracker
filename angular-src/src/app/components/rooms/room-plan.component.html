@@ -1,4 +1,4 @@
-<div id="content-wrapper" [mnFullpage]="options"
+<!-- <div id="content-wrapper" [mnFullpage]="options"
 [mnFullpageNavigation]="true"
 [mnFullpageKeyboardScrolling]="true"
 [mnFullpageSlidesNavigation]="true">
@@ -46,7 +46,7 @@
     <div class="section start-use-it-now-section">
         <h1>TEMP!</h1>
     </div> 
-</div>
+</div> -->
 
 
 
@@ -132,20 +132,98 @@
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"
     [events]="events"
+    [refresh]="refresh"
     [activeDayIsOpen]="true"
-    (dayClicked)="viewDate = $event.day.date; view = 'day'">
+    (dayClicked)="viewDate = $event.day.date; view = 'day'"
+    (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-month-view>
   <mwl-calendar-week-view
     *ngSwitchCase="'week'"
     [viewDate]="viewDate"
     [events]="events"
-    (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'">
+    [refresh]="refresh"
+    (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
+    (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-week-view>
   <mwl-calendar-day-view
     *ngSwitchCase="'day'"
     [viewDate]="viewDate"
     [events]="events"
+    [refresh]="refresh"
     [dayStartHour]="5"
-    [dayEndHour]="17">>
+    [dayEndHour]="17"
+    (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-day-view>
 </div>
+
+
+
+<h3>
+  <button
+    class="btn btn-primary pull-right"
+    (click)="addEvent()">
+    Add new
+  </button>
+  <div class="clearfix"></div>
+</h3>
+
+<table class="table table-bordered">
+
+  <thead>
+    <tr>
+      <th>Activity</th>
+      <th>Colours</th>
+      <th>Options</th>
+      <th>Starts at</th>
+      <th>Ends at</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let event of events; let index = index">
+      <td>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="event.title"
+          (keyup)="refresh.next()">
+      </td>
+      <td>
+        <input
+          type="color"
+          [(ngModel)]="event.color.primary"
+          (change)="refresh.next()">
+        <input
+          type="color"
+          [(ngModel)]="event.color.secondary"
+          (change)="refresh.next()">
+      </td>
+      <td>
+        
+      </td>
+      <td>
+        <mwl-demo-utils-date-time-picker
+          [(ngModel)]="event.start"
+          (ngModelChange)="refresh.next()"
+          placeholder="Not set">
+        </mwl-demo-utils-date-time-picker>
+      </td>
+      <td>
+         <mwl-demo-utils-date-time-picker
+          [(ngModel)]="event.end"
+          (ngModelChange)="refresh.next()"
+          placeholder="Not set">
+        </mwl-demo-utils-date-time-picker>
+      </td>
+      <td>
+        <button
+          class="btn btn-danger"
+          (click)="events.splice(index, 1); refresh.next()">
+          Delete
+        </button>
+      </td>
+    </tr>
+  </tbody>
+
+</table>

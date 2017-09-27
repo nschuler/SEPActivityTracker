@@ -14,7 +14,8 @@ import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 import { MnFullpageModule } from 'ngx-fullpage';
 import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 import { CalendarModule } from 'angular-calendar';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { DatePickerModule } from 'ng2-datepicker';
 
 
 
@@ -36,7 +37,7 @@ import { EducatorService } from './services/educator.service';
 import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
-import { RoomPlanComponent, DialogOverviewExampleDialog } from './components/rooms/room-plan.component';
+import { RoomPlanComponent, DialogOverviewExampleDialog, DateTimePickerComponent } from './components/rooms/room-plan.component';
 import { ActivitiesListComponent } from './components/activities/activities-list.component';
 import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
@@ -74,7 +75,8 @@ const appRoutes: Routes = [
     ActivitiesListComponent,
     ActivitiesCreateComponent,
     ActivitiesEditComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    DateTimePickerComponent
    ],
   imports: [
     BrowserModule,
@@ -93,10 +95,13 @@ const appRoutes: Routes = [
     MnFullpageModule.forRoot(),
     NgxPaginationModule,
     CalendarModule.forRoot(),
-    NgbModalModule.forRoot()
+    NgbModalModule.forRoot(),
+    NgbDatepickerModule.forRoot(),
+    NgbTimepickerModule.forRoot(),
+    DatePickerModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog]
+  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent]
 })
 export class AppModule { }

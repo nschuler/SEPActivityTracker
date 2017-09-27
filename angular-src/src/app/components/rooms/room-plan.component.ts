@@ -1,14 +1,17 @@
-import { Component, OnInit, Output, ViewEncapsulation, EventEmitter, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, Output, ViewEncapsulation, EventEmitter, ViewChild, TemplateRef, Inject, ChangeDetectorRef, forwardRef, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MnFullpageOptions, MnFullpageService } from 'ngx-fullpage';
 import { EducatorService } from '../../services/educator.service';
-import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
+import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule} from '@angular/material';
+import { Subject } from 'rxjs/Subject';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DatePickerOptions } from 'ng2-datepicker';
 
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
-import { startOfDay, endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours} from 'date-fns';
+import { startOfDay, endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours,  getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear} from 'date-fns';
 
 const colors: any = {
   red: {
@@ -33,6 +36,16 @@ const colors: any = {
 })
 
 export class RoomPlanComponent implements OnInit {
+  date: Date;
+
+  dateStruct: NgbDateStruct;
+
+  timeStruct: NgbTimeStruct;
+
+  datePicker: any;
+
+
+
   animal: string;
   name: string;
   room_id: number; // Identifies which room has been selected
@@ -42,48 +55,30 @@ export class RoomPlanComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  events: CalendarEvent[] = [
-  {
+  events: CalendarEvent[] = [{
     title: 'Editable event',
     color: colors.yellow,
     start: new Date(),
+    end: new Date(),
     actions: [
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       }
-    }
-    ]
-  },
-  {
-    title: 'Deletable event',
-    color: colors.blue,
-    start: new Date(),
-    actions: [
+    },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter(iEvent => iEvent !== event);
-        console.log('Event deleted', event);
+        this.handleEvent('Deleted', event);
       }
     }
     ]
-  },
-  {
-    title: 'Non editable and deletable event',
-    color: colors.red,
-    start: new Date(),
-    actions: [
-    {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    }
-    ]
-  }
-  ];
+  }];
+
+    refresh: Subject<any> = new Subject();
+
 
   public options: MnFullpageOptions = new MnFullpageOptions({
     controlArrows: false,
@@ -127,6 +122,17 @@ export class RoomPlanComponent implements OnInit {
     this.viewDate = viewdatechange;
   }
 
+    eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    // this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
   handleEvent(action: string, event: CalendarEvent): void {
     let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '500px',
@@ -137,6 +143,21 @@ export class RoomPlanComponent implements OnInit {
       console.log(result);
       this.animal = result;
     });
+  }
+
+  addEvent(): void {
+    this.events.push({
+      title: 'New event',
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
   }
 }
 
@@ -162,4 +183,98 @@ export class DialogOverviewExampleDialog {
     this.dialogRef.close();
   }
 
+}
+
+// FOR DATE TIME PICKER
+export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => DateTimePickerComponent),
+  multi: true
+};
+// <input readonly class="form-control" [placeholder]="placeholder" name="date"  [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" ngbDatepicker  #datePicker="ngbDatepicker">
+
+@Component({
+  selector: 'mwl-demo-utils-date-time-picker',
+  template: `
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+            <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker>
+        </div>
+      </div>
+    </form>
+    <ngb-timepicker
+      [(ngModel)]="timeStruct"
+      (ngModelChange)="updateTime()"
+      [meridian]="true">
+    </ngb-timepicker>
+  `,
+  styles: [
+    `
+    .form-group {
+      width: 100%;
+    }
+  `
+  ],
+  providers: [DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR]
+})
+export class DateTimePickerComponent implements ControlValueAccessor {
+  @Input() placeholder: string;
+
+  date: Date;
+  options: DatePickerOptions;
+
+
+  dateStruct: NgbDateStruct;
+
+  timeStruct: NgbTimeStruct;
+
+  datePicker: any;
+
+  private onChangeCallback: (date: Date) => void = () => {console.log(this.date)};
+
+  constructor(private cdr: ChangeDetectorRef) {
+  }
+
+  writeValue(date: Date): void {
+    this.date = date;
+    this.dateStruct = {
+      day: getDate(date),
+      month: getMonth(date) + 1,
+      year: getYear(date)
+    };
+    this.timeStruct = {
+      second: getSeconds(date),
+      minute: getMinutes(date),
+      hour: getHours(date)
+    };
+    this.cdr.detectChanges();
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChangeCallback = fn;
+  }
+
+  registerOnTouched(fn: any): void {}
+
+  updateDate(): void {
+    const newDate: Date = setYear(new Date(this.dateStruct.year, this.dateStruct.month-1, this.dateStruct.day), this.dateStruct.year)
+    this.date = newDate
+    this.onChangeCallback(newDate);
+  }
+
+  updateTime(): void {
+    const newDate: Date = setHours(
+      setMinutes(
+        setSeconds(this.date, this.timeStruct.second),
+        this.timeStruct.minute
+      ),
+      this.timeStruct.hour
+    );
+    console.log(this.date)
+    console.log(this.timeStruct.second)
+    console.log(this.timeStruct.minute)
+    console.log(this.timeStruct.hour);
+    this.onChangeCallback(newDate);
+  }
 }
