@@ -39,7 +39,7 @@ module.exports.getFamily = function(id, callback) {
 		}
 		else
 		{
-			callback(new Error('User is not a Parent'),null)
+			console.log('Not a parent');
 		}
 	});
 }

@@ -3,6 +3,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const passport = require('passport');
+const mongoose = require('mongoose');
+// const mysql = require('mysql');
 const config = require('./config/database');
 
 
@@ -10,7 +12,6 @@ const app = express();
 
 const users = require('./routes/users'); // Contains our User Routes
 const parents = require('./routes/parents'); // Contains our Parent Routes
-const educators = require('./routes/educators'); // Contains our Parent Routes
 
 // PORT Number
 const port = process.env.PORT || 8080;
@@ -32,7 +33,6 @@ require('./config/passport')(passport);
 
 app.use('/users', users); // Use /users for all our user routes
 app.use('/parents', parents); // Use /parents for all our user routes
-app.use('/educators', educators); // Use /parents for all our user routes
 
 // Index Route
 app.get('/', (req, res) => {
