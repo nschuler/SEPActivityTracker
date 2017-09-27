@@ -23,6 +23,7 @@ module.exports.getFamily = function(id, callback) {
 							address: family[0].address,
 							children: children
 						};
+						console.log(children);
 						callback(err, familyData);
 					});
 				});
@@ -54,7 +55,14 @@ module.exports.getCurrentActivities = function(id, room_id, callback) {
 		if(err) callback(err, null);
 		if(valid)
 		{
-			// query Activity table for the activities related to the Room the Child is in and for the activities on the current day...
+			// Query Schedule for 'activities' which matches the room_id the Child/Children is in
+			// Maybe we could query activities per day, for now, just retrieve all activities
+			
+			mysql_query('SELECT * FROM Schedule INNER JOIN Activity on Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', id, (err, schedule) => { 
+				if(err) callback(err, null);
+				console.log(schedule);
+				callback(err, schedule);
+			});
 		}
 		else
 		{

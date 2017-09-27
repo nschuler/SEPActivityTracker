@@ -31,16 +31,25 @@ export class TimetableComponent implements OnInit {
     ) {}
 
   ngOnInit() {
-    this.parentService.getTimetable().subscribe(data => {
-      console.log(data.msg);
-    },
-    err => {
-      console.log(err);
-      return false;
-    });
+    // this.parentService.getTimetable().subscribe(data => {
+    //   console.log(data.msg);
+    // },
+    // err => {
+    //   console.log(err);
+    //   return false;
+    // });
+
+    // EXAMPLE of getCurrentActivities(<room_id>)
+    
+    // this.parentService.getCurrentActivities("1").subscribe(data => {
+    //   console.log("current activities ", data);
+    // },
+    // err => {
+    //   console.log(err);
+    //   return false;
+    // });
 
     this.parentService.getFamily().subscribe(data => {
-      console.log(data.family);
       this.family = data.family;
       this.firstName = data.family.children[0].first_name;
       this.familyName = data.family.familyName;
