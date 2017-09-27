@@ -123,10 +123,14 @@ export class RoomPlanComponent implements OnInit {
     this.view = viewchange;
   }
 
+  viewDateChange(viewdatechange) {
+    this.viewDate = viewdatechange;
+  }
+
   handleEvent(action: string, event: CalendarEvent): void {
     let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '250px',
-      data: { event: event.title, action: action }
+      width: '500px',
+      data: { event: event, action: action }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -138,7 +142,7 @@ export class RoomPlanComponent implements OnInit {
 
 @Component({
   selector: 'dialog-overview-example-dialog',
-  template: `<h1 md-dialog-title>{{data.event}}</h1>
+  template: `<h1 md-dialog-title>{{data.event | json }}</h1>
   <div md-dialog-content>
   <p>What's your favorite animal?</p>
   <input mdInput tabindex="1" [(ngModel)]="data.action">

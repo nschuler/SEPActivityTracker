@@ -35,7 +35,7 @@
             </tbody>
         </table>
         <h5 style="text-align: right;"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </div>
 
     <div class="section usage-section ">
@@ -43,9 +43,9 @@
         
     </div>
 
-    <!-- <div class="section start-use-it-now-section">
+    <div class="section start-use-it-now-section">
         <h1>TEMP!</h1>
-    </div> -->
+    </div> 
 </div>
 
 
@@ -80,14 +80,14 @@
             mwlCalendarPreviousView
             [view]="view"
             [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)">
+            (viewDateChange)="viewDateChange(viewDate)">
             Previous
           </div>
           <div
             class="btn btn-outline-secondary"
             mwlCalendarToday
             [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)">
+            (viewDateChange)="viewDateChange(viewDate)">
             Today
           </div>
           <div
@@ -95,7 +95,7 @@
             mwlCalendarNextView
             [view]="view"
             [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)">
+            (viewDateChange)="viewDateChange(viewDate)">
             Next
           </div>
         </div>
