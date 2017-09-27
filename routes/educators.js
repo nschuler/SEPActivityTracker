@@ -86,7 +86,18 @@ router.post('/deleteroom', passport.authenticate('jwt', {session:false}), (req, 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Room Deleted' + data});
+			res.json({success: true, msg:'Room Deleted'});
+		}
+	});
+});
+
+router.post('/createroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	// console.log(req.body.room);
+	Educator.createRoom(req.user[0].id, req.body.room, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Room Created' + data});
 		}
 	});
 });

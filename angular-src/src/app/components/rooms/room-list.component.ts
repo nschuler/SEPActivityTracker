@@ -43,8 +43,11 @@ export class RoomListComponent implements OnInit {
 
   deleteRoom(room) {
     this.educatorService.deleteRoomById(room.id).subscribe(data => {
-      var index = this.rooms.indexOf(room);
-      this.rooms.splice(index, 1);
+      if(data.success)
+      {
+        var index = this.rooms.indexOf(room);
+        this.rooms.splice(index, 1);
+      }
     }, 
     err => {
       console.log(err);

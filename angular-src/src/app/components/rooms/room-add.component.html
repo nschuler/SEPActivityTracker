@@ -17,18 +17,9 @@
 		</div>
 
 	    <div class="row">
-	    	<div class="input-field col s6 m6">
-	    		<div class="form-group">
-	    			<label>Birth Date</label>
-	    			<input active type="date" class="datepicker"  #birthDate>
-	    		</div>           
-	    	</div>
-	    </div>
-
-	    <div class="row">
 		    <div class="card-panel teal lighten-2 col s6 m6 l6" *ngIf="roomCreated" >{{info}}</div>
 		    <button class="btn waves-effect waves-light right" type="submit" name="action" 
-		    	(click)="newRoom(room_name.value,room_description.value,birthDate.value)">Create Room
+		    	(click)="newRoom(room_name.value,room_description.value)">Create Room
 		    	<i class="material-icons right">send</i>
 		    </button>
 		    <a md-button class="btn right waves-effect waves-light" (click)="goBack()"><i class="material-icons left">keyboard_return</i>Back</a>

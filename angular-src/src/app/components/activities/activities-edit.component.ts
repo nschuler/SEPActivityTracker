@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { EducatorService } from '../../services/educator.service';
 
 @Component({
@@ -7,20 +9,52 @@ import { EducatorService } from '../../services/educator.service';
   styleUrls: ['./activities-edit.component.css']
 })
 export class ActivitiesEditComponent implements OnInit {
+  activity_id: number; // Identifies which room has been selected
+  activity_type: string;
+  activity_name: string;
+  activity_description: string;
 
-  constructor(private educatorService: EducatorService) { }
+  // Make this dynamically pulled from DB
+  activityTypes = [{id:1, name: "care"}, {id:2, name: "learning"}, {id:1, name: "leisure"}];
+
+  constructor(private route: ActivatedRoute, private location: Location, private educatorService: EducatorService) { }
 
   ngOnInit() {
-   // EXAMPLE - 
-   // Very similar to createActivity, except you also pass in the id of the activity you want to update.
+    this.activity_id = +this.route.snapshot.params['activity'];
 
-   // this.educatorService.updateActivity({name: "Reading Time", description: "Story time", type: "Learning", id: "1"}).subscribe(data => {
-   //    console.log(data);
-   //  },
-   //  err => { 
-   //    console.log(err);
-   //    return false;
-   //  });
+    let activities = JSON.parse(this.educatorService.loadActivities());
+    if(activities)
+    {
+      for(var i = 0; i < activities.length; i++)
+      {
+        if(activities[i].id == this.activity_id)
+        {
+          this.activity_type = activities[i].type;
+          this.activity_name = activities[i].name;
+          this.activity_description = activities[i].description;
+        }
+      }
+    }
+    else
+    {
+      // TODO get activity from db
+    }
   }
 
+  updateActivity() { 
+    this.educatorService.updateActivity({name: this.activity_name, type: this.activity_type, description: this.activity_description, id: this.activity_id})
+      .subscribe(data => {
+        if(data.success)
+        {
+          console.log(this.activity_type);
+          //TODO Flash messages
+          this.goBack();
+        }
+      }, err => {console.log(err);
+    });
+  }
+   
+   goBack(): void{
+      this.location.back();
+   }
 }

@@ -41,6 +41,17 @@ export class EducatorService {
       .map(res => res.json())
   };
 
+  createRoom(room) {
+    this.loadToken(); // Grab auth token from local storage
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/createroom', {room: room}, {headers: headers})
+      .map(res => res.json())
+  }
+
   updateRoom(room) {
     this.loadToken(); // Grab auth token from local storage
 

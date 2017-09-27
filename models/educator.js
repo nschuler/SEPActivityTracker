@@ -153,8 +153,6 @@ module.exports.createActivity = function(id, data, callback){
 		if(err) callback(err, null);
 		if(valid)
 		{
-			console.log('activity creaed');
-			
 			let activity = {
 				type: data.type,
 				name: data.name,
@@ -238,6 +236,25 @@ module.exports.deleteRoomByID = function(id, room_id, callback) {
 			mysql_query('DELETE FROM Room WHERE id = ?', room_id, (err, data) => { 
 				callback(err, data);
 			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
+
+module.exports.createRoom = function(id, roomData, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			let room = {
+				room_name: roomData.name,
+				room_description: roomData.description
+			}
+
+			mysql_query('INSERT INTO Room SET ?', room, callback);
 		}
 		else
 		{
