@@ -4,6 +4,8 @@ import { MdGridListModule } from '@angular/material';
 import { MdCardModule } from '@angular/material';
 import { AuthService } from '../../services/auth.service';
 import { ParentService } from '../../services/parent.service';
+import { DatePickerOptions, DateModel } from 'ng2-datepicker';
+import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule } from '@angular/material';
 import { Router } from '@angular/router';
 
 
@@ -13,53 +15,52 @@ import { Router } from '@angular/router';
   styleUrls: ['./timetable.component.css']
 })
 export class TimetableComponent implements OnInit {
-  family: Object;
-  firstName: string;
   familyName: string;
-  dob: string;
   address: string;
-  allergies: string;
-  famId: string;
-  childId: string;
-  roomId: string;
   boolLike: boolean;
+
+  childArray = [];
+
+  date: DateModel;
+  options: DatePickerOptions;
 
   constructor(
     private authService: AuthService, 
     private parentService: ParentService,
     private router: Router
-    ) {}
+    ) {
+      this.options = new DatePickerOptions();
+    }
 
   ngOnInit() {
-    // this.parentService.getTimetable().subscribe(data => {
-    //   console.log(data.msg);
-    // },
-    // err => {
-    //   console.log(err);
-    //   return false;
-    // });
-
-    // EXAMPLE of getCurrentActivities(<room_id>)
-    
-    // this.parentService.getCurrentActivities("1").subscribe(data => {
-    //   console.log("current activities ", data);
-    // },
-    // err => {
-    //   console.log(err);
-    //   return false;
-    // });
+    this.parentService.getTimetable().subscribe(data => {
+      console.log(data.msg);
+    },
+    err => {
+      console.log(err);
+      return false;
+    });
 
     this.parentService.getFamily().subscribe(data => {
-      this.family = data.family;
-      this.firstName = data.family.children[0].first_name;
-      this.familyName = data.family.familyName;
-      this.dob = data.family.children[0].dob;
-      this.address = data.family.address;
-      this.allergies = data.family.children[0].allergens;
-      this.famId = data.family.children[0].family_id;
-      this.childId = data.family.children[0].id;
-      this.roomId = data.family.children[0].room_id;
-      this.boolLike = false;
+      console.log(data);
+      if(data.success)
+      {
+        this.familyName = data.family.familyName;
+        this.address = data.family.address;
+        this.boolLike = false;
+
+        // Populate the child array
+        for (var i = 0; i < data.family.children.length; i++) {
+          this.childArray.push({
+            'first_name': data.family.children[i].first_name,
+            'dob': data.family.children[i].dob,
+            'family_id': data.family.children[i].family_id,
+            'room_id': data.family.children[i].room_id,
+            'allergens': data.family.children[i].allergens,
+            'child_id': data.family.children[i].id,
+            });
+        }
+      }
     },
     err => {
       console.log(err);

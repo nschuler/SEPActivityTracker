@@ -23,7 +23,7 @@ module.exports.getFamily = function(id, callback) {
 							address: family[0].address,
 							children: children
 						};
-						console.log(children);
+
 						callback(err, familyData);
 					});
 				});
@@ -60,7 +60,6 @@ module.exports.getCurrentActivities = function(id, room_id, callback) {
 			
 			mysql_query('SELECT * FROM Schedule INNER JOIN Activity on Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', id, (err, schedule) => { 
 				if(err) callback(err, null);
-				console.log(schedule);
 				callback(err, schedule);
 			});
 		}
