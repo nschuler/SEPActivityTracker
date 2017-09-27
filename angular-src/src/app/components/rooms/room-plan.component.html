@@ -1,0 +1,48 @@
+<div id="content-wrapper" [mnFullpage]="options"
+[mnFullpageNavigation]="true"
+[mnFullpageKeyboardScrolling]="true"
+[mnFullpageSlidesNavigation]="true">
+
+    <div class="section welcome-section active">
+        <div>
+            <h1>Welcome to the Room Planner!</h1>
+            <h4>Please scroll to the required section</h4>
+            <img class="logo-image" src="https://raw.githubusercontent.com/meiblorn/ng2-fullpage/develop/logo.png"/>
+        </div>
+    </div>
+
+    <div class="section usage-section ">
+      <h1>Children !</h1>
+      <div class="code-block" style="margin-top:100px; width: 70%; height: 70%;">
+        <table class="table table-striped" >
+            <thead>
+                <tr style="text-align: center;">
+                  <th style="text-align: center;">First Name</th>
+                  <th style="text-align: center;">Last Name</th>
+                  <th style="text-align: center;">DOB</th>
+                  <th style="text-align: center;">Allergens</th>
+                  <th style="text-align: center;">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let child of enrolledChildren | paginate: { itemsPerPage: 10, currentPage: p }">
+                    <td> {{ child.first_name }} </td>
+                    <td> {{ child.last_name }} </td>
+                    <td> {{ child.dob }} </td>
+                    <td> {{ child.allergens }} </td>
+                    <td><a (click)="deleteRoom(room); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 style="text-align: right;"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>>
+    </div>
+
+    <div class="section usage-section ">
+        <h1>Activities !</h1>
+    </div>
+
+    <div class="section start-use-it-now-section">
+        <h1>TEMP!</h1>
+    </div>
+</div>

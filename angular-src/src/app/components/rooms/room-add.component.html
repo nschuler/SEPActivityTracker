@@ -1,0 +1,41 @@
+<div class="container">
+	<legend>Create new Room</legend>
+	<form #form="ngForm" class="col s12" novalidate>
+		<div class="row">
+			<div class="input-field col s6 m6">
+				<div class="form-group">
+					<label>Room Name</label>
+					<input type="text" class="form-control validate" #room_name id="room_name" required>
+				</div>
+			</div>
+			<div class="input-field col s6 m6">
+				<div class="form-group">
+					<label>Room Description</label>
+					<input type="text" class="form-control validate" #room_description id="room_description" required>
+				</div>
+			</div>
+		</div>
+
+	    <div class="row">
+	    	<div class="input-field col s6 m6">
+	    		<div class="form-group">
+	    			<label>Birth Date</label>
+	    			<input active type="date" class="datepicker"  #birthDate>
+	    		</div>           
+	    	</div>
+	    </div>
+
+	    <div class="row">
+		    <div class="card-panel teal lighten-2 col s6 m6 l6" *ngIf="roomCreated" >{{info}}</div>
+		    <button class="btn waves-effect waves-light right" type="submit" name="action" 
+		    	(click)="newRoom(room_name.value,room_description.value,birthDate.value)">Create Room
+		    	<i class="material-icons right">send</i>
+		    </button>
+		    <a md-button class="btn right waves-effect waves-light" (click)="goBack()"><i class="material-icons left">keyboard_return</i>Back</a>
+		</div>
+	</form>
+</div>
+
+
+<!--This div is used to display toastr message-->
+<div id="toast-container" style="top: auto !important; left: auto !important; bottom: 10%; right:5%;"></div>

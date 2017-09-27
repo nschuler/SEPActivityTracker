@@ -1,0 +1,31 @@
+<div class="tab-content">
+	<div role="tabpanel" class="tab-pane active" id="home">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>Room Id</th>
+				<th>Activity Name</th>
+				<th>Activity Description</th>
+				<th>Activity Type</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let activity of activities">
+					<td> {{ activity.id}} </td>
+					<td> {{ activity.name}} </td>
+					<td> {{ activity.description}} </td>
+					<td> {{ activity.type}} </td>
+					<td><a [routerLink]="['/activities/edit',activity.id]"><i class="material-icons center">mode_edit</i></a></td>
+      				<td><a (click)="deleteActivity(activity); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<div class="fixed-action-btn">
+    <a [routerLink]="['/activities/create']" md-mini-fab><i class="large material-icons">add</i></a>
+</div>

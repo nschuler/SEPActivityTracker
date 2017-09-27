@@ -1,0 +1,111 @@
+<md-toolbar color="primary">
+	<span>Room Selector</span>
+	<span class="spacer"></span>
+	<button md-icon-button [mdMenuTriggerFor]="menu">
+		<md-icon>more_vert</md-icon>
+	</button>
+
+	<md-menu #menu="mdMenu">
+		<button md-menu-item>
+			<md-icon>fingerprint</md-icon>
+			<span>Add a Room</span>
+		</button>
+		<button md-menu-item>
+			<md-icon>fingerprint</md-icon>
+			<span>Add a Activity</span>
+		</button>
+	</md-menu>
+</md-toolbar>
+
+<md-tab-group (selectChange)="onSelectChange($event)">
+	<md-tab *ngFor="let room of roomsArray" label="{{room.title}}" >
+		<md-grid-list cols="2" rowHeight="1:1.5">
+			<md-grid-tile>
+				<div style="padding: 25px; text-align: center;">
+					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Children</h2>
+					<div style="height: 500px; width: 450px; overflow-y: auto">
+						<md-list dense>
+							<md-list-item *ngFor="let child of room.content | orderBy: order">
+								<h4>{{ child.first_name }} {{ child.last_name }}</h4>
+								<div style="margin-left:auto; margin-right:0;">
+									<button md-mini-fab color="warn" class="size-16" (click)="removeChild(room, child)">
+										<md-icon class="md-24 size-5">clear</md-icon>
+									</button>
+								</div>
+							</md-list-item>
+						</md-list>
+					</div>
+					<h5><b>Total Children: {{ room.content.length }}</b></h5>
+					<br>
+
+
+					<form>
+						<md-input-container style="width:50%; bottom: 0; left:0; right:0; margin:auto; position: absolute;  text-align: center;">
+							<input mdInput placeholder="Child Name" [disabled]="true" [mdAutocomplete]="auto" [formControl]="childrenCtrl">
+						</md-input-container>
+						<md-autocomplete #auto="mdAutocomplete">
+							<md-option *ngFor="let child of filteredChildren | async" [value]="child.name">
+								{{ child.name }}
+							</md-option>
+						</md-autocomplete>
+					</form>
+
+				</div>
+			</md-grid-tile>
+			<md-grid-tile>
+				<div style="padding: 25px; text-align: center;">
+					<h2 style="top: 0; position: absolute; left:0; right:0; margin:auto; padding-top: 30px;">Activities</h2>
+					<button md-raised-button color="primary" (click)="removeRoom(room)" ng-disabled="roomsArray.length <= 1">Remove Room</button>
+
+
+					<div style="width:400px;">
+						<!-- <div class="panel-body" dnd-droppable (onDropSuccess)="addTo($event)" [dropZones]="['source-dropZone']">
+
+						<div class="panel panel-info">
+							<div class="panel-heading">Planned Activities</div>
+							<div class="panel-body" dnd-sortable-container [dropZones]="['activities-zone']" [sortableData]="room.activities">
+								<ul class="list-group">
+									<li *ngFor="let item of room.activities; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i"><b>{{item}}</b></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div style="width:400px;">
+						<div class="panel panel-warning">
+							<div class="panel-heading">Available Activities</div>
+							<div class="panel-body" dnd-sortable-container [dropZones]="['activities-zone']" [sortableData]="listActivities">
+								<ul class="list-group" >
+									<li *ngFor="let item of listActivities; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i"><b>{{item}}</b></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<form>
+						<md-input-container style="width:50%; bottom: 0; left:0; right:0; margin:auto; position: absolute;  text-align: center;">
+							<input mdInput placeholder="Activity Name" [disabled]="true" [mdAutocomplete]="auto" [formControl]="childrenCtrl">
+						</md-input-container>
+						<md-autocomplete #auto="mdAutocomplete">
+							<md-option *ngFor="let child of filteredChildren | async" [value]="child.name">
+								{{ child.name }}
+							</md-option>
+						</md-autocomplete>
+					</form>
+				</div>
+			</md-grid-tile>
+		</md-grid-list>
+	</md-tab>
+</md-tab-group>
+
+
+<!-- <form (submit)="addRoom(rTitle,rDescription)" layout="column" class="md-padding" style="padding-top: 0;">
+	<div class="bottom-right">
+		<label for="label">Room Title: </label>
+		<input type="text" id="label"  [(ngModel)]="rTitle" name="title">
+
+		<label for="content">Description</label>
+		<input type="text" id="content"  [(ngModel)]="rDescription" name="description">
+		<button  md-raised-button color="primary" type="submit">Add Room</button>
+	</div>
+</form> --> -->

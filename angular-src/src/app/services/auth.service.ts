@@ -46,6 +46,14 @@ export class AuthService {
   	this.authToken = token;
   }
 
+  storeProfile(profile){
+    localStorage.setItem('profile', JSON.stringify(profile));
+  }
+
+  loadProfile(){
+    return localStorage.getItem('profile');
+  }
+
   loggedIn(){
   	return tokenNotExpired('id_token');
   }

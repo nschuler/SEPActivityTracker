@@ -1,0 +1,50 @@
+<div class="row container">
+    <h5>Edit {{ room_label }} Room</h5>
+    <form #form="ngForm" class="col s12" novalidate>
+      <div class="row">
+        <div class="input-field col s6 m6">
+        	<div class="form-group">
+				<label>Room Name</label>
+				<input id="room_name" type="text" class="form-control validate" name="room_name" [(ngModel)]="room_name">
+			</div>
+        </div>
+
+        <div class="input-field col s6 m6">
+        	<div class="form-group">
+				<label>Room Description</label>
+          		<input id="room_description" type="text" class="form-control validate" name="room_description" [(ngModel)]="room_description">
+			</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="birthdate" active type="date" [ngModel]="birthDate | date" class="datepicker" name="datepicker" >
+          <label class="active" for="birthDate">Employee's Birthdate</label>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div  class="input-field col s12">
+          <select id="jobPosition" >
+              <option value="" disabled selected>{{jobPosition}}</option>
+              <option value="Trainee">Trainee</option>
+              <option value="Junior">Junior</option>
+              <option value="Senior">Senior</option>
+              <option value="Expert">Expert</option>
+              <option value="Manager">Manager</option>
+          </select>
+          <label class="active" for="department">Job position</label>    
+        </div>
+      </div> -->
+
+    <div class="row">
+            <div class="card-panel teal lighten-2 col s6 m6 l6" *ngIf="roomEdited" >{{info}}</div>
+            <button  class="btn waves-effect waves-light right" type="submit" name="action" (click)="updateRoom()">Save Changes<i class="material-icons right">send</i></button>
+            <a md-button class="btn right" (click)="goBack()"><i class="material-icons left">keyboard_return</i>Back</a>
+    </div>
+    </form>
+  </div>
+
+<!--This div is used to display toastr message-->
+<div id="toast-container" style="top: auto !important; left: auto !important; bottom: 10%; right:5%;"></div>
