@@ -126,7 +126,7 @@
         </div>
       </div>
     </div>
-    <br>
+    <hr>
         <div [ngSwitch]="view">
   <mwl-calendar-month-view
     *ngSwitchCase="'month'"
@@ -156,19 +156,16 @@
   </mwl-calendar-day-view>
 </div>
 
-
+<hr>
 
 <h3>
-  <button
-    class="btn btn-primary pull-right"
-    (click)="addEvent()">
-    Add new
-  </button>
-  <div class="clearfix"></div>
+    <button class="btn btn-primary pull-right" (click)="addEvent()">Add new</button>
+    <div class="clearfix"></div>
 </h3>
 
-<table class="table table-bordered">
+<br>
 
+<table class="table table-bordered">
   <thead>
     <tr>
       <th>Activity</th>

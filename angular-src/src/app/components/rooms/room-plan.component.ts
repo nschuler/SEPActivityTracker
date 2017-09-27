@@ -122,7 +122,7 @@ export class RoomPlanComponent implements OnInit {
     this.viewDate = viewdatechange;
   }
 
-    eventTimesChanged({
+  eventTimesChanged({
     event,
     newStart,
     newEnd
@@ -155,7 +155,22 @@ export class RoomPlanComponent implements OnInit {
       resizable: {
         beforeStart: true,
         afterEnd: true
+      },
+      actions: [
+      {
+        label: '<i class="fa fa-fw fa-pencil"></i>',
+        onClick: ({ event }: { event: CalendarEvent }): void => {
+          this.handleEvent('Edited', event);
+        }
+      },
+      {
+        label: '<i class="fa fa-fw fa-times"></i>',
+        onClick: ({ event }: { event: CalendarEvent }): void => {
+          this.events = this.events.filter(iEvent => iEvent !== event);
+          this.handleEvent('Deleted', event);
+        }
       }
+      ]
     });
     this.refresh.next();
   }
@@ -196,24 +211,24 @@ export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
 @Component({
   selector: 'mwl-demo-utils-date-time-picker',
   template: `
-    <form class="form-inline">
-      <div class="form-group">
-        <div class="input-group">
-            <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker>
-        </div>
-      </div>
-    </form>
-    <ngb-timepicker
-      [(ngModel)]="timeStruct"
-      (ngModelChange)="updateTime()"
-      [meridian]="true">
-    </ngb-timepicker>
+  <form class="form-inline">
+  <div class="form-group">
+  <div class="input-group">
+  <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker>
+  </div>
+  </div>
+  </form>
+  <ngb-timepicker
+  [(ngModel)]="timeStruct"
+  (ngModelChange)="updateTime()"
+  [meridian]="true">
+  </ngb-timepicker>
   `,
   styles: [
-    `
-    .form-group {
-      width: 100%;
-    }
+  `
+  .form-group {
+    width: 100%;
+  }
   `
   ],
   providers: [DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR],
@@ -269,9 +284,9 @@ export class DateTimePickerComponent implements ControlValueAccessor {
       setMinutes(
         setSeconds(this.date, this.timeStruct.second),
         this.timeStruct.minute
-      ),
+        ),
       this.timeStruct.hour
-    );
+      );
     this.onChangeCallback(newDate);
   }
 }
