@@ -13,6 +13,9 @@ import { DndModule } from 'ng2-dnd';
 import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 import { MnFullpageModule } from 'ngx-fullpage';
 import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+import { CalendarModule } from 'angular-calendar';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 import { AppComponent } from './app.component';
@@ -33,7 +36,7 @@ import { EducatorService } from './services/educator.service';
 import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
-import { RoomPlanComponent } from './components/rooms/room-plan.component';
+import { RoomPlanComponent, DialogOverviewExampleDialog } from './components/rooms/room-plan.component';
 import { ActivitiesListComponent } from './components/activities/activities-list.component';
 import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
@@ -70,8 +73,9 @@ const appRoutes: Routes = [
     RoomPlanComponent,
     ActivitiesListComponent,
     ActivitiesCreateComponent,
-    ActivitiesEditComponent
-  ],
+    ActivitiesEditComponent,
+    DialogOverviewExampleDialog
+   ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -87,9 +91,12 @@ const appRoutes: Routes = [
     DndModule.forRoot(),
     NgProgressModule,
     MnFullpageModule.forRoot(),
-    NgxPaginationModule
+    NgxPaginationModule,
+    CalendarModule.forRoot(),
+    NgbModalModule.forRoot()
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogOverviewExampleDialog]
 })
 export class AppModule { }

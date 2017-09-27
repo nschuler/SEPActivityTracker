@@ -40,9 +40,112 @@
 
     <div class="section usage-section ">
         <h1>Activities !</h1>
+        
     </div>
 
-    <div class="section start-use-it-now-section">
+    <!-- <div class="section start-use-it-now-section">
         <h1>TEMP!</h1>
+    </div> -->
+</div>
+
+
+
+<ng-template #modalContent let-close="close">
+  <div class="modal-header">
+    <h5 class="modal-title">Event action occurred</h5>
+     <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
     </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+  </div> 
+</ng-template>
+
+<div class="row text-center">
+      <div class="col-md-4">
+        <div class="btn-group">
+          <div
+            class="btn btn-primary"
+            mwlCalendarPreviousView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="viewDateChange.next(viewDate)">
+            Previous
+          </div>
+          <div
+            class="btn btn-outline-secondary"
+            mwlCalendarToday
+            [(viewDate)]="viewDate"
+            (viewDateChange)="viewDateChange.next(viewDate)">
+            Today
+          </div>
+          <div
+            class="btn btn-primary"
+            mwlCalendarNextView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="viewDateChange.next(viewDate)">
+            Next
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
+      </div>
+      <div class="col-md-4">
+        <div class="btn-group">
+          <div
+            class="btn btn-primary"
+            (click)="viewChange('month')"
+            [class.active]="view === 'month'">
+            Month
+          </div>
+          <div
+            class="btn btn-primary"
+            (click)="viewChange('week')"
+            [class.active]="view === 'week'">
+            Week
+          </div>
+          <div
+            class="btn btn-primary"
+            (click)="viewChange('day')"
+            [class.active]="view === 'day'">
+            Day
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+        <div [ngSwitch]="view">
+  <mwl-calendar-month-view
+    *ngSwitchCase="'month'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [activeDayIsOpen]="true"
+    (dayClicked)="viewDate = $event.day.date; view = 'day'">
+  </mwl-calendar-month-view>
+  <mwl-calendar-week-view
+    *ngSwitchCase="'week'"
+    [viewDate]="viewDate"
+    [events]="events"
+    (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'">
+  </mwl-calendar-week-view>
+  <mwl-calendar-day-view
+    *ngSwitchCase="'day'"
+    [viewDate]="viewDate"
+    [events]="events"
+    [dayStartHour]="5"
+    [dayEndHour]="17">>
+  </mwl-calendar-day-view>
 </div>
