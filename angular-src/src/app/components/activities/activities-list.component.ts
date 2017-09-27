@@ -21,9 +21,12 @@ export class ActivitiesListComponent implements OnInit {
 
   getAllActivities() {
     this.educatorService.getAllActivities().subscribe(data => {
-      let activityData = data.data.activityData
-      this.educatorService.storeActivities(activityData);
-      this.displayActivities(activityData);
+      if(data.success)
+      {
+        let activityData = data.data.activityData
+        this.educatorService.storeActivities(activityData);
+        this.displayActivities(activityData);
+      }
     }, err => {console.log(err);});
   }
 
@@ -41,9 +44,14 @@ export class ActivitiesListComponent implements OnInit {
   }
 
   deleteActivity(activity) {
-  	var index = this.activities.indexOf(activity);
-    this.activities.splice(index, 1);
-
-    // NEED TO CODE FUNCTION TO DELETE FROM DB
+    this.educatorService.deleteActivity(activity.id).subscribe(data => {
+      if(data.success)
+      {
+        var index = this.activities.indexOf(activity);
+        this.activities.splice(index, 1);
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 }

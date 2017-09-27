@@ -118,6 +118,17 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  deleteActivity(activity_id) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/deleteactivity', {activity_id: activity_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
   storeActivities(activities){
     localStorage.setItem('activities', JSON.stringify(activities));
   }

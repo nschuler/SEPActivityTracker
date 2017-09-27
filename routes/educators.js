@@ -102,8 +102,13 @@ router.post('/createactivity', passport.authenticate('jwt', {session:false}), (r
 });
 
 router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	console.log('delete activity');
-	res.json({success: true, msg:'delete activity', data});
+	Educator.deleteActivity(req.user[0].id, req.body.activity_id, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Activity Deleted'});
+		}
+	});
 });
 
 router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 

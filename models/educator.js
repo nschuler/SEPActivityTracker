@@ -153,6 +153,8 @@ module.exports.createActivity = function(id, data, callback){
 		if(err) callback(err, null);
 		if(valid)
 		{
+			console.log('activity creaed');
+			
 			let activity = {
 				type: data.type,
 				name: data.name,
@@ -175,6 +177,22 @@ module.exports.updateActivity = function(id, activity, callback) {
 		{
 			// Validate data...
 			mysql_query('UPDATE Activity SET type = ?, name = ?, description = ? WHERE id = ?',[activity.type, activity.name, activity.description, activity.id],(err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.deleteActivity = function(id, activity_id, callback){
+	this.validateEducator(id, (err,valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			mysql_query('DELETE FROM Activity WHERE id = ?', activity_id, (err, data) => { 
 				callback(err, data);
 			});
 		}

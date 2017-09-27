@@ -22,21 +22,14 @@ export class ActivitiesCreateComponent implements OnInit {
   }
 
   newActivity(activity_name:string, activity_description:string, activity_type:string){
-    // EXAMPLE
-    // activity is made up of:
-    // 1. name
-    // 2. description
-    // 3. type
-
-    // this.educatorService.createActivity({name: activity_name, description: activity_description, type: activity_type}).subscribe(data => {
-    //   console.log(data);
-    // },
-    // err => { 
-    //   console.log(err);
-    //   return false;
-    // });
-
-    console.log("activity name - ", activity_name);
+    this.educatorService.createActivity({name: activity_name, description: activity_description, type: activity_type}).subscribe(data => {
+      console.log(data);
+      this.goBack();
+    },
+    err => { 
+      console.log(err);
+      return false;
+    });
    }
 
    goBack(): void{
