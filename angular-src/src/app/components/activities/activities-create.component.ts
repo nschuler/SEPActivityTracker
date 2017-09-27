@@ -27,11 +27,8 @@ export class ActivitiesCreateComponent implements OnInit {
     // 1. name
     // 2. description
     // 3. type
-    // 4. meta (array)
-    //    - meta_key
-    //    - meta_value
 
-    // this.educatorService.createActivity({name: activity_name, description: activity_description, type: activity_type, meta: [{meta_key: "metakey1", meta_value: "metavalue1"},{meta_key: "metakey2", meta_value: "metavalue2"}]}).subscribe(data => {
+    // this.educatorService.createActivity({name: activity_name, description: activity_description, type: activity_type}).subscribe(data => {
     //   console.log(data);
     // },
     // err => { 

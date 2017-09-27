@@ -107,8 +107,13 @@ router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (r
 });
 
 router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	console.log('update activity');
-	res.json({success: true, msg:'update activity', data});
+	Educator.updateActivity(req.user[0].id, req.body.activity, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Activity Updated'});
+		}
+	});
 });
 
 module.exports = router;

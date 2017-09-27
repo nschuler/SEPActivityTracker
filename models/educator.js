@@ -148,33 +148,34 @@ module.exports.getRoomById = function(id, room_id, callback) {
 	});
 }
 
-module.exports.createActivity = function(id, activityData, callback){
+module.exports.createActivity = function(id, data, callback){
 	this.validateEducator(id, (err,valid) => { 
 		if(err) callback(err, null);
 		if(valid)
 		{
-			// TODO validate activityData, especially meta data
 			let activity = {
-				room_id: null,
-				type: activityData.type,
-				name: activityData.name,
-				description: activityData.description
+				type: data.type,
+				name: data.name,
+				description: data.description
 			}
 
-			let activityMetaData = activityData.meta;
+			mysql_query('INSERT INTO Activity SET ?', activity, callback);
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
 
-			mysql_query('INSERT INTO Activity SET ?', activity, (err, data) => {
-
-				let queryData = [];
-				
-				for(i in activityMetaData)
-				{
-					queryData.push('(' + data.insertId + "," + activityMetaData[i].meta_key + "," + activityMetaData[i].meta_value + ")");
-				}
-
-				query = "INSERT INTO ActivityMeta (activity_id, meta_key, meta_value) VALUES ".concat(queryData.join(", "));
-
-				mysql_query(query, callback);
+module.exports.updateActivity = function(id, activity, callback) {
+	this.validateEducator(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// Validate data...
+			mysql_query('UPDATE Activity SET type = ?, name = ?, description = ? WHERE id = ?',[activity.type, activity.name, activity.description, activity.id],(err, data) => { 
+				callback(err, data);
 			});
 		}
 		else
