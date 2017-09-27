@@ -5,25 +5,16 @@ var mysql_query = require('../connection');
 
 var PARENT = 1;
 
-// Not sure if we will need a parent object..
-function Parent(family_id) {
-	this.family_id = family_id;
-}
-	
-
-module.exports = Parent;
-
 module.exports.getFamily = function(id, callback) {
-
 	this.validateParent(id, (err, valid) => { 
-		if(err) throw err;
+		if(err) callback(err, null);
 		if(valid)
 		{
 			mysql_query('SELECT family_id FROM FamilyMember WHERE id = ?', id, (err, familyMember) => { 
-				if(err) throw err;
+				if(err) callback(err, null);
 
 				mysql_query('SELECT * FROM Family WHERE id = ?', familyMember[0].family_id, (err, family) => {
-					if(err) throw err;
+					if(err) callback(err, null);
 
 					mysql_query('SELECT * FROM Child WHERE family_id = ?', family[0].id, (err, children) => {
 
@@ -32,6 +23,7 @@ module.exports.getFamily = function(id, callback) {
 							address: family[0].address,
 							children: children
 						};
+						console.log(children);
 						callback(err, familyData);
 					});
 				});
@@ -44,6 +36,40 @@ module.exports.getFamily = function(id, callback) {
 	});
 }
 
+module.exports.getActivityRecords = function(id, child_id, callback) {
+	this.validateParent(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// query ChildActivityRecord by DATE and the associated ActivityRecord
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
+module.exports.getCurrentActivities = function(id, room_id, callback) {
+	this.validateParent(id, (err, valid) => { 
+		if(err) callback(err, null);
+		if(valid)
+		{
+			// Query Schedule for 'activities' which matches the room_id the Child/Children is in
+			// Maybe we could query activities per day, for now, just retrieve all activities
+			
+			mysql_query('SELECT * FROM Schedule INNER JOIN Activity on Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', id, (err, schedule) => { 
+				if(err) callback(err, null);
+				console.log(schedule);
+				callback(err, schedule);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
 
 module.exports.validateParent = function(id, callback) {
 	mysql_query('SELECT role_type FROM Role WHERE id = ?', id, (err, data) => {
