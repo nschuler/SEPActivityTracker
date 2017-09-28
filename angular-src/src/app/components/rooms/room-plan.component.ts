@@ -86,9 +86,7 @@ export class RoomPlanComponent implements OnInit {
 
     menu: '.menu',
     css3: true,
-    anchors: [
-    'mainpage', 'children', 'activites', 'temp'
-    ]
+    anchors: ['mainpage', 'children', 'activites']
   });
 
   constructor(public dialog: MdDialog, private modal: NgbModal, private route: ActivatedRoute, private location: Location, public fullpageService: MnFullpageService, private educatorService: EducatorService
