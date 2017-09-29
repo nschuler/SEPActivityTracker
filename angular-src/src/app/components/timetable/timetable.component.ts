@@ -19,6 +19,8 @@ export class TimetableComponent implements OnInit {
   address: string;
   boolLike: boolean;
 
+  roomActivities: any; //(temp)
+
   childActivities: string;
 
   childArray = [];
@@ -35,12 +37,9 @@ export class TimetableComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.parentService.getTimetable().subscribe(data => {
-      console.log(data.msg);
-    },
-    err => {
-      console.log(err);
-      return false;
+
+    this.parentService.getCurrentActivities("1").subscribe(activityData => { 
+      this.roomActivities = activityData.activities;
     });
 
     this.parentService.getFamily().subscribe(data => {
@@ -60,8 +59,8 @@ export class TimetableComponent implements OnInit {
           var allergens = data.family.children[i].allergens
           var child_id = data.family.children[i].id
 
-          this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
-            this.childActivities = activityData.activities;
+          if(room_id == 1)
+          {
             this.childArray.push({
               'first_name': first_name,
               'dob': dob,
@@ -69,9 +68,23 @@ export class TimetableComponent implements OnInit {
               'room_id': room_id,
               'allergens': allergens,
               'child_id': child_id,
-              'activities': this.childActivities
+              'activities': this.roomActivities
             });
-          });
+          }
+          
+
+          // this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
+          //   this.childActivities = activityData.activities;
+          //   this.childArray.push({
+          //     'first_name': first_name,
+          //     'dob': dob,
+          //     'family_id': family_id,
+          //     'room_id': room_id,
+          //     'allergens': allergens,
+          //     'child_id': child_id,
+          //     'activities': this.childActivities
+          //   });
+          // });
         }
       }
     },

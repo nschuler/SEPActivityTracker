@@ -20,16 +20,6 @@ export class ParentService {
       .map(res => res.json());
   }
 
-  getTimetable(){
-    let headers = new Headers();
-    this.loadToken(); // Grab auth token from local storage
-
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', this.authToken);
-    return this.http.get('http://localhost:8080/parents/timetable', {headers: headers})
-      .map(res => res.json());
-  }
-
   getCurrentActivities(room_id){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage

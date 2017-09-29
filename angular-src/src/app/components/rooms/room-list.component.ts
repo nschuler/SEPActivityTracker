@@ -22,9 +22,12 @@ export class RoomListComponent implements OnInit {
 
   getAllRooms() {
     this.educatorService.getRooms().subscribe(data => {
-      let roomData = data.data
-      this.educatorService.storeRooms(roomData);
-      this.displayRooms(roomData);
+      if(data.success)
+      {
+        let roomData = data.data
+        this.educatorService.storeRooms(roomData);
+        this.displayRooms(roomData);
+      }
     }, err => {console.log(err);});
   }
 
