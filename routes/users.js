@@ -56,7 +56,8 @@ router.post('/authenticate', (req, res, next) => {
 						last_name: user[0].last_name,
 						username: user[0].username,
 						email: user[0].email,
-						mobile: user[0].mobile
+						mobile: user[0].mobile,
+						role_type: user[0].role_type
 					}
 				});
 			} else {
