@@ -12,19 +12,16 @@ module.exports.getFamily = function(user, callback) {
 			mysql_query('SELECT family_id FROM FamilyMember WHERE id = ?', user.id, (err, familyMember) => { 
 				if(err) callback(err, null);
 
-				mysql_query('SELECT * FROM Family WHERE id = ?', familyMember[0].family_id, (err, family) => {
+				mysql_query('SELECT * FROM Family INNER JOIN Child ON Family.id = Child.family_id WHERE Family.id = ?', familyMember[0].family_id, (err, children) => { 
 					if(err) callback(err, null);
 
-					mysql_query('SELECT * FROM Child WHERE family_id = ?', family[0].id, (err, children) => {
+					let familyData = {
+						familyName: children[0].family_name,
+						address: children[0].address,
+						children: children
+					};
 
-						let familyData = {
-							familyName: family[0].family_name,
-							address: family[0].address,
-							children: children
-						};
-
-						callback(err, familyData);
-					});
+					callback(err, familyData);
 				});
 			});
 		}
@@ -39,7 +36,12 @@ module.exports.getActivityRecords = function(user, child_id, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
-			// query ChildActivityRecord by DATE and the associated ActivityRecord
+			// Maybe we could query activityrecords by DATE, for now just retrieve all.
+
+			mysql_query('SELECT * FROM ChildActivityRecord INNER JOIN ActivityRecord ON ChildActivityRecord.activity_record_id = ActivityRecord.id WHERE ChildActivityRecord.child_id = ?', child_id, (err, record) => { 
+				if(err) callback(err, null);
+				callback(err, record);
+			});
 		}
 		else
 		{
@@ -55,7 +57,7 @@ module.exports.getCurrentActivities = function(user, room_id, callback) {
 			// Query Schedule for 'activities' which matches the room_id the Child/Children is in
 			// Maybe we could query activities per day, for now, just retrieve all activities
 			
-			mysql_query('SELECT * FROM Schedule INNER JOIN Activity on Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
+			mysql_query('SELECT * FROM Schedule INNER JOIN Activity ON Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
 				if(err) callback(err, null);
 				callback(err, schedule);
 			});

@@ -38,6 +38,11 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
 
+    // Example -
+    // this.parentService.getActivityRecords("1").subscribe(data => {
+    //   console.log(data);
+    // });
+
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 
       this.roomActivities = activityData.activities;
     });
