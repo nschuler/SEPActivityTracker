@@ -37,7 +37,6 @@ export class TimetableComponent implements OnInit {
     }
 
   ngOnInit() {
-<<<<<<< HEAD
     //get Id from below!
     console.log(this.parseURLParams(window.location.search));
 
@@ -95,7 +94,6 @@ export class TimetableComponent implements OnInit {
           // });
         }
       }
->>>>>>> master
     },
     err => {
       //console.log(err);
