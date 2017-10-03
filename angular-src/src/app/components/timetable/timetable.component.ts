@@ -19,6 +19,10 @@ export class TimetableComponent implements OnInit {
   address: string;
   boolLike: boolean;
 
+  roomActivities: any; //(temp)
+
+  childActivities: string;
+
   childArray = [];
 
   date: DateModel;
@@ -33,32 +37,59 @@ export class TimetableComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.parentService.getTimetable().subscribe(data => {
-      console.log(data.msg);
-    },
-    err => {
-      console.log(err);
-      return false;
+
+    // Example -
+    // this.parentService.getActivityRecords("1").subscribe(data => {
+    //   console.log(data);
+    // });
+
+    this.parentService.getCurrentActivities("1").subscribe(activityData => { 
+      this.roomActivities = activityData.activities;
     });
 
     this.parentService.getFamily().subscribe(data => {
-      console.log(data);
       if(data.success)
       {
         this.familyName = data.family.familyName;
         this.address = data.family.address;
         this.boolLike = false;
 
+
         // Populate the child array
         for (var i = 0; i < data.family.children.length; i++) {
-          this.childArray.push({
-            'first_name': data.family.children[i].first_name,
-            'dob': data.family.children[i].dob,
-            'family_id': data.family.children[i].family_id,
-            'room_id': data.family.children[i].room_id,
-            'allergens': data.family.children[i].allergens,
-            'child_id': data.family.children[i].id,
+          var first_name = data.family.children[i].first_name
+          var dob = data.family.children[i].dob
+          var family_id = data.family.children[i].family_id
+          var room_id = data.family.children[i].room_id
+          var allergens = data.family.children[i].allergens
+          var child_id = data.family.children[i].id
+
+          if(room_id == 1)
+          {
+            this.childArray.push({
+              'first_name': first_name,
+              'dob': dob,
+              'family_id': family_id,
+              'room_id': room_id,
+              'allergens': allergens,
+              'child_id': child_id,
+              'activities': this.roomActivities
             });
+          }
+          
+
+          // this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
+          //   this.childActivities = activityData.activities;
+          //   this.childArray.push({
+          //     'first_name': first_name,
+          //     'dob': dob,
+          //     'family_id': family_id,
+          //     'room_id': room_id,
+          //     'allergens': allergens,
+          //     'child_id': child_id,
+          //     'activities': this.childActivities
+          //   });
+          // });
         }
       }
     },
@@ -70,14 +101,18 @@ export class TimetableComponent implements OnInit {
 
   openDatepicker() {
     console.log("Clickity click click!");
+    console.log(this.childArray)
   }
 
   likeActivity() {
     if(this.boolLike == true) {
       console.log("You have unliked this activity!");
+          console.log(this.childArray)
       this.boolLike = false;
     } else {
       console.log("You have liked this activity!");
+          console.log(this.childArray)
+
       this.boolLike = true;
     }
   }

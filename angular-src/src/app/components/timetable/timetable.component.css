@@ -13,5 +13,19 @@
 }
 
 .example-card{
-  background: #ffffe6;
+  background: #e6f9ff;
+  top: -55px;
+}
+
+.image {
+	position: absolute;
+	top: 80px;
+	left: 125px;
+}
+
+.childInfo {
+	position: absolute;
+	font-size: 16px;
+	top: 430px;
+	left: 30px;
 }
