@@ -75,6 +75,16 @@ export class TimetableComponent implements OnInit {
               'child_id': child_id,
               'activities': this.roomActivities
             });
+          } else {
+            this.childArray.push({
+              'first_name': first_name,
+              'dob': dob,
+              'family_id': family_id,
+              'room_id': room_id,
+              'allergens': allergens,
+              'child_id': child_id
+              // 'activities': this.roomActivities
+            });
           }
           
 
@@ -119,5 +129,13 @@ export class TimetableComponent implements OnInit {
 
   leaveComment() {
     console.log("Leave a comment!");
+  }
+
+  describeRoom(room_id) {
+    if (room_id != null) {
+      return "Currently in Room #" + room_id;
+    } else {
+      return "Not currently assigned to a room!";
+    }
   }
 }
