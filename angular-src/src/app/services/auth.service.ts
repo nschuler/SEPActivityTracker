@@ -41,9 +41,21 @@ export class AuthService {
   	this.user = user;
   }
 
+  loadUserData(){
+    return localStorage.getItem('user');
+  }
+
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;
+  }
+
+  storeProfile(profile){
+    localStorage.setItem('profile', JSON.stringify(profile));
+  }
+
+  loadProfile(){
+    return localStorage.getItem('profile');
   }
 
   loggedIn(){

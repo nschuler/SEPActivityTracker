@@ -1,3 +1,51 @@
+<<<<<<< HEAD
 <html>
 <h1>Daily Schedule</h1>
 </html>
+=======
+<md-toolbar color="warn">
+    <span>Daily Schedule</span>
+</md-toolbar>
+
+<md-tab-group>
+    <md-tab *ngFor="let x of childArray" label="{{x.first_name}}">
+        <md-grid-list cols="2" rowHeight="1:2">
+            <md-grid-tile class="gray" md-rowspan="3" md-colspan="1.5" md-colspan-sm="1" md-colspan-xs="1">
+                <md-grid-tile-header><h3>Profile</h3></md-grid-tile-header>
+                <div>
+                    <img src="https://1.bp.blogspot.com/_5tsELtz6AzA/RzJamBoiS9I/AAAAAAAAAaU/-MzQIx1TO0M/s320/Bennett+passport.jpg&w=310&h=214" alt="Child" class="wrapper">
+                    <h4><b>About {{x.first_name}}</b></h4>
+                    <b>DOB:</b> {{x.dob}}<br>
+                    <b>Surname:</b> {{this.familyName}}<br>
+                    <b>Address:</b> {{this.address}}<br>
+                    <br>
+                    <h4><b>Information</b></h4>
+                    <b>Allergies:</b> {{x.allergens}}<br>
+                    <b>Family ID:</b> #{{x.family_id}}<br>
+                    <b>Child ID:</b> #{{x.child_id}}<br>
+                    <br>
+                </div>
+            </md-grid-tile>
+            
+            <md-grid-tile class="gray">
+                <md-grid-tile-header><h3>Activities - Currently in Room #{{x.room_id}}</h3></md-grid-tile-header>
+                <div>
+                    <md-card class="example-card" *ngFor="let activity of x.activities">
+                        <md-card-header>
+                            <md-card-title><b>{{ activity.name }}</b></md-card-title>
+                            <md-card-subtitle>{{ activity.start_time }} - {{ activity.end_time }}</md-card-subtitle>
+                        </md-card-header>
+                        <md-card-content>
+                            <p>{{ activity.description }}</p>
+                        </md-card-content>
+                        <md-card-actions>
+                            <button (click)="likeActivity()" md-button>{{this.boolLike ? "UNLIKE" : "LIKE"}}</button>
+                            <button (click)="leaveComment()" md-button>COMMENT</button>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+        </md-grid-tile>
+    </md-grid-list>
+</md-tab>
+</md-tab-group>
+>>>>>>> master
