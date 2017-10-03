@@ -29,7 +29,7 @@ export class TimetableComponent implements OnInit {
   options: DatePickerOptions;
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private parentService: ParentService,
     private router: Router
     ) {
@@ -41,33 +41,12 @@ export class TimetableComponent implements OnInit {
     //get Id from below!
     console.log(this.parseURLParams(window.location.search));
 
-
-  	this.parentService.getTimetable().subscribe(data => {
-  	//	console.log(data.msg);
-  	},
-  	err => {
-  	//	console.log(err);
-  		return false;
-  	});
-
-    this.parentService.getFamily().subscribe(data => {
-      //console.log(data);
-    },
-    err => {
-     // console.log(err);
-      return false;
-    });
-
-    this.educatorService.getChildren().subscribe(data => {
-      //console.log(data);
-=======
-
     // Example -
     // this.parentService.getActivityRecords("1").subscribe(data => {
     //   console.log(data);
     // });
 
-    this.parentService.getCurrentActivities("1").subscribe(activityData => { 
+    this.parentService.getCurrentActivities("1").subscribe(activityData => {
       this.roomActivities = activityData.activities;
     });
 
@@ -100,7 +79,7 @@ export class TimetableComponent implements OnInit {
               'activities': this.roomActivities
             });
           }
-          
+
 
           // this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
           //   this.childActivities = activityData.activities;
@@ -123,7 +102,6 @@ export class TimetableComponent implements OnInit {
       return false;
     });
   }
-<<<<<<< HEAD
   //stolen from https://stackoverflow.com/questions/814613/how-to-read-get-data-from-a-url-using-javascript
   parseURLParams(url) {
     var queryStart = url.indexOf("?") + 1,
@@ -144,7 +122,6 @@ export class TimetableComponent implements OnInit {
     }
     return parms;
 }
-=======
 
   openDatepicker() {
     console.log("Clickity click click!");
@@ -167,5 +144,4 @@ export class TimetableComponent implements OnInit {
   leaveComment() {
     console.log("Leave a comment!");
   }
->>>>>>> master
 }

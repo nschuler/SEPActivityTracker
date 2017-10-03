@@ -44,15 +44,7 @@ import { ActivitiesCreateComponent } from './components/activities/activities-cr
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
 
 const appRoutes: Routes = [
-<<<<<<< HEAD
-	{path:'', component:HomeComponent},
-	{path:'register', component:RegisterComponent},
-	{path:'login', component:LoginComponent},
-	{path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
-	{path:'profile', component:ProfileComponent, canActivate:[AuthGuard]},
-  {path:'timetable', component:TimetableComponent},
-  {path:'parent', component:ParentComponent}
-=======
+
   {path:'', component:HomeComponent},
   {path:'register', component:RegisterComponent},
   {path:'login', component:LoginComponent},
@@ -66,8 +58,8 @@ const appRoutes: Routes = [
   {path:'rooms/admin/:room', component:RoomAdminComponent, canActivate:[AuthGuard]},
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
+  {path:'parent', component:ParentComponent},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
->>>>>>> master
 ]
 
 @NgModule({
@@ -80,11 +72,9 @@ const appRoutes: Routes = [
     DashboardComponent,
     ProfileComponent,
     TimetableComponent,
-<<<<<<< HEAD
-    ParentComponent
-,
-],
-=======
+
+    ParentComponent,
+
     RoomListComponent,
     RoomEditComponent,
     RoomAddComponent,
@@ -97,7 +87,7 @@ const appRoutes: Routes = [
     DateTimePickerComponent,
     RoomAdminComponent
    ],
->>>>>>> master
+
   imports: [
     BrowserModule,
     FormsModule,
