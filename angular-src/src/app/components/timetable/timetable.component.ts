@@ -48,7 +48,7 @@ export class TimetableComponent implements OnInit {
     //     comment: "This is my third comment",
     //   }
 
-    //   this.parentService.commentOnActivityRecord(container).subscribe(temp => { 
+    //   this.parentService.commentOnChildActivityRecord(container).subscribe(temp => { 
     //     console.log(temp);
     //   });
     // });

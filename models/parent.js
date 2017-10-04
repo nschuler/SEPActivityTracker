@@ -38,7 +38,7 @@ module.exports.getActivityRecords = function(user, child_id, callback) {
 		{
 			// Maybe we could query activityrecords by DATE, for now just retrieve all.
 
-			mysql_query('SELECT * FROM ChildActivityRecord INNER JOIN ActivityRecord ON ChildActivityRecord.activity_record_id = ActivityRecord.id WHERE ChildActivityRecord.child_id = ?', child_id, (err, record) => { 
+			mysql_query('SELECT ChildActivityRecord.id, ChildActivityRecord.comments, ChildActivityRecord.child_id, ChildActivityRecord.date, ChildActivityRecord.activity_record_id, ActivityRecord.type, ActivityRecord.name, ActivityRecord.description, ActivityRecord.room_name, ActivityRecord.start_time, ActivityRecord.end_time FROM ChildActivityRecord INNER JOIN ActivityRecord ON ChildActivityRecord.activity_record_id = ActivityRecord.id WHERE ChildActivityRecord.child_id = ?', child_id, (err, record) => { 
 				if(err) callback(err, null);
 				callback(err, record);
 			});

@@ -40,7 +40,7 @@ export class ParentService {
       .map(res => res.json());
   }
 
-  commentOnActivityRecord(data){
+  commentOnChildActivityRecord(data){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage
 
