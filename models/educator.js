@@ -5,6 +5,22 @@ var mysql_query = require('../connection');
 
 var EDUCATOR = 2;
 
+module.exports.getEducators = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Educator', (err, educator)=>{
+				if(err) callback(err, null);
+				callback(err, educator);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.getChildren = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
