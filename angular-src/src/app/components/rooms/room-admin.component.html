@@ -1,40 +1,43 @@
 <h1 style="text-align: center;">Assigned Staff !</h1>
 <br>
 <div class="text-center">
-    <button [ngClass]="{disabled : enrolled}" class="btn btn-primary" (click)="enrolled || joinRoom()">Log in to Room</button>
+  <button [ngClass]="{disabled : enrolled}" class="btn btn-primary" (click)="enrolled || joinRoom()">Log in to Room</button>
 </div>
 <br>
 <br>
 <md-nav-list style="width: 300px; margin:0 auto;" layout-align="center center">
-   <a md-list-item *ngFor="let educator of assignedEducators" style="text-align: center;">
-      <span style="flex: 1 1 auto;"> id[{{ educator }}] - Staff Name</span>
-      <a (click)="deleteEducator(educator); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a>
-   </a>
-   <p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">No Staff currently enrolled in this Room!</p>
+ <a md-list-item *ngFor="let educator of assignedEducators" style="text-align: center;">
+  <span style="flex: 1 1 auto;"> id[{{ educator }}] - Staff Name</span>
+  <a (click)="deleteEducator(educator); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a>
+</a>
+<p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">No Staff currently enrolled in this Room!</p>
 </md-nav-list>
 <br>
 <hr>
 <h1 style="text-align: center;">Children !</h1>
-      <div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
-        <table class="table table-striped" >
-            <thead>
-                <tr style="text-align: center;">
-                  <th style="text-align: center;">First Name</th>
-                  <th style="text-align: center;">Last Name</th>
-                  <th style="text-align: center;">DOB</th>
-                  <th style="text-align: center;">Allergens</th>
-                  <th style="text-align: center;">Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let child of enrolledChildren | paginate: { itemsPerPage: 10, currentPage: p }">
-                    <td style="text-align: center;"> {{ child.first_name }} </td>
-                    <td style="text-align: center;"> {{ child.last_name }} </td>
-                    <td style="text-align: center;"> {{ child.dob }} </td>
-                    <td style="text-align: center;"> {{ child.allergens }} </td>
-                    <td style="text-align: center;"><a (click)="deleteChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
-                </tr>
-            </tbody>
-        </table>
-        <h5 style="text-align: right;"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+<br>
+<p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">Log in to room to be able to add children!</p>
+<div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
+  <table class="table table-striped" [hidden]="!assignedEducators.length">
+    <thead>
+      <tr style="text-align: center;">
+        <th style="text-align: center;">First Name</th>
+        <th style="text-align: center;">Last Name</th>
+        <th style="text-align: center;">DOB</th>
+        <th style="text-align: center;">Allergens</th>
+        <th style="text-align: center;">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let child of enrolledChildren | paginate: { itemsPerPage: 10, currentPage: p }">
+        <td style="text-align: center;"> {{ child.first_name }} </td>
+        <td style="text-align: center;"> {{ child.last_name }} </td>
+        <td style="text-align: center;"> {{ child.dob }} </td>
+        <td style="text-align: center;"> {{ child.allergens }} </td>
+        <td style="text-align: center;"><a (click)="deleteChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 style="text-align: right;" [hidden]="!assignedEducators.length"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
+  <pagination-controls (pageChange)="p = $event" [hidden]="!assignedEducators.length"></pagination-controls>
+</div>
