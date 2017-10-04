@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdCardModule } from '@angular/material';
-import { MdDatepickerModule } from '@angular/material';
+import { MdDatepickerModule, MdSelectModule, MdListModule } from '@angular/material';
 import 'hammerjs';
 import { OrderModule } from 'ngx-order-pipe';
 import { DndModule } from 'ng2-dnd';
@@ -91,6 +91,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     MdCardModule,
     MdDatepickerModule,
+    MdListModule,
+    MdSelectModule,
     OrderModule,
     DndModule.forRoot(),
     NgProgressModule,

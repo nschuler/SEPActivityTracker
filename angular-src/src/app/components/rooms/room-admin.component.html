@@ -1,3 +1,19 @@
+<h1 style="text-align: center;">Assigned Educator(s) !</h1>
+<br>
+<div class="text-center">
+    <button [ngClass]="{disabled : enrolled}" class="btn btn-primary" (click)="enrolled || joinRoom()">Log in to Room</button>
+</div>
+<br>
+<br>
+<md-nav-list style="width: 300px; margin:0 auto;" layout-align="center center">
+   <a md-list-item *ngFor="let educator of assignedEducators" style="text-align: center;">
+      <span style="flex: 1 1 auto;"> id[{{ educator }}] - Educator Name</span>
+      <a (click)="deleteEducator(educator); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a>
+   </a>
+   <p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">No Educators currently enrolled in this Room!</p>
+</md-nav-list>
+<br>
+<hr>
 <h1 style="text-align: center;">Children !</h1>
       <div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
         <table class="table table-striped" >

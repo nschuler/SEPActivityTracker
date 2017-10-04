@@ -52,7 +52,9 @@ export class RoomListComponent implements OnInit {
     this.educatorService.getEducators().subscribe(data => {
       if(data.success)
       {
-        this.educators.push(data.educators[0])
+        for (var i=0; i<data.educators.length; i++) {
+            this.educators.push(data.educators[i])
+        }
         this.fetchAssignedEducator()
 
       }
@@ -62,10 +64,13 @@ export class RoomListComponent implements OnInit {
   fetchAssignedEducator() {
     for (var i=0; i<this.educators.length; i++) {
       if (this.educators[i].room_id != null) {
-        this.assignedEducators[this.educators[i].room_id] = [];
+        if (!this.assignedEducators[this.educators[i].room_id]) {
+          this.assignedEducators[this.educators[i].room_id] = [];
+        }
         this.assignedEducators[this.educators[i].room_id].push(this.educators[i].staff_id)
       }
     }
+
   }
 
   deleteRoom(room) {

@@ -55,7 +55,7 @@ export class AuthService {
   }
 
   loadProfile(){
-    return localStorage.getItem('profile');
+    return localStorage.getItem('user');
   }
 
   loggedIn(){
