@@ -38,6 +38,10 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
 
+    this.options = new DatePickerOptions({
+      format: 'DD-MM-YYYY',
+      initialDate: new Date()
+    });
     // Example -
     // this.parentService.getActivityRecords("1").subscribe(data => {
     //   console.log(data);
@@ -107,11 +111,6 @@ export class TimetableComponent implements OnInit {
       console.log(err);
       return false;
     });
-  }
-
-  openDatepicker() {
-    console.log("Clickity click click!");
-    console.log(this.childArray)
   }
 
   likeActivity() {
