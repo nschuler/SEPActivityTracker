@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { EducatorService } from '../../services/educator.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-room-edit',
@@ -14,7 +15,7 @@ export class RoomEditComponent implements OnInit {
   room_description: string;
 
 
-  constructor(private route: ActivatedRoute, private location: Location, private educatorService: EducatorService) { }
+  constructor(private route: ActivatedRoute, private location: Location, private educatorService: EducatorService, private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
     this.room_id = +this.route.snapshot.params['room'];
@@ -50,8 +51,10 @@ export class RoomEditComponent implements OnInit {
       .subscribe(data => {
         if(data.success)
         {
-          console.log(data);
+          this.flashMessage.show('Room ' + this.room_id + ' was updated!', {cssClass:'alert-success', timeout:5000});
           this.goBack();
+        } else {
+          this.flashMessage.show(data.msg, {cssClass:'alert-danger', timeout:5000});
         }
       }, err => {console.log(err);
     });

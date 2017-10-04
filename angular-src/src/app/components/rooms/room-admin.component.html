@@ -1,0 +1,24 @@
+<h1 style="text-align: center;">Children !</h1>
+      <div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
+        <table class="table table-striped" >
+            <thead>
+                <tr style="text-align: center;">
+                  <th style="text-align: center;">First Name</th>
+                  <th style="text-align: center;">Last Name</th>
+                  <th style="text-align: center;">DOB</th>
+                  <th style="text-align: center;">Allergens</th>
+                  <th style="text-align: center;">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let child of enrolledChildren | paginate: { itemsPerPage: 10, currentPage: p }">
+                    <td style="text-align: center;"> {{ child.first_name }} </td>
+                    <td style="text-align: center;"> {{ child.last_name }} </td>
+                    <td style="text-align: center;"> {{ child.dob }} </td>
+                    <td style="text-align: center;"> {{ child.allergens }} </td>
+                    <td style="text-align: center;"><a (click)="deleteChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 style="text-align: right;"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>

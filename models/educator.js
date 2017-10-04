@@ -5,9 +5,8 @@ var mysql_query = require('../connection');
 
 var EDUCATOR = 2;
 
-module.exports.getChildren = function(id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getChildren = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Child', (err, children)=>{
@@ -22,9 +21,8 @@ module.exports.getChildren = function(id, callback) {
 	});
 }
 
-module.exports.getRooms = function(id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getRooms = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Room', (err, rooms) => { 
@@ -38,9 +36,8 @@ module.exports.getRooms = function(id, callback) {
 	});
 }
 
-module.exports.getChildrenInRoom = function(id, room_id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getChildrenInRoom = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			this.fetchChildrenFromDB(room_id, (err, children) => {
@@ -55,9 +52,8 @@ module.exports.getChildrenInRoom = function(id, room_id, callback) {
 	});
 }
 
-module.exports.updateRoom = function(id, room, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.updateRoom = function(user, room, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('UPDATE Room Set room_name = ?, room_description = ? WHERE id = ?',[room.name, room.description, room.id],(err, data) => { 
@@ -71,9 +67,8 @@ module.exports.updateRoom = function(id, room, callback) {
 	});
 }
 
-module.exports.getAllActivities = function(id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getAllActivities = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Activity', (err, activityData) => { 
@@ -101,9 +96,8 @@ module.exports.getAllActivities = function(id, callback) {
 	});
 }
 
-module.exports.getActivitiesByRoomId = function(id, room_id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getActivitiesByRoomId = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Activity WHERE room_id = ?', room_id, (err, activityData) => { 
@@ -132,9 +126,8 @@ module.exports.getActivitiesByRoomId = function(id, room_id, callback) {
 	});
 }
 
-module.exports.getRoomById = function(id, room_id, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getRoomById = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('SELECT * FROM Room WHERE id = ?', room_id, (err, roomData) => { 
@@ -148,9 +141,8 @@ module.exports.getRoomById = function(id, room_id, callback) {
 	});
 }
 
-module.exports.createActivity = function(id, data, callback){
-	this.validateEducator(id, (err,valid) => { 
-		if(err) callback(err, null);
+module.exports.createActivity = function(user, data, callback){
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			let activity = {
@@ -168,12 +160,10 @@ module.exports.createActivity = function(id, data, callback){
 	});
 }
 
-module.exports.updateActivity = function(id, activity, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.updateActivity = function(user, activity, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			// Validate data...
 			mysql_query('UPDATE Activity SET type = ?, name = ?, description = ? WHERE id = ?',[activity.type, activity.name, activity.description, activity.id],(err, data) => { 
 				callback(err, data);
 			});
@@ -185,9 +175,8 @@ module.exports.updateActivity = function(id, activity, callback) {
 	});
 }
 
-module.exports.deleteActivity = function(id, activity_id, callback){
-	this.validateEducator(id, (err,valid) => { 
-		if(err) callback(err, null);
+module.exports.deleteActivity = function(user, activity_id, callback){
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('DELETE FROM Activity WHERE id = ?', activity_id, (err, data) => { 
@@ -227,10 +216,8 @@ module.exports.getRoomID = function(room_name, callback) {
 	});
 }
 
-module.exports.deleteRoomByID = function(id, room_id, callback) {
-
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.deleteRoomByID = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			mysql_query('DELETE FROM Room WHERE id = ?', room_id, (err, data) => { 
@@ -244,9 +231,8 @@ module.exports.deleteRoomByID = function(id, room_id, callback) {
 	});
 }
 
-module.exports.createRoom = function(id, roomData, callback) {
-	this.validateEducator(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.createRoom = function(user, roomData, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
 			let room = {
@@ -263,16 +249,13 @@ module.exports.createRoom = function(id, roomData, callback) {
 	});
 }
 
-module.exports.validateEducator = function(id, callback) {
-
-	mysql_query('SELECT role_type FROM Role WHERE id = ?', id, (err, data) => {
-		if(data[0].role_type == EDUCATOR)
-		{
-			callback(err, true);
-		}
-		else
-		{
-			callback(err, false);
-		}
-	});
+module.exports.validateEducator = function(role_type, callback) {
+	if(role_type === EDUCATOR)
+	{
+		callback(true);
+	} 
+	else
+	{
+		callback(false);
+	}
 }

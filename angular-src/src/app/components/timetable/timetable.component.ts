@@ -38,6 +38,7 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
 
+<<<<<<< HEAD
     this.options = new DatePickerOptions({
       format: 'DD-MM-YYYY',
       initialDate: new Date()
@@ -45,6 +46,21 @@ export class TimetableComponent implements OnInit {
     // Example -
     // this.parentService.getActivityRecords("1").subscribe(data => {
     //   console.log(data);
+=======
+    // Example -
+    // this.parentService.getActivityRecords("1").subscribe(data => {
+    //   let activityRecords = data.records;
+    //   console.log(activityRecords);
+
+    //   let container = {
+    //     activityrecord_id: activityRecords[0].id,
+    //     comment: "This is my third comment",
+    //   }
+
+    //   this.parentService.commentOnActivityRecord(container).subscribe(temp => { 
+    //     console.log(temp);
+    //   });
+>>>>>>> master
     // });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 
@@ -78,6 +94,7 @@ export class TimetableComponent implements OnInit {
               'allergens': allergens,
               'child_id': child_id,
               'activities': this.roomActivities
+<<<<<<< HEAD
             });
           } else {
             this.childArray.push({
@@ -88,6 +105,8 @@ export class TimetableComponent implements OnInit {
               'allergens': allergens,
               'child_id': child_id
               // 'activities': this.roomActivities
+=======
+>>>>>>> master
             });
           }
           
@@ -113,6 +132,14 @@ export class TimetableComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
+=======
+  openDatepicker() {
+    console.log("Clickity click click!");
+    console.log(this.childArray)
+  }
+
+>>>>>>> master
   likeActivity() {
     if(this.boolLike == true) {
       console.log("You have unliked this activity!");

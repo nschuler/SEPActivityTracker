@@ -17,8 +17,6 @@ import { CalendarModule } from 'angular-calendar';
 import { NgbModalModule, NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerModule } from 'ng2-datepicker';
 
-
-
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
@@ -37,6 +35,7 @@ import { EducatorService } from './services/educator.service';
 import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
+import { RoomAdminComponent } from './components/rooms/room-admin.component';
 import { RoomPlanComponent, DialogOverviewExampleDialog, DateTimePickerComponent } from './components/rooms/room-plan.component';
 import { ActivitiesListComponent } from './components/activities/activities-list.component';
 import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
@@ -53,6 +52,7 @@ const appRoutes: Routes = [
   {path:'rooms/create', component:RoomAddComponent, canActivate:[AuthGuard]},
   {path:'rooms/edit/:room', component:RoomEditComponent, canActivate:[AuthGuard]},
   {path:'rooms/plan/:room', component:RoomPlanComponent, canActivate:[AuthGuard]},
+  {path:'rooms/admin/:room', component:RoomAdminComponent, canActivate:[AuthGuard]},
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
@@ -72,11 +72,13 @@ const appRoutes: Routes = [
     RoomEditComponent,
     RoomAddComponent,
     RoomPlanComponent,
+    RoomAdminComponent,
     ActivitiesListComponent,
     ActivitiesCreateComponent,
     ActivitiesEditComponent,
     DialogOverviewExampleDialog,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    RoomAdminComponent
    ],
   imports: [
     BrowserModule,

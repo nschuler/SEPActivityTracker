@@ -8,9 +8,6 @@ import { EducatorService } from '../../services/educator.service';
 })
 export class ActivitiesListComponent implements OnInit {
   activityTypes = {};
-
-  
-
   activities = [];
   
   constructor(private educatorService: EducatorService) { }

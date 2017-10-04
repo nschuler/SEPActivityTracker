@@ -40,12 +40,12 @@
 
     <div class="section usage-section ">
         <h1>Activities !</h1>
-        
+        <a [routerLink]="['/rooms/admin',room_id]">Lets plan activities!</a>   
     </div>
 
-    <div class="section start-use-it-now-section">
+     <div class="section start-use-it-now-section">
         <h1>TEMP!</h1>
-    </div> 
+    </div>
 </div> -->
 
 
@@ -224,3 +224,18 @@
   </tbody>
 
 </table>
+<br>
+<hr>
+<div id="content-wrapper" [mnFullpage]="options"
+[mnFullpageNavigation]="true"
+[mnFullpageKeyboardScrolling]="true"
+[mnFullpageSlidesNavigation]="true">
+
+
+    <div class="section usage-section ">
+        <h1>Admin !</h1>
+        <a [routerLink]="['/rooms/admin',room_id]">Lets enter the room admin panel!</a>   
+    </div>
+
+
+</div>

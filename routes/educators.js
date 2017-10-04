@@ -8,7 +8,7 @@ var Educator = require('../models/educator')
 
 // All Children
 router.get('/allchildren', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.getChildren(req.user[0].id, (err, data) => {
+	Educator.getChildren(req.user[0], (err, data) => {
 		if(err){
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -19,8 +19,7 @@ router.get('/allchildren', passport.authenticate('jwt', {session:false}), (req, 
 
 // Children Associated with a Room
 router.post('/childrenroom', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-
-	Educator.getChildrenInRoom(req.user[0].id, req.body.room_id, (err, data) => {
+	Educator.getChildrenInRoom(req.user[0], req.body.room_id, (err, data) => {
 		if(err){
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -31,7 +30,7 @@ router.post('/childrenroom', passport.authenticate('jwt', {session:false}), (req
 
 // Rooms
 router.get('/rooms', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.getRooms(req.user[0].id, (err, data) => { 
+	Educator.getRooms(req.user[0], (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -41,7 +40,7 @@ router.get('/rooms', passport.authenticate('jwt', {session:false}), (req, res, n
 });
 
 router.post('/updateroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.updateRoom(req.user[0].id, req.body.room, (err, data) => { 
+	Educator.updateRoom(req.user[0], req.body.room, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -52,7 +51,7 @@ router.post('/updateroom', passport.authenticate('jwt', {session:false}), (req, 
 
 // Activities
 router.get('/allactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getAllActivities(req.user[0].id, (err, data) => { 
+	Educator.getAllActivities(req.user[0], (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -62,7 +61,7 @@ router.get('/allactivities', passport.authenticate('jwt', {session:false}), (req
 });
 
 router.post('/activitiesbyroomid', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getActivitiesByRoomId(req.user[0].id, req.body.room_id, (err, data) => { 
+	Educator.getActivitiesByRoomId(req.user[0], req.body.room_id, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -72,7 +71,7 @@ router.post('/activitiesbyroomid', passport.authenticate('jwt', {session:false})
 });
 
 router.post('/roombyid', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getRoomById(req.user[0].id, req.body.room_id, (err, data) => { 
+	Educator.getRoomById(req.user[0], req.body.room_id, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -92,8 +91,7 @@ router.post('/deleteroom', passport.authenticate('jwt', {session:false}), (req, 
 });
 
 router.post('/createroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	// console.log(req.body.room);
-	Educator.createRoom(req.user[0].id, req.body.room, (err, data) => { 
+	Educator.createRoom(req.user[0], req.body.room, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -103,7 +101,7 @@ router.post('/createroom', passport.authenticate('jwt', {session:false}), (req, 
 });
 
 router.post('/createactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.createActivity(req.user[0].id, req.body.activity, (err, data) => { 
+	Educator.createActivity(req.user[0], req.body.activity, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -113,7 +111,7 @@ router.post('/createactivity', passport.authenticate('jwt', {session:false}), (r
 });
 
 router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.deleteActivity(req.user[0].id, req.body.activity_id, (err, data) => { 
+	Educator.deleteActivity(req.user[0], req.body.activity_id, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
@@ -123,7 +121,7 @@ router.post('/deleteactivity', passport.authenticate('jwt', {session:false}), (r
 });
 
 router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.updateActivity(req.user[0].id, req.body.activity, (err, data) => { 
+	Educator.updateActivity(req.user[0], req.body.activity, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {

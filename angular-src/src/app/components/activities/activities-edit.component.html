@@ -22,7 +22,7 @@
         <div class="form-group">
           <label>Activity Description</label>
   				<select class="form-control" required #activity_type>
-  					<option *ngFor="let type of activityTypes" [value]="type.id">{{type.name}}</option>
+  					<option *ngFor="let type of activityTypes" [selected]="type.name == selected_activity_type" [value]="type.id">{{type.name}}</option>
   				</select>
         </div>
 			</div>      
@@ -30,7 +30,7 @@
 
     <div class="row">
 <!--             <div class="card-panel teal lighten-2 col s6 m6 l6" *ngIf="activityEdited" >{{info}}</div> -->
-            <button  class="btn waves-effect waves-light right" type="submit" name="action" (click)="updateActivity()">Save Changes<i class="material-icons right">send</i></button>
+            <button  class="btn waves-effect waves-light right" type="submit" name="action" (click)="updateActivity(activity_type.value)">Save Changes<i class="material-icons right">send</i></button>
             <a md-button class="btn right" (click)="goBack()"><i class="material-icons left">keyboard_return</i>Back</a>
     </div>
     </form>

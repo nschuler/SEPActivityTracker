@@ -5,27 +5,23 @@ var mysql_query = require('../connection');
 
 var PARENT = 1;
 
-module.exports.getFamily = function(id, callback) {
-	this.validateParent(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getFamily = function(user, callback) {
+	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT family_id FROM FamilyMember WHERE id = ?', id, (err, familyMember) => { 
+			mysql_query('SELECT family_id FROM FamilyMember WHERE id = ?', user.id, (err, familyMember) => { 
 				if(err) callback(err, null);
 
-				mysql_query('SELECT * FROM Family WHERE id = ?', familyMember[0].family_id, (err, family) => {
+				mysql_query('SELECT * FROM Family INNER JOIN Child ON Family.id = Child.family_id WHERE Family.id = ?', familyMember[0].family_id, (err, children) => { 
 					if(err) callback(err, null);
 
-					mysql_query('SELECT * FROM Child WHERE family_id = ?', family[0].id, (err, children) => {
+					let familyData = {
+						familyName: children[0].family_name,
+						address: children[0].address,
+						children: children
+					};
 
-						let familyData = {
-							familyName: family[0].family_name,
-							address: family[0].address,
-							children: children
-						};
-
-						callback(err, familyData);
-					});
+					callback(err, familyData);
 				});
 			});
 		}
@@ -36,12 +32,16 @@ module.exports.getFamily = function(id, callback) {
 	});
 }
 
-module.exports.getActivityRecords = function(id, child_id, callback) {
-	this.validateParent(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.getActivityRecords = function(user, child_id, callback) {
+	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
-			// query ChildActivityRecord by DATE and the associated ActivityRecord
+			// Maybe we could query activityrecords by DATE, for now just retrieve all.
+
+			mysql_query('SELECT * FROM ChildActivityRecord INNER JOIN ActivityRecord ON ChildActivityRecord.activity_record_id = ActivityRecord.id WHERE ChildActivityRecord.child_id = ?', child_id, (err, record) => { 
+				if(err) callback(err, null);
+				callback(err, record);
+			});
 		}
 		else
 		{
@@ -50,15 +50,41 @@ module.exports.getActivityRecords = function(id, child_id, callback) {
 	});
 }
 
-module.exports.getCurrentActivities = function(id, room_id, callback) {
-	this.validateParent(id, (err, valid) => { 
-		if(err) callback(err, null);
+module.exports.commentOnChildActivityRecord = function(user, userData, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			let newComment = {
+				comment: userData.comment,
+				date: Date.now(),
+				author: user.username
+			}
+
+			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', userData.activityrecord_id, (err,data) => { 
+				if(err) callback(err,null);
+				let commentObject = JSON.parse(data[0].comments);
+				commentObject.comments.push(newComment); // Add new comment
+				
+				mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),userData.activityrecord_id],(err,data)=>{
+					callback(err,data);
+				});
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
+module.exports.getCurrentActivities = function(user, room_id, callback) {
+	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
 			// Query Schedule for 'activities' which matches the room_id the Child/Children is in
 			// Maybe we could query activities per day, for now, just retrieve all activities
 			
-			mysql_query('SELECT * FROM Schedule INNER JOIN Activity on Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', id, (err, schedule) => { 
+			mysql_query('SELECT * FROM Schedule INNER JOIN Activity ON Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
 				if(err) callback(err, null);
 				callback(err, schedule);
 			});
@@ -70,16 +96,13 @@ module.exports.getCurrentActivities = function(id, room_id, callback) {
 	});
 }
 
-module.exports.validateParent = function(id, callback) {
-	mysql_query('SELECT role_type FROM Role WHERE id = ?', id, (err, data) => {
-		if(data[0].role_type == PARENT)
-		{
-			callback(err, true);
-		}
-		else
-		{
-			callback(err, false);
-		}
-	});
+module.exports.validateParent = function(role_type, callback) {
+	if(role_type === PARENT)
+	{
+		callback(true);
+	} 
+	else
+	{
+		callback(false);
+	}
 }
-

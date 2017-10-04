@@ -6,9 +6,14 @@
             <md-grid-tile class="gray" md-rowspan="3" md-colspan="1.5" md-colspan-sm="1" md-colspan-xs="1">
                 <md-grid-tile-header style="background: #1a8cff; font-size: 16px;"><h3>Profile</h3></md-grid-tile-header>
                 <div>
+<<<<<<< HEAD
                     <img src="https://1.bp.blogspot.com/_5tsELtz6AzA/RzJamBoiS9I/AAAAAAAAAaU/-MzQIx1TO0M/s320/Bennett+passport.jpg&w=310&h=214" alt="Child" class="image">
                     <div class="childInfo">
                     <h3><b>About {{x.first_name}}</b></h3>
+=======
+                    <img src="https://1.bp.blogspot.com/_5tsELtz6AzA/RzJamBoiS9I/AAAAAAAAAaU/-MzQIx1TO0M/s320/Bennett+passport.jpg&w=310&h=214" alt="Child" class="wrapper">
+                    <h4><b>About {{x.first_name}}</b></h4>
+>>>>>>> master
                     <b>DOB:</b> {{x.dob}}<br>
                     <b>Surname:</b> {{this.familyName}}<br>
                     <b>Address:</b> {{this.address}}<br>
@@ -23,9 +28,13 @@
             </md-grid-tile>
             
             <md-grid-tile class="gray">
+<<<<<<< HEAD
                 <md-grid-tile-header style="background: #1a8cff; font-size: 16px;">
                     <h3>Activities - Currently in Room #{{x.room_id}}</h3>
                 </md-grid-tile-header>
+=======
+                <md-grid-tile-header><h3>Activities - Currently in Room #{{x.room_id}}</h3></md-grid-tile-header>
+>>>>>>> master
                 <div>
                     <md-card class="example-card" *ngFor="let activity of x.activities">
                         <md-card-header>
