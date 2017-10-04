@@ -25,6 +25,8 @@ export class TimetableComponent implements OnInit {
 
   childArray = [];
 
+  commentsArray = [];
+
   date: DateModel;
   options: DatePickerOptions;
 
@@ -32,26 +34,28 @@ export class TimetableComponent implements OnInit {
     private authService: AuthService, 
     private parentService: ParentService,
     private router: Router
-    ) {
-      this.options = new DatePickerOptions();
-    }
+    ) { }
 
   ngOnInit() {
 
-    // Example -
-    // this.parentService.getActivityRecords("1").subscribe(data => {
-    //   let activityRecords = data.records;
-    //   console.log(activityRecords);
+    this.options = new DatePickerOptions({
+        format: 'YYYY-MM-DD',
+        initialDate: new Date()
+      });
 
-    //   let container = {
-    //     activityrecord_id: activityRecords[0].id,
-    //     comment: "This is my third comment",
-    //   }
+    this.parentService.getActivityRecords("1").subscribe(data => {
+      console.log(data);
 
-    //   this.parentService.commentOnChildActivityRecord(container).subscribe(temp => { 
-    //     console.log(temp);
-    //   });
-    // });
+      if(data.success) {
+        for(var i = 0; i < data.records.length; i++) {
+          var JSONcomments = JSON.parse(data.records[i].comments);
+          for(var x = 0; x < JSONcomments.comments.length; x++) {
+            //console.log(JSONcomments.comments[x].comment);
+            this.commentsArray.push(JSONcomments.comments[x].comment)
+          }
+        }
+      }
+    });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 
       this.roomActivities = activityData.activities;
@@ -63,7 +67,6 @@ export class TimetableComponent implements OnInit {
         this.familyName = data.family.familyName;
         this.address = data.family.address;
         this.boolLike = false;
-
 
         // Populate the child array
         for (var i = 0; i < data.family.children.length; i++) {
@@ -85,21 +88,17 @@ export class TimetableComponent implements OnInit {
               'child_id': child_id,
               'activities': this.roomActivities
             });
+          } else {
+            this.childArray.push({
+              'first_name': first_name,
+              'dob': dob,
+              'family_id': family_id,
+              'room_id': room_id,
+              'allergens': allergens,
+              'child_id': child_id
+              // 'activities': this.roomActivities
+            });
           }
-          
-
-          // this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
-          //   this.childActivities = activityData.activities;
-          //   this.childArray.push({
-          //     'first_name': first_name,
-          //     'dob': dob,
-          //     'family_id': family_id,
-          //     'room_id': room_id,
-          //     'allergens': allergens,
-          //     'child_id': child_id,
-          //     'activities': this.childActivities
-          //   });
-          // });
         }
       }
     },
@@ -107,11 +106,6 @@ export class TimetableComponent implements OnInit {
       console.log(err);
       return false;
     });
-  }
-
-  openDatepicker() {
-    console.log("Clickity click click!");
-    console.log(this.childArray)
   }
 
   likeActivity() {
@@ -125,9 +119,5 @@ export class TimetableComponent implements OnInit {
 
       this.boolLike = true;
     }
-  }
-
-  leaveComment() {
-    console.log("Leave a comment!");
   }
 }
