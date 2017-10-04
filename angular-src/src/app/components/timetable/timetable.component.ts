@@ -25,6 +25,8 @@ export class TimetableComponent implements OnInit {
 
   childArray = [];
 
+  commentsArray = [];
+
   date: DateModel;
   options: DatePickerOptions;
 
@@ -32,36 +34,28 @@ export class TimetableComponent implements OnInit {
     private authService: AuthService, 
     private parentService: ParentService,
     private router: Router
-    ) {
-      this.options = new DatePickerOptions();
-    }
+    ) { }
 
   ngOnInit() {
 
-<<<<<<< HEAD
     this.options = new DatePickerOptions({
-      format: 'DD-MM-YYYY',
-      initialDate: new Date()
+        format: 'YYYY-MM-DD',
+        initialDate: new Date()
+      });
+
+    this.parentService.getActivityRecords("1").subscribe(data => {
+      console.log(data);
+
+      if(data.success) {
+        for(var i = 0; i < data.records.length; i++) {
+          var JSONcomments = JSON.parse(data.records[i].comments);
+          for(var x = 0; x < JSONcomments.comments.length; x++) {
+            console.log(JSONcomments.comments[x].comment);
+            this.commentsArray.push(JSONcomments.comments[x].comment)
+          }
+        }
+      }
     });
-    // Example -
-    // this.parentService.getActivityRecords("1").subscribe(data => {
-    //   console.log(data);
-=======
-    // Example -
-    // this.parentService.getActivityRecords("1").subscribe(data => {
-    //   let activityRecords = data.records;
-    //   console.log(activityRecords);
-
-    //   let container = {
-    //     activityrecord_id: activityRecords[0].id,
-    //     comment: "This is my third comment",
-    //   }
-
-    //   this.parentService.commentOnActivityRecord(container).subscribe(temp => { 
-    //     console.log(temp);
-    //   });
->>>>>>> master
-    // });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 
       this.roomActivities = activityData.activities;
@@ -73,7 +67,6 @@ export class TimetableComponent implements OnInit {
         this.familyName = data.family.familyName;
         this.address = data.family.address;
         this.boolLike = false;
-
 
         // Populate the child array
         for (var i = 0; i < data.family.children.length; i++) {
@@ -94,7 +87,6 @@ export class TimetableComponent implements OnInit {
               'allergens': allergens,
               'child_id': child_id,
               'activities': this.roomActivities
-<<<<<<< HEAD
             });
           } else {
             this.childArray.push({
@@ -105,8 +97,6 @@ export class TimetableComponent implements OnInit {
               'allergens': allergens,
               'child_id': child_id
               // 'activities': this.roomActivities
-=======
->>>>>>> master
             });
           }
           
@@ -132,14 +122,6 @@ export class TimetableComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
-=======
-  openDatepicker() {
-    console.log("Clickity click click!");
-    console.log(this.childArray)
-  }
-
->>>>>>> master
   likeActivity() {
     if(this.boolLike == true) {
       console.log("You have unliked this activity!");
@@ -150,18 +132,6 @@ export class TimetableComponent implements OnInit {
           console.log(this.childArray)
 
       this.boolLike = true;
-    }
-  }
-
-  leaveComment() {
-    console.log("Leave a comment!");
-  }
-
-  describeRoom(room_id) {
-    if (room_id != null) {
-      return "Currently in Room #" + room_id;
-    } else {
-      return "Not currently assigned to a room!";
     }
   }
 }

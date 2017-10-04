@@ -29,3 +29,20 @@
 	top: 430px;
 	left: 30px;
 }
+
+.commentsBar {
+	position: absolute;
+	background: #1a8cff;
+	color: #FFFFFF;
+	top: -60px;
+	width: 550px;
+}
+
+.example-header-image {
+	background-image: url('http://consciousmama.com/wp-content/uploads/2011/09/smilingFace.jpg');
+	background-size: cover;
+}
+
+.comment-card {
+	width: 550px;
+}
