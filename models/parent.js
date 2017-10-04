@@ -50,6 +50,33 @@ module.exports.getActivityRecords = function(user, child_id, callback) {
 	});
 }
 
+module.exports.commentOnChildActivityRecord = function(user, userData, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			let newComment = {
+				comment: userData.comment,
+				date: Date.now(),
+				author: user.username
+			}
+
+			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', userData.activityrecord_id, (err,data) => { 
+				if(err) callback(err,null);
+				let commentObject = JSON.parse(data[0].comments);
+				commentObject.comments.push(newComment); // Add new comment
+				
+				mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),userData.activityrecord_id],(err,data)=>{
+					callback(err,data);
+				});
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
 module.exports.getCurrentActivities = function(user, room_id, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)

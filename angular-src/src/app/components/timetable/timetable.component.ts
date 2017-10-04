@@ -40,7 +40,17 @@ export class TimetableComponent implements OnInit {
 
     // Example -
     // this.parentService.getActivityRecords("1").subscribe(data => {
-    //   console.log(data);
+    //   let activityRecords = data.records;
+    //   console.log(activityRecords);
+
+    //   let container = {
+    //     activityrecord_id: activityRecords[0].id,
+    //     comment: "This is my third comment",
+    //   }
+
+    //   this.parentService.commentOnActivityRecord(container).subscribe(temp => { 
+    //     console.log(temp);
+    //   });
     // });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 

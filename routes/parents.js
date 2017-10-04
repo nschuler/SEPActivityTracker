@@ -28,6 +28,17 @@ router.post('/activityrecords', passport.authenticate('jwt', {session:false}), (
 	});
 });
 
+// Comment on Activity Record
+router.post('/commentonchildactivityrecord', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.commentOnChildActivityRecord(req.user[0], req.body.data, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Comment Made'});
+		}
+	});
+});
+
 // Child Current Activities
 router.post('/currentactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Parent.getCurrentActivities(req.user[0], req.body.room_id, (err, data) => {
