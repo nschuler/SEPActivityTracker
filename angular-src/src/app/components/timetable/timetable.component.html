@@ -1,4 +1,4 @@
-<h3><b>Viewing Activities for: <ng2-datepicker [options]="options" [(ngModel)]="date"></ng2-datepicker></b></h3>
+<h3><b>Viewing Activities for: <ng2-datepicker [options]="options" [(ngModel)]="date" (ngModelChange)="onChange()"></ng2-datepicker></b></h3>
 
 <md-tab-group>
     <md-tab *ngFor="let x of childArray" label="{{x.first_name}}">
@@ -39,7 +39,7 @@
                         </md-card-content>
                         <md-card-actions>
                             <button (click)="likeActivity()" md-button>{{this.boolLike ? "UNLIKE" : "LIKE"}}</button>
-                            <button (click)="leaveComment()" md-button>COMMENT</button>
+                            <button (click)="leaveComment(activity)" md-button>COMMENT</button>
                         </md-card-actions>
                     </md-card>
                 </div>

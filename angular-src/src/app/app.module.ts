@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdCardModule } from '@angular/material';
-import { MdDatepickerModule, MdSelectModule, MdListModule } from '@angular/material';
+import { MdDatepickerModule, MdSelectModule, MdListModule, MdDialogModule } from '@angular/material';
 import 'hammerjs';
 import { OrderModule } from 'ngx-order-pipe';
 import { DndModule } from 'ng2-dnd';
@@ -37,6 +37,8 @@ import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
 import { RoomAdminComponent } from './components/rooms/room-admin.component';
 import { RoomPlanComponent, DialogOverviewExampleDialog, DateTimePickerComponent } from './components/rooms/room-plan.component';
+import { MyDialogComponent } from './components/timetable/timetable.component';
+
 import { ActivitiesListComponent } from './components/activities/activities-list.component';
 import { ActivitiesCreateComponent } from './components/activities/activities-create.component';
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
@@ -78,7 +80,8 @@ const appRoutes: Routes = [
     ActivitiesEditComponent,
     DialogOverviewExampleDialog,
     DateTimePickerComponent,
-    RoomAdminComponent
+    RoomAdminComponent,
+    MyDialogComponent
    ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ const appRoutes: Routes = [
     MdDatepickerModule,
     MdListModule,
     MdSelectModule,
+    MdDialogModule,
     OrderModule,
     DndModule.forRoot(),
     NgProgressModule,
@@ -106,6 +110,6 @@ const appRoutes: Routes = [
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent]
+  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent, MyDialogComponent]
 })
 export class AppModule { }

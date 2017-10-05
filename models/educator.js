@@ -41,9 +41,22 @@ module.exports.getRooms = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT * FROM Room', (err, rooms) => { 
-				callback(err, rooms);
+			mysql_query('SELECT User.first_name, User.last_name, Educator.id, Educator.room_id FROM Educator INNER JOIN User ON Educator.id = User.id', (err, educators)=>{
+				if(err) callback(err, null);
+
+				mysql_query('SELECT * FROM Room', (err, rooms) => { 
+					let data = {
+						educators: educators,
+						rooms: rooms,
+					}
+					callback(err, data);
+				});
 			});
+
+
+			// mysql_query('SELECT * FROM Room', (err, rooms) => { 
+			// 	callback(err, rooms);
+			// });
 		}
 		else
 		{

@@ -82,13 +82,13 @@ export class RoomAdminComponent implements OnInit {
   deleteEducator(educator) {
     var index = this.assignedEducators.indexOf(educator);
     this.assignedEducators.splice(index, 1);
-    if (educator == this.user.id) {
+    if (educator.id == this.user.id) {
       this.enrolled = false;
     }
   }
 
   joinRoom() {
     this.enrolled = true;
-    this.assignedEducators.push(this.user.id)
+    this.assignedEducators.push(this.user)
   }
 }

@@ -9,7 +9,6 @@ import { EducatorService } from '../../services/educator.service';
 })
 export class RoomListComponent implements OnInit {
   rooms = [];
-  educators = []
   assignedEducators = {};
 
   constructor(private educatorService: EducatorService) { }
@@ -17,9 +16,10 @@ export class RoomListComponent implements OnInit {
   ngOnInit() {
     let rooms = JSON.parse(this.educatorService.loadRooms());
     if(rooms)
-      this.displayRooms(rooms);
+    {
+      this.displayRooms(rooms.rooms,rooms.educators);
+    }
 
-    this.fetchEducators();
     this.getAllRooms(); // Refresh from DB
   }
 
@@ -27,14 +27,15 @@ export class RoomListComponent implements OnInit {
     this.educatorService.getRooms().subscribe(data => {
       if(data.success)
       {
-        let roomData = data.data
-        //this.educatorService.storeRooms(roomData);
-        this.displayRooms(roomData);
+        this.displayRooms(data.data.rooms, data.data.educators);
+        this.educatorService.storeRooms(data.data);
       }
     }, err => {console.log(err);});
   }
 
-  displayRooms(rooms) {
+  displayRooms(rooms,educators) {
+    this.sortEducators(educators);
+
     this.rooms = []; // Clear existing array of rooms
     for (var i = 0; i < rooms.length; i++) {
       this.rooms.push(
@@ -48,29 +49,16 @@ export class RoomListComponent implements OnInit {
     }
   }
 
-  fetchEducators() {
-    this.educatorService.getEducators().subscribe(data => {
-      if(data.success)
-      {
-        for (var i=0; i<data.educators.length; i++) {
-            this.educators.push(data.educators[i])
+  sortEducators(educators) {
+    this.assignedEducators = {};
+    for (var i=0; i<educators.length; i++) {
+      if (educators[i].room_id != null) {
+        if (!this.assignedEducators[educators[i].room_id]) {
+          this.assignedEducators[educators[i].room_id] = [];
         }
-        this.fetchAssignedEducator()
-
-      }
-    }, err => {console.log(err);});
-  }
-
-  fetchAssignedEducator() {
-    for (var i=0; i<this.educators.length; i++) {
-      if (this.educators[i].room_id != null) {
-        if (!this.assignedEducators[this.educators[i].room_id]) {
-          this.assignedEducators[this.educators[i].room_id] = [];
-        }
-        this.assignedEducators[this.educators[i].room_id].push(this.educators[i].staff_id)
+        this.assignedEducators[educators[i].room_id].push(educators[i])
       }
     }
-
   }
 
   deleteRoom(room) {
