@@ -39,7 +39,7 @@
                         </md-card-content>
                         <md-card-actions>
                             <button (click)="likeActivity()" md-button>{{this.boolLike ? "UNLIKE" : "LIKE"}}</button>
-                            <button (click)="leaveComment()" md-button>COMMENT</button>
+                            <button (click)="leaveComment(activity)" md-button>COMMENT</button>
                         </md-card-actions>
                     </md-card>
                 </div>
@@ -55,7 +55,7 @@
 <md-card class="comment-card" *ngFor="let x of commentsArray">
   <md-card-header>
     <div md-card-avatar class="example-header-image"></div>
-    <md-card-title>Maria Stidson</md-card-title>
+    <md-card-title>Maria Pavlova</md-card-title>
     <md-card-subtitle>Parent</md-card-subtitle>
   </md-card-header>
   <md-card-content>

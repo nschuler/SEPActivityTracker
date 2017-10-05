@@ -9,6 +9,8 @@ import { EducatorService } from '../../services/educator.service';
 })
 export class RoomListComponent implements OnInit {
   rooms = [];
+  educators = []
+  assignedEducators = {};
 
   constructor(private educatorService: EducatorService) { }
 
@@ -17,6 +19,7 @@ export class RoomListComponent implements OnInit {
     if(rooms)
       this.displayRooms(rooms);
 
+    this.fetchEducators();
     this.getAllRooms(); // Refresh from DB
   }
 
@@ -25,7 +28,7 @@ export class RoomListComponent implements OnInit {
       if(data.success)
       {
         let roomData = data.data
-        this.educatorService.storeRooms(roomData);
+        //this.educatorService.storeRooms(roomData);
         this.displayRooms(roomData);
       }
     }, err => {console.log(err);});
@@ -39,9 +42,35 @@ export class RoomListComponent implements OnInit {
           'id' : rooms[i].id,
           'name' : rooms[i].room_name,
           'schedule_id' : rooms[i].schedule_id,
-          'description' : rooms[i].room_description
+          'description' : rooms[i].room_description,
+          'educator' : this.assignedEducators[parseInt(rooms[i].id)]
         });
     }
+  }
+
+  fetchEducators() {
+    this.educatorService.getEducators().subscribe(data => {
+      if(data.success)
+      {
+        for (var i=0; i<data.educators.length; i++) {
+            this.educators.push(data.educators[i])
+        }
+        this.fetchAssignedEducator()
+
+      }
+    }, err => {console.log(err);});
+  }
+
+  fetchAssignedEducator() {
+    for (var i=0; i<this.educators.length; i++) {
+      if (this.educators[i].room_id != null) {
+        if (!this.assignedEducators[this.educators[i].room_id]) {
+          this.assignedEducators[this.educators[i].room_id] = [];
+        }
+        this.assignedEducators[this.educators[i].room_id].push(this.educators[i].staff_id)
+      }
+    }
+
   }
 
   deleteRoom(room) {

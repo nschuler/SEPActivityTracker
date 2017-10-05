@@ -30,6 +30,16 @@ export class EducatorService {
       .map(res => res.json());
   };
 
+  getEducators() {
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.get('http://localhost:8080/educators/all', {headers: headers})
+      .map(res => res.json());
+  }
+
   getChildrenInRoom(room_id) {
     this.loadToken(); // Grab auth token from local storage
 

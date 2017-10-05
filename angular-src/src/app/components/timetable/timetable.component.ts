@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MD_DIALOG_DATA } from '@angular/material';
 import { MdDatepickerModule } from '@angular/material';
 import { MdGridListModule } from '@angular/material';
 import { MdCardModule } from '@angular/material';
@@ -34,7 +35,8 @@ export class TimetableComponent implements OnInit {
   constructor(
     private authService: AuthService, 
     private parentService: ParentService,
-    private router: Router
+    private router: Router,
+    public dialog: MdDialog
     ) { }
 
   ngOnInit() {
@@ -47,15 +49,15 @@ export class TimetableComponent implements OnInit {
     this.parentService.getActivityRecords("1").subscribe(data => {
       console.log(data);
 
-      if(data.success) {
-        for(var i = 0; i < data.records.length; i++) {
-          var JSONcomments = JSON.parse(data.records[i].comments);
-          for(var x = 0; x < JSONcomments.comments.length; x++) {
-            console.log(JSONcomments.comments[x].comment);
-            this.commentsArray.push(JSONcomments.comments[x].comment)
-          }
-        }
-      }
+      // if(data.success) {
+      //   for(var i = 0; i < data.records.length; i++) {
+      //     var JSONcomments = JSON.parse(data.records[i].comments);
+      //     for(var x = 0; x < JSONcomments.comments.length; x++) {
+      //       this.commentsArray.push(JSONcomments.comments[x].comment)
+      //     }
+      //   }
+      // }
+      this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
     });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => { 
@@ -102,20 +104,6 @@ export class TimetableComponent implements OnInit {
               // 'activities': this.roomActivities
             });
           }
-          
-
-          // this.parentService.getCurrentActivities(data.family.children[i].room_id).subscribe(activityData => {
-          //   this.childActivities = activityData.activities;
-          //   this.childArray.push({
-          //     'first_name': first_name,
-          //     'dob': dob,
-          //     'family_id': family_id,
-          //     'room_id': room_id,
-          //     'allergens': allergens,
-          //     'child_id': child_id,
-          //     'activities': this.childActivities
-          //   });
-          // });
         }
       }
     },
@@ -145,5 +133,40 @@ export class TimetableComponent implements OnInit {
   getCurrentDate($event) {
     this.date=$event;
     console.log(this.date);
+  }
+
+  leaveComment(activity) {
+     let dialogRef = this.dialog.open(MyDialogComponent, {
+      width: '600px',
+      data: {activity: activity.name, data: activity.description}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+          this.commentsArray.push(result)
+      }
+    })
+  }
+}
+
+
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './my-dialog.component.html',
+  styleUrls: ['./my-dialog.component.css']
+})
+export class MyDialogComponent implements OnInit {
+  comment: any;
+  constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+    }
+
+  onCloseConfirm() {
+    this.thisDialogRef.close(this.comment);
+  }
+
+  onCloseCancel() {
+    this.thisDialogRef.close(null);
   }
 }

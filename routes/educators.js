@@ -6,6 +6,18 @@ const config = require('../config/database');
 
 var Educator = require('../models/educator')
 
+
+// All Educators
+router.get('/all', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.getEducators(req.user[0], (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'All Educators', educators:data});
+		}
+	});
+});
+
 // All Children
 router.get('/allchildren', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Educator.getChildren(req.user[0], (err, data) => {
