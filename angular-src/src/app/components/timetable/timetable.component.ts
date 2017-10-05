@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
+
 export class TimetableComponent implements OnInit {
   familyName: string;
   address: string;
@@ -64,6 +65,8 @@ export class TimetableComponent implements OnInit {
     this.parentService.getFamily().subscribe(data => {
       if(data.success)
       {
+        console.log(data);
+
         this.familyName = data.family.familyName;
         this.address = data.family.address;
         this.boolLike = false;
@@ -133,5 +136,14 @@ export class TimetableComponent implements OnInit {
 
       this.boolLike = true;
     }
+  }
+
+  updateDate($event) {
+    console.log('YTB')
+  }
+
+  getCurrentDate($event) {
+    this.date=$event;
+    console.log(this.date);
   }
 }
