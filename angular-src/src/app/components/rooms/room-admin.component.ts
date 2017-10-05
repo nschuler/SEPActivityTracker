@@ -66,10 +66,10 @@ export class RoomAdminComponent implements OnInit {
   fetchAssignedEducator() {
     for (var i=0; i<this.educators.length; i++) {
       if (this.educators[i].room_id != null) {
-        if (this.educators[i].staff_id == this.user.id) {
+        if (this.educators[i].id == this.user.id) {
           this.enrolled = true;
         }
-        this.assignedEducators.push(this.educators[i].staff_id)
+        this.assignedEducators.push(this.educators[i])
       }
     }
   }

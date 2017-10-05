@@ -9,7 +9,7 @@ module.exports.getEducators = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT * FROM Educator', (err, educator)=>{
+			mysql_query('SELECT User.first_name, User.last_name, Educator.id, Educator.room_id FROM Educator INNER JOIN User ON Educator.id = User.id', (err, educator)=>{
 				if(err) callback(err, null);
 				callback(err, educator);
 			});

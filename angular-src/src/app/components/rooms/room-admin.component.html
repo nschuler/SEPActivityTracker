@@ -7,7 +7,7 @@
 <br>
 <md-nav-list style="width: 300px; margin:0 auto;" layout-align="center center">
    <a md-list-item *ngFor="let educator of assignedEducators" style="text-align: center;">
-      <span style="flex: 1 1 auto;"> id[{{ educator }}] - Staff Name</span>
+      <span style="flex: 1 1 auto;"> [{{ educator.id }}] - {{educator.first_name}}</span>
       <a (click)="deleteEducator(educator); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a>
    </a>
    <p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">No Staff currently enrolled in this Room!</p>
