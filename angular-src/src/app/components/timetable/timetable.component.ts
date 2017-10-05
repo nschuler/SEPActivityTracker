@@ -135,12 +135,6 @@ export class TimetableComponent implements OnInit {
       }
     });
   }
-
-  onChange() {
-      console.log(this.date);
-      
-      // ... do other stuff here ...
-  }
 }
 
 
