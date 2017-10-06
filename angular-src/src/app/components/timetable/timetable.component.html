@@ -25,12 +25,20 @@
 
         <!-- Child Notes -->
         <div class="notes">
-            
+          <div class="row">
+            <legend>Notes</legend>
+            <ul class="list-group">
+              <li class="list-group-item">A comment will go right here.</li>
+              <li class="list-group-item">A comment will also go here.</li>
+            </ul>
+          </div>
         </div>
     </div>
 </div>
 
-<h3><b>Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker></b></h3>
+<legend style="padding-bottom: 15px;">
+  Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker>
+</legend>
 
 <div class="activityBox">
 	

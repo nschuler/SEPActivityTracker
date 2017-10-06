@@ -46,7 +46,7 @@ export class TimetableComponent implements OnInit {
 
     //console.log(this.parseURLParams(window.location.search));
     let childIdParam = this.route.snapshot.params['child'];
-    console.log("Child with Id - ", childIdParam);
+    console.log("Child ID: ", childIdParam);
 
     this.parentService.getFamily().subscribe(data => {
       if (data.success) {
@@ -57,13 +57,6 @@ export class TimetableComponent implements OnInit {
         // Populate the child array
         for (var i = 0; i < data.family.children.length; i++) {
           if (data.family.children[i].id == childIdParam) {
-            // this.childInfo.push({
-            //   'firstName'   : data.family.children[i].first_name,
-            //   'dob'         : data.family.children[i].dob,
-            //   'familyId'    : data.family.children[i].family_id,
-            //   'roomId'      : data.family.children[i].room_id,
-            //   'allergens'   : data.family.children[i].allergens
-            // })
             this.childInfo = data.family.children[i];
           }
 

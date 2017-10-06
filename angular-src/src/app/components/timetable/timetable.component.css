@@ -1,7 +1,7 @@
 .profile {
 	height: 600px;
 	border: 1px solid red;
-	margin-bottom: 50px;
+	margin-bottom: 25px;
 }
 
 .imgBox {
@@ -32,7 +32,7 @@
 	height: 500px;
 	width: 65%;
 	margin: 0 auto;
-	margin-top: 50px;
+	margin-top: 25px;
 	border: 1px solid red;
 }
 
