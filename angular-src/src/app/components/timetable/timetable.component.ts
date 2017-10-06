@@ -29,6 +29,8 @@ export class TimetableComponent implements OnInit {
 
   commentsArray = [];
 
+  childInfo = Object;
+
   date: DateModel;
   options: DatePickerOptions;
 
@@ -41,45 +43,30 @@ export class TimetableComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    //get Id from below!
+
     //console.log(this.parseURLParams(window.location.search));
-    let test = +this.route.snapshot.params['child'];
-    console.log("Child with Id - ",test);
-
-    this.options = new DatePickerOptions({
-        format: 'YYYY-MM-DD',
-        initialDate: new Date()
-      });
-
-    this.parentService.getActivityRecords("1").subscribe(data => {
-      console.log(data);
-
-      // if(data.success) {
-      //   for(var i = 0; i < data.records.length; i++) {
-      //     var JSONcomments = JSON.parse(data.records[i].comments);
-      //     for(var x = 0; x < JSONcomments.comments.length; x++) {
-      //       this.commentsArray.push(JSONcomments.comments[x].comment)
-      //     }
-      //   }
-      // }
-      this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
-    });
-
-    this.parentService.getCurrentActivities("1").subscribe(activityData => {
-      this.roomActivities = activityData.activities;
-    });
+    let childIdParam = this.route.snapshot.params['child'];
+    console.log("Child with Id - ", childIdParam);
 
     this.parentService.getFamily().subscribe(data => {
-      if(data.success)
-      {
-        console.log(data);
-
+      if (data.success) {
         this.familyName = data.family.familyName;
         this.address = data.family.address;
         this.boolLike = false;
 
         // Populate the child array
         for (var i = 0; i < data.family.children.length; i++) {
+          if (data.family.children[i].id == childIdParam) {
+            // this.childInfo.push({
+            //   'firstName'   : data.family.children[i].first_name,
+            //   'dob'         : data.family.children[i].dob,
+            //   'familyId'    : data.family.children[i].family_id,
+            //   'roomId'      : data.family.children[i].room_id,
+            //   'allergens'   : data.family.children[i].allergens
+            // })
+            this.childInfo = data.family.children[i];
+          }
+
           var first_name = data.family.children[i].first_name
           var dob = data.family.children[i].dob
           var family_id = data.family.children[i].family_id
@@ -111,10 +98,35 @@ export class TimetableComponent implements OnInit {
           }
         }
       }
+
+      console.log(this.childInfo);
     },
     err => {
       //console.log(err);
       return false;
+    });
+
+    this.options = new DatePickerOptions({
+        format: 'YYYY-MM-DD',
+        initialDate: new Date()
+      });
+
+    this.parentService.getActivityRecords("1").subscribe(data => {
+      console.log(data);
+
+      // if(data.success) {
+      //   for(var i = 0; i < data.records.length; i++) {
+      //     var JSONcomments = JSON.parse(data.records[i].comments);
+      //     for(var x = 0; x < JSONcomments.comments.length; x++) {
+      //       this.commentsArray.push(JSONcomments.comments[x].comment)
+      //     }
+      //   }
+      // }
+      this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
+    });
+
+    this.parentService.getCurrentActivities("1").subscribe(activityData => {
+      this.roomActivities = activityData.activities;
     });
   }
 

@@ -1,25 +1,18 @@
-#wrapper {
-    width: 500px;
-    border: 1px solid black;
-    overflow: hidden; /* add this to contain floated children */
-}
-#first {
-    width: 300px;
-    float:left; /* add this */
-    border: 1px solid red;
-}
-#second {
-    border: 1px solid green;
-    float: left; /* add this */
-}
-
 .profile {
-	height: 500px;
+	height: 600px;
 	border: 1px solid red;
 	margin-bottom: 50px;
 }
 
-.box {
+.imgBox {
+	height: 80%;
+	width: 50%;
+	float: left;
+	border: 1px solid blue;
+	text-align: center;
+}
+
+.infoBox {
 	height: 100%;
 	width: 50%;
 	float: right;
@@ -41,4 +34,15 @@
 	margin: 0 auto;
 	margin-top: 50px;
 	border: 1px solid red;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.row {
+	margin-left: 15px;
+	margin-top: 15px;
 }

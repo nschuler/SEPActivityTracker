@@ -1,8 +1,29 @@
 <div class="profile">
-    <div class="box">
+
+    <!-- Image Box -->
+    <div class="imgBox">
+      <span class="helper"></span>
+      <img src="http://placehold.it/450x450">
+    </div>
+
+    <!-- Information Box -->
+    <div class="infoBox">
+
+        <!-- Child Information -->
         <div class="information">
-            
+          <div class="row">
+            <legend>Profile</legend>
+            <ul class="list-group">
+              <li class="list-group-item"><b>First Name: </b>{{childInfo.first_name}}</li>
+              <li class="list-group-item"><b>Last Name: </b>{{familyName}}</li>
+              <li class="list-group-item"><b>Address: </b>{{address}}</li>
+              <li class="list-group-item"><b>DOB: </b>{{childInfo.dob}}</li>
+              <li class="list-group-item"><b>Allergens: </b>{{childInfo.allergens}}</li>
+            </ul>
+          </div>
         </div>
+
+        <!-- Child Notes -->
         <div class="notes">
             
         </div>
@@ -11,25 +32,6 @@
 
 <h3><b>Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker></b></h3>
 
-<<<<<<< HEAD
 <div class="activityBox">
 	
 </div>
-=======
-<md-grid-list cols="2" rowHeight="1:2">
-    <md-toolbar md-scroll-shrink class="commentsBar"><div class="md-toolbar-tools">Comments</div></md-toolbar>
-</md-grid-list>
-<br>
-<md-card class="comment-card" *ngFor="let x of commentsArray">
-  <md-card-header>
-    <div md-card-avatar class="example-header-image"></div>
-    <md-card-title>Maria Pavlova</md-card-title>
-    <md-card-subtitle>Parent</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <p>
-      {{x}}
-    </p>
-  </md-card-content>
-</md-card>
->>>>>>> d6ced70973652a41fc9c5d1d8aed11b94d8d3d99
