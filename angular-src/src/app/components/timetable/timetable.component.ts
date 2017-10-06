@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { ParentService } from '../../services/parent.service';
 import { DatePickerOptions, DateModel } from 'ng2-datepicker';
 import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -33,13 +33,18 @@ export class TimetableComponent implements OnInit {
   options: DatePickerOptions;
 
   constructor(
-    private authService: AuthService, 
+    private route: ActivatedRoute, 
+    private authService: AuthService,
     private parentService: ParentService,
     private router: Router,
     public dialog: MdDialog
     ) { }
 
   ngOnInit() {
+    //get Id from below!
+    //console.log(this.parseURLParams(window.location.search));
+    let test = +this.route.snapshot.params['child'];
+    console.log("Child with Id - ",test);
 
     this.options = new DatePickerOptions({
         format: 'YYYY-MM-DD',
@@ -60,7 +65,7 @@ export class TimetableComponent implements OnInit {
       this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
     });
 
-    this.parentService.getCurrentActivities("1").subscribe(activityData => { 
+    this.parentService.getCurrentActivities("1").subscribe(activityData => {
       this.roomActivities = activityData.activities;
     });
 
@@ -108,7 +113,7 @@ export class TimetableComponent implements OnInit {
       }
     },
     err => {
-      console.log(err);
+      //console.log(err);
       return false;
     });
   }

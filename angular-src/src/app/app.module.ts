@@ -25,6 +25,8 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { TimetableComponent } from './components/timetable/timetable.component';
+import { ParentComponent } from './components/parent/parent.component';
+
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
@@ -44,12 +46,13 @@ import { ActivitiesCreateComponent } from './components/activities/activities-cr
 import { ActivitiesEditComponent } from './components/activities/activities-edit.component';
 
 const appRoutes: Routes = [
+
   {path:'', component:HomeComponent},
   {path:'register', component:RegisterComponent},
   {path:'login', component:LoginComponent},
   {path:'dashboard', component:DashboardComponent, canActivate:[AuthGuard]},
   {path:'profile', component:ProfileComponent, canActivate:[AuthGuard]},
-  {path:'timetable', component:TimetableComponent},
+  {path:'timetable/:child', component:TimetableComponent},
   {path:'rooms', component:RoomListComponent, canActivate:[AuthGuard]},
   {path:'rooms/create', component:RoomAddComponent, canActivate:[AuthGuard]},
   {path:'rooms/edit/:room', component:RoomEditComponent, canActivate:[AuthGuard]},
@@ -57,6 +60,7 @@ const appRoutes: Routes = [
   {path:'rooms/admin/:room', component:RoomAdminComponent, canActivate:[AuthGuard]},
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
+  {path:'parent', component:ParentComponent},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
 ]
 
@@ -70,6 +74,9 @@ const appRoutes: Routes = [
     DashboardComponent,
     ProfileComponent,
     TimetableComponent,
+
+    ParentComponent,
+
     RoomListComponent,
     RoomEditComponent,
     RoomAddComponent,
@@ -83,6 +90,7 @@ const appRoutes: Routes = [
     RoomAdminComponent,
     MyDialogComponent
    ],
+
   imports: [
     BrowserModule,
     FormsModule,
