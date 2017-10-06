@@ -1,0 +1,37 @@
+<html>
+  <body>
+    <h1>Your Kids:</h1>
+    <div>
+      <md-list>
+        <md-grid-list cols = "3"  *ngFor="let child of children">
+          <div class = "RowBoy">
+            <a [routerLink]="['/timetable',child[0].childId]">
+              <div class="Lshell">
+                <img src="http://images.fandango.com/images/fandangoblog/everettcollection_topgun-170602.jpg" alt="Tom Cruise is now your child" class ="tomCruise">
+                <div class="name">
+                  {{child[0].firstName}} {{child[0].familyName}}
+                </div>
+              </div>
+            </a>
+            <a [routerLink]="['/timetable',child[1].childId]">
+              <div class="Mshell">
+                <img src="http://images.fandango.com/images/fandangoblog/everettcollection_topgun-170602.jpg" alt="Tom Cruise is now your child" class ="tomCruise">
+                <div class="name">
+                  {{child[1].firstName}} {{child[1].familyName}}
+                </div>
+              </div>
+            </a>
+            <a [routerLink]="['/timetable',child[2].childId]">
+              <div class="Rshell">
+                <img src="http://images.fandango.com/images/fandangoblog/everettcollection_topgun-170602.jpg" alt="Tom Cruise is now your child" class ="tomCruise">
+                <div class="name">
+                  {{child[2].firstName}} {{child[2].familyName}}
+                </div>
+              </div>
+            </a>
+          </div>
+        </md-grid-list>
+      </md-list>
+    </div>
+  </body>
+</html>

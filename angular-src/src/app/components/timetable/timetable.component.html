@@ -11,6 +11,25 @@
 
 <h3><b>Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker></b></h3>
 
+<<<<<<< HEAD
 <div class="activityBox">
 	
 </div>
+=======
+<md-grid-list cols="2" rowHeight="1:2">
+    <md-toolbar md-scroll-shrink class="commentsBar"><div class="md-toolbar-tools">Comments</div></md-toolbar>
+</md-grid-list>
+<br>
+<md-card class="comment-card" *ngFor="let x of commentsArray">
+  <md-card-header>
+    <div md-card-avatar class="example-header-image"></div>
+    <md-card-title>Maria Pavlova</md-card-title>
+    <md-card-subtitle>Parent</md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <p>
+      {{x}}
+    </p>
+  </md-card-content>
+</md-card>
+>>>>>>> d6ced70973652a41fc9c5d1d8aed11b94d8d3d99
