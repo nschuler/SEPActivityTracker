@@ -1,51 +1,22 @@
 
-div.Lshell{
+div.shell{
   margin-left: 5%;;
   float: left;
-  border: 2px solid #ffa64d;
+  border: 2px solid #cccccc;
   border-radius: 5px;
  width: 30%;
  margin: 1%;
- background-color:#ffb366;
-}
-div.Mshell{
-  float: left;
-  border: 2px solid #ffa64d;
-  border-radius: 5px;
- width: 30%;
- margin-right: auto;
- margin-left: auto;
- margin-bottom: 1%;
- margin-top: 1%;
- background-color:#ffb366;
-}
-div.Rshell{
-  float: left;
-  border: 2px solid #ffa64d;
-  border-radius: 5px;
- width: 30%;
- margin: 1%;
- background-color:#ffb366;
+ background-color:#D3D3D3;
 }
 h1{
   text-align: center;
 }
 div.name{
-
   width: 100%;
   text-align: center;
   vertical-align:bottom;
   color: black;
   font-weight: bold;
-}
-a{
-color: black;
-
-}
-div.tomCruise{
-  width:100%;
-  height: 60%;
-
 }
 img.tomCruise{
 width: 80%;
@@ -53,5 +24,5 @@ height: 30%;
 margin-left: 10%;
 margin-right: 10%;
 margin-top: 5%;
-border:3px solid #ffb366;
+border:3px solid #cccccc;
 }

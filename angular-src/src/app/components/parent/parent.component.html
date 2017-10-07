@@ -1,11 +1,11 @@
 <html>
   <body>
-    <h1>Your Kids:</h1>
+    <h1><b> {{greeting}} {{userName}} family, your children:</b></h1>
     <div>
       <md-list>
         <md-grid-list cols = "3"  *ngFor="let child of children">
             <a [routerLink]="['/timetable',child.childId]">
-              <div class="Lshell">
+              <div class="shell">
                 <img src="http://images.fandango.com/images/fandangoblog/everettcollection_topgun-170602.jpg" alt="Tom Cruise is now your child" class ="tomCruise">
                 <div class="name">
                   {{child.firstName}} {{child.familyName}}
