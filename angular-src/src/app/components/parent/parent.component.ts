@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { ParentService } from '../../services/parent.service';
 import { EducatorService } from '../../services/educator.service';
 import { Router } from '@angular/router';
+import { getHours } from 'date-fns';
 
 @Component({
   selector: 'app-parent',
@@ -11,11 +12,15 @@ import { Router } from '@angular/router';
 })
 export class ParentComponent implements OnInit {
   children: any[] = [];
-  tempOfThree: Child[] = [];
+  today: Date = new Date;
+  greeting: string;
+  first_name: string;
 
   constructor(private authService: AuthService, private parentService: ParentService, private educatorService: EducatorService, private router: Router) { }
 
   ngOnInit() {
+    this.first_name = JSON.parse(this.authService.loadUserData()).first_name;
+
     let family = JSON.parse(this.parentService.loadFamily());
     if(family)
     {
@@ -23,6 +28,7 @@ export class ParentComponent implements OnInit {
     }
 
     this.getFamily();
+    this.setGreeting();
   }
 
   getFamily() {
@@ -39,20 +45,24 @@ export class ParentComponent implements OnInit {
     });
   }
 
-  // Fix this
   displayFamily(family) {
     let temp = 0;
 
     this.children = [];
 
     for(let i in family.children){
-      if(temp > 3){
-        temp = 0;
-        this.children.push(this.tempOfThree);
-        this.tempOfThree = [];
-      }
-      this.tempOfThree.push(new Child(family.children[i].first_name , family.familyName, family.children[i].dob, family.address, family.children[i].family_id, family.children[i].id, family.children[i].room_id));
-      temp++;
+      this.children.push(new Child(family.children[i].first_name , family.familyName, family.children[i].family_id, family.children[i].id, family.children[i].room_id));
+    }
+  }
+
+  setGreeting() {
+    let time = this.today.getHours();
+    if(time <= 12 && time >= 4){
+      this.greeting = "Good Morning";
+    }else if(time > 17){
+      this.greeting = "Good Evening";
+    }else if(time <= 17){
+      this.greeting = "Good Afternoon";
     }
   }
 }
@@ -66,17 +76,10 @@ class Child {
   childId: string;
   roomId: string;
 
-  constructor(firstname: string, familyName: string, dob: string, address: string, famId: string, childId: string, roomId: string ) {
+  constructor(firstname: string, familyName: string, famId: string, childId: string, roomId: string ) {
     this.firstName = firstname;
     this.familyName = familyName;
-    this.dob = dob;
-    this.address =  address;
     this.childId = childId;
     this.roomId = roomId;
-
-  }
-
-  sendName (){
-    return this.firstName + " " + this.familyName;
   }
 }
