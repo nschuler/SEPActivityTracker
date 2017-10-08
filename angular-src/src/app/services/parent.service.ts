@@ -50,6 +50,14 @@ export class ParentService {
       .map(res => res.json());
   }
 
+  storeFamily(family){
+    localStorage.setItem('family', JSON.stringify(family));
+  }
+
+  loadFamily(){
+    return localStorage.getItem('family');
+  }
+
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;
