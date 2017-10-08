@@ -29,6 +29,8 @@ export class TimetableComponent implements OnInit {
 
   commentsArray = [];
 
+  notesArray = [];
+
   childInfo = Object;
 
   date: DateModel;
@@ -106,15 +108,6 @@ export class TimetableComponent implements OnInit {
 
     this.parentService.getActivityRecords("1").subscribe(data => {
       console.log(data);
-
-      // if(data.success) {
-      //   for(var i = 0; i < data.records.length; i++) {
-      //     var JSONcomments = JSON.parse(data.records[i].comments);
-      //     for(var x = 0; x < JSONcomments.comments.length; x++) {
-      //       this.commentsArray.push(JSONcomments.comments[x].comment)
-      //     }
-      //   }
-      // }
       this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
     });
 
@@ -157,6 +150,22 @@ export class TimetableComponent implements OnInit {
       }
     })
   }
+
+  addNote() {
+    console.log("You clicked me!");
+
+    let dialogRef = this.dialog.open(MyDialogComponent, {
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+          console.log("Left a note!")
+          this.notesArray.push(result)
+          console.log(this.notesArray)
+      }
+    })
+  }
 }
 
 
@@ -165,15 +174,16 @@ export class TimetableComponent implements OnInit {
   templateUrl: './my-dialog.component.html',
   styleUrls: ['./my-dialog.component.css']
 })
+
 export class MyDialogComponent implements OnInit {
-  comment: any;
+  note: String;
   constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
-    }
+  }
 
   onCloseConfirm() {
-    this.thisDialogRef.close(this.comment);
+    this.thisDialogRef.close(this.note);
   }
 
   onCloseCancel() {

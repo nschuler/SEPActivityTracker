@@ -25,12 +25,14 @@
 
         <!-- Child Notes -->
         <div class="notes">
-          <div class="row">
-            <legend>Notes</legend>
-            <ul class="list-group">
-              <li class="list-group-item">A comment will go right here.</li>
-              <li class="list-group-item">A comment will also go here.</li>
-            </ul>
+          <div class="noteField">
+            <legend style="margin-left: 15px;">Notes</legend>
+            <div class="noteDisplay">
+              <li class="list-group-item" *ngFor="let note of notesArray">{{note}}</li>
+            </div>
+          </div>
+          <div class="noteButton">
+            <button (click)="addNote()" mdbutton>Add Note</button>
           </div>
         </div>
     </div>
