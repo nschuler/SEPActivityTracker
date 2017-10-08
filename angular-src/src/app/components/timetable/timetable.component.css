@@ -50,6 +50,10 @@
 	border: 1px solid red;
 }
 
+.activityCard {
+	margin-bottom: 10px;
+}
+
 .helper {
     display: inline-block;
     height: 100%;

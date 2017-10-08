@@ -22,10 +22,14 @@ export class TimetableComponent implements OnInit {
   boolLike: boolean;
   roomActivities: any; //(temp)
   childActivities: string;
+
   childArray = [];
+  notesArray = [];
   commentsArray = [];
 
-  notesArray = [];
+  activitiesArray = [];
+  selectedActivities = [];
+  
 
   childInfo = Object;
   childIdParam: number;
@@ -57,17 +61,15 @@ export class TimetableComponent implements OnInit {
 
     this.parentService.getActivityRecords("1").subscribe(data => {
       console.log(data);
-      //console.log(data);
+      console.log(this.date.formatted);
 
-      // if(data.success) {
-        //   for(var i = 0; i < data.records.length; i++) {
-          //     var JSONcomments = JSON.parse(data.records[i].comments);
-          //     for(var x = 0; x < JSONcomments.comments.length; x++) {
-            //       this.commentsArray.push(JSONcomments.comments[x].comment)
-            //     }
-            //   }
-            // }
-      this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
+      if (data.success) {
+        for (var i = 0; i < data.records.length; i++) {
+            this.activitiesArray.push(data.records[i]);
+        }
+      }
+
+      console.log(this.activitiesArray);
     });
 
     this.parentService.getCurrentActivities("1").subscribe(activityData => {
@@ -99,26 +101,23 @@ export class TimetableComponent implements OnInit {
     }
   }
 
-  likeActivity() {
-    if(this.boolLike == true) {
-      console.log("You have unliked this activity!");
-      console.log(this.childArray)
-      this.boolLike = false;
-    } else {
-      console.log("You have liked this activity!");
-      console.log(this.childArray)
-
-      this.boolLike = true;
-    }
-  }
-
   updateDate($event) {
     console.log('YTB')
   }
 
   getCurrentDate($event) {
     this.date=$event;
-    console.log(this.date);
+    console.log(this.date.formatted);
+
+    this.selectedActivities = [];
+
+    for (var i = 0; i < this.activitiesArray.length; i++) {
+      if (this.date.formatted == this.activitiesArray[i].date.split("T")[0]) {
+        this.selectedActivities.push(this.activitiesArray[i]);
+      }
+    }
+
+    console.log(this.selectedActivities);
   }
 
   leaveComment(activity) {
@@ -135,22 +134,17 @@ export class TimetableComponent implements OnInit {
   }
 
   addNote() {
-    console.log("You clicked me!");
-
     let dialogRef = this.dialog.open(MyDialogComponent, {
       width: '600px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-          console.log("Left a note!")
           this.notesArray.push(result)
-          console.log(this.notesArray)
       }
     })
   }
 }
-
 
 @Component({
   selector: 'app-my-dialog',
