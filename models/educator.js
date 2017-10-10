@@ -224,7 +224,6 @@ module.exports.getActivityTypes = function(user, callback) {
 		if(valid)
 		{
 			mysql_query('SELECT * FROM ActivityType', (err, data) => { 
-				console.log(data);
 				callback(err, data);
 			});
 		}
