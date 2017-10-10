@@ -20,6 +20,7 @@
     </div> 
 </ng-template>
 
+
 <div class="row text-center">
   <div class="col-md-4">
     <div class="btn-group">
@@ -60,10 +61,9 @@
   <thead>
     <tr>
       <th>Activity</th>
-      <th>blank</th>
       <th>Activity Date/Time</th>
+      <th>Recurring</th>
       <th>Options</th>
-      <th>Remove</th>
     </tr>
   </thead>
 
@@ -71,29 +71,32 @@
     <tr *ngFor="let event of events; let index = index">
       <td>
         <!-- <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()"></td> -->
-        <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next()">
+        {{event.title}}
+        <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next(); updateColour(event);">
           <option *ngFor="let activity of activities">{{activity.name}}</option>
         </select>
-      <td>
-        
-      </td>
 
       <td>
         <div class="input-control">
-          <label for="input1">Start Date:</label>
+          <label for="input1">Start Date/Time:</label>
           <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
           <br>
-          <label for="input1">End Date:</label>
-          <owl-date-time [(ngModel)]="event.end"  (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
+          <label for="input1">Finish Time:</label>
+          <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next()" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>
         </div>
       </td>
 
       <td>
-
+        <select class="form-control" [(ngModel)]="event.test" (ngModelChange)="updateRecurring(event);">
+          <option *ngFor="let option of repeatOptions">{{option}}</option>
+        </select>
+        <label for="input1">End Date:</label>
+        <owl-date-time [(ngModel)]="event.recurEnd"  [dateFormat]="'YYYY-MM-DD'" [type]="'calendar'" [placeHolder]="'yyyy/mm/dd'" (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
       </td>
 
       <td>
-        <button class="btn btn-danger" (click)="events.splice(index, 1); refresh.next()">Delete</button>
+        <button class="btn btn-danger" (click)="updateRecurring(event); refresh.next()">Submit</button>
+        <button class="btn btn-primary" (click)="events.splice(index, 1); refresh.next()">Delete</button>
       </td>
     </tr>
 </tbody>

@@ -6,16 +6,18 @@ import { EducatorService } from '../../services/educator.service';
 import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule} from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import RRule from 'rrule';
 
 import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
-import { startOfDay, endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours,  getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear} from 'date-fns';
+import { startOfDay, startOfMonth, startOfWeek, endOfDay, endOfWeek, subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours, getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear, isMonday, isTuesday, isWednesday, isThursday, isFriday} from 'date-fns';
 
 const colors: any = {
   red: {primary: '#ad2121',secondary: '#FAE3E3'},
   blue: {primary: '#1e90ff',secondary: '#D1E8FF'},
   yellow: {primary: '#e3bc08',secondary: '#FDF1BA'}
 };
+
 
 @Component({
   selector: 'app-room-plan',
@@ -38,6 +40,7 @@ export class RoomPlanComponent implements OnInit {
   datePicker: any;
 
   activities = [];
+  repeatOptions = ["No Repeat", "Everyday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
   animal: string;
   name: string;
@@ -50,11 +53,10 @@ export class RoomPlanComponent implements OnInit {
 
   events: CalendarEvent[] = [{
     title: 'Painting',
-    color: colors.yelow,
+    color: colors.yellow,
     start: new Date(),
     end: new Date(),
-    actions: [
-    {
+    actions: [{
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
@@ -66,8 +68,7 @@ export class RoomPlanComponent implements OnInit {
         this.events = this.events.filter(iEvent => iEvent !== event);
         this.handleEvent('Deleted', event);
       }
-    }
-    ]
+    }]
   }];
 
   refresh: Subject<any> = new Subject();
@@ -95,6 +96,50 @@ export class RoomPlanComponent implements OnInit {
     this.educatorService.getAllActivities().subscribe(data => {
       this.activities = data.data.activityData;
     }, err => {console.log(err);});
+
+    // EXAMPLE of creating activity instance
+    // let newActivity = {
+    //   room_id: "1",
+    //   activity_id: "7",
+    //   start_time: "04:00pm",
+    //   end_time: "05:00pm",
+    //   length: "60",
+    //   sunday: "1",
+    //   monday: "1",
+    //   tuesday: "1",
+    //   wednesday: "1",
+    //   thursday: "1",
+    //   friday: "1",
+    //   saturday: "1",
+    // }
+    // this.educatorService.createActivityInstance(newActivity).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    // EXAMPLE of updating activity instance
+    // let activityData = {
+    //   id: "15",
+    //   room_id: "1",
+    //   activity_id: "7",
+    //   start_time: "04:30pm",
+    //   end_time: "05:30pm",
+    //   length: "60",
+    //   sunday: "1",
+    //   monday: "0",
+    //   tuesday: "1",
+    //   wednesday: "0",
+    //   thursday: "1",
+    //   friday: "0",
+    //   saturday: "1",
+    // }
+    // this.educatorService.updateActivityInstance(activityData).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    // EXAMPLE of deleting activity instance
+    // this.educatorService.deleteActivityInstance("15").subscribe(data => {
+    //   console.log(data);
+    // });
   }
 
   getAllChildren() {
@@ -123,8 +168,37 @@ export class RoomPlanComponent implements OnInit {
     newEnd
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
+    console.log(event.end)
     event.end = newEnd;
-    // this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
+  updateRecurring(event) {
+
+    let day_difference = getDate(event.recurEnd) - getDate(event.start)
+    if (day_difference != 0) {
+      let count = 1;
+      do {
+          let newStart = setDate(event.start, getDate(event.start) + count);
+          let newEnd = setDate(event.end, getDate(event.end) + count);
+          if (event.test == "Monday" && isMonday(newStart)) {
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          } else if (event.test == "Tuesday" && isTuesday(newStart)) {
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          } else if (event.test == "Wednesday" && isWednesday(newStart)) {
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          } else if (event.test == "Thursday" && isThursday(newStart)) {
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          } else if (event.test == "Friday" && isFriday(newStart)) {
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          } else if (event.test == "Everyday"){
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+          }
+          count++;
+          day_difference--;
+      } 
+      while (day_difference > 0);
+    }
     this.refresh.next();
   }
 
@@ -135,7 +209,7 @@ export class RoomPlanComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      // console.log(result);
       this.animal = result;
     });
   }
@@ -145,7 +219,7 @@ export class RoomPlanComponent implements OnInit {
       title: 'New event',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
-      color: colors.red,
+      color: colors.yellow,
       draggable: true,
       resizable: {
         beforeStart: true,
@@ -169,6 +243,44 @@ export class RoomPlanComponent implements OnInit {
     });
     this.refresh.next();
   }
+
+  updateColour(event) {
+    console.log(event);
+    event.color = colors.blue;
+  }
+
+  // updateCalendarEvents(): void {
+  //   const startOfPeriod: any = {
+  //     month: startOfMonth,
+  //     week: startOfWeek,
+  //     day: startOfDay
+  //   };
+
+  //   const endOfPeriod: any = {
+  //     month: endOfMonth,
+  //     week: endOfWeek,
+  //     day: endOfDay
+  //   };
+
+  //   this.recurringEvents.forEach(event => {
+  //     var rule: RRule = new RRule(
+  //       Object.assign({}, event.rrule, {
+  //         dtstart: startOfPeriod[this.view](this.viewDate),
+  //         until: new Date("2017-11-11T15:10:10.530Z")
+  //       })
+  //     );
+
+  //     rule.all().forEach(date => {
+  //       this.events.push(
+  //         Object.assign({}, event, {
+  //           start: new Date(date)
+  //         })
+
+  //       );
+  //       console.log(date)
+  //     });
+  //   });
+  // }
 }
 
 @Component({
