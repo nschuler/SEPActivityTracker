@@ -29,7 +29,8 @@ export class TimetableComponent implements OnInit {
   selectedActivities = [];
   selectedComments = [];
   chosenActivity = Object;
-  
+
+  test = ["1", "2", "3"];
 
   childInfo = Object;
   childIdParam: number;
@@ -114,24 +115,33 @@ export class TimetableComponent implements OnInit {
   }
 
   addComment(activityId) {
-    console.log(activityId);
-
     for (var i = 0; i < this.selectedActivities.length; i++) {
       if (activityId == this.selectedActivities[i].activity_record_id) {
         this.chosenActivity = this.selectedActivities[i];
+
+        let commentsObj = JSON.parse(this.selectedActivities[i].comments)
+
+        if (commentsObj.comments.length > 0) {
+          console.log(commentsObj.comments.length)
+          console.log(commentsObj.comments[0])
+          console.log(commentsObj.comments[0].comment)
+
+          this.selectedComments.push(commentsObj.comments[0].comment)
+        }
       }
     }
 
     let dialogRef = this.dialog.open(MyCommentComponent, {
       width: '600px',
       data: {
-        name: this.chosenActivity.name
+        name: this.chosenActivity.name,
+        comments: this.selectedComments
       }
     })
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        console.log(result)
+        this.selectedComments.push(result)
       }
     })
   }
