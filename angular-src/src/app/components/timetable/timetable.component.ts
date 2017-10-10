@@ -19,16 +19,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class TimetableComponent implements OnInit {
   familyName: string;
   address: string;
-  boolLike: boolean;
   roomActivities: any; //(temp)
   childActivities: string;
 
   childArray = [];
   notesArray = [];
-  commentsArray = [];
 
   activitiesArray = [];
   selectedActivities = [];
+  selectedComments = [];
+  chosenActivity = Object;
   
 
   childInfo = Object;
@@ -49,6 +49,7 @@ export class TimetableComponent implements OnInit {
     this.childIdParam = this.route.snapshot.params['child'];
 
     let family = JSON.parse(this.parentService.loadFamily());
+    
     if(family)
       this.displayChild(family);
 
@@ -59,10 +60,8 @@ export class TimetableComponent implements OnInit {
       initialDate: new Date()
     });
 
+    // roomId is hard-coded.
     this.parentService.getActivityRecords("1").subscribe(data => {
-      console.log(data);
-      console.log(this.date.formatted);
-
       if (data.success) {
         for (var i = 0; i < data.records.length; i++) {
             this.activitiesArray.push(data.records[i]);
@@ -92,7 +91,6 @@ export class TimetableComponent implements OnInit {
   displayChild(family) {
     this.familyName = family.familyName;
     this.address = family.address;
-    this.boolLike = false;
 
     for (var i = 0; i < family.children.length; i++) {
       if (family.children[i].id == this.childIdParam) {
@@ -101,15 +99,10 @@ export class TimetableComponent implements OnInit {
     }
   }
 
-  updateDate($event) {
-    console.log('YTB')
-  }
-
   getCurrentDate($event) {
-    this.date=$event;
-    console.log(this.date.formatted);
-
+    this.date = $event;
     this.selectedActivities = [];
+    this.selectedComments = []
 
     for (var i = 0; i < this.activitiesArray.length; i++) {
       if (this.date.formatted == this.activitiesArray[i].date.split("T")[0]) {
@@ -120,25 +113,27 @@ export class TimetableComponent implements OnInit {
     console.log(this.selectedActivities);
   }
 
-  leaveComment(activity) {
-    let dialogRef = this.dialog.open(MyNoteComponent, {
-      width: '600px',
-      data: {activity: activity.name, data: activity.description}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        this.commentsArray.push(result)
-      }
-    })
-  }
-
   addComment(activityId) {
     console.log(activityId);
 
+    for (var i = 0; i < this.selectedActivities.length; i++) {
+      if (activityId == this.selectedActivities[i].activity_record_id) {
+        this.chosenActivity = this.selectedActivities[i];
+      }
+    }
+
     let dialogRef = this.dialog.open(MyCommentComponent, {
       width: '600px',
-    });    
+      data: {
+        name: this.chosenActivity.name
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        console.log(result)
+      }
+    })
   }
 
   addNote() {
@@ -191,7 +186,6 @@ export class MyCommentComponent implements OnInit {
 
   onCloseConfirm() {
     this.thisDialogRef.close(this.comment);
-    console.log(this.comment);
   }
 
   onCloseCancel() {

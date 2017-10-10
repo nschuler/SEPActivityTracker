@@ -1,12 +1,17 @@
 <div>
-  <h2 md-dialog-title>Leave a Comment</h2>
+  <h2 md-dialog-title>Leave a Comment on: {{data.name}}</h2>
   <hr>
   <md-dialog-content>
-    <form>
-      <div class="form-group">
-        <input type="textarea" [(ngModel)]="comment" name="comment" class="form-control">
-      </div>
-    </form>
+    <div class="noteDisplay">
+      <li class="list-group-item" *ngFor="let comment of comments">{{comment}}</li>
+    </div>
+    <div>
+      <form>
+        <div class="form-group" style="padding-top: 10px;">
+          <input type="textarea" [(ngModel)]="comment" name="comment" class="form-control">
+        </div>
+      </form>
+    </div>
   </md-dialog-content>
   <hr>
   <md-dialog-actions>
