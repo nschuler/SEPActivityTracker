@@ -105,12 +105,12 @@
       </div>
       <div class="col-md-4">
         <div class="btn-group">
-          <div
+          <!-- <div
             class="btn btn-primary"
             (click)="viewChange('month')"
             [class.active]="view === 'month'">
             Month
-          </div>
+          </div> -->
           <div
             class="btn btn-primary"
             (click)="viewChange('week')"
@@ -128,7 +128,7 @@
     </div>
     <hr>
         <div [ngSwitch]="view">
-  <mwl-calendar-month-view
+ <!--  <mwl-calendar-month-view
     *ngSwitchCase="'month'"
     [viewDate]="viewDate"
     [events]="events"
@@ -136,7 +136,7 @@
     [activeDayIsOpen]="true"
     (dayClicked)="viewDate = $event.day.date; view = 'day'"
     (eventTimesChanged)="eventTimesChanged($event)">
-  </mwl-calendar-month-view>
+  </mwl-calendar-month-view> -->
   <mwl-calendar-week-view
     *ngSwitchCase="'week'"
     [viewDate]="viewDate"
@@ -170,8 +170,7 @@
     <tr>
       <th>Activity</th>
       <th>Colours</th>
-      <th>Starts at</th>
-      <th>Ends at</th>
+      <th>Activity Date/Time</th>
       <th>Options</th>
       <th>Remove</th>
     </tr>
@@ -197,18 +196,19 @@
           (change)="refresh.next()">
       </td>
       <td>
-        <mwl-demo-utils-date-time-picker
+        <!-- <mwl-demo-utils-date-time-picker
           [(ngModel)]="event.start"
           (ngModelChange)="refresh.next()"
           placeholder="Not set">
-        </mwl-demo-utils-date-time-picker>
-      </td>
-      <td>
-         <mwl-demo-utils-date-time-picker
-          [(ngModel)]="event.end"
-          (ngModelChange)="refresh.next()"
-          placeholder="Not set">
-        </mwl-demo-utils-date-time-picker>
+        </mwl-demo-utils-date-time-picker> -->
+                    <div class="input-control">
+                    <label for="input1">Start Date:</label>
+                    <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
+                    <br>
+                    <label for="input1">End Date:</label>
+                    <owl-date-time [(ngModel)]="event.end"  (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
+                </div>
+                          
       </td>
       <td>
         

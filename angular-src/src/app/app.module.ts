@@ -15,6 +15,7 @@ import { MnFullpageModule } from 'ngx-fullpage';
 import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 import { CalendarModule } from 'angular-calendar';
 import { NgbModalModule, NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { DateTimePickerModule } from 'ng-pick-datetime';
 import { DatePickerModule } from 'ng2-datepicker';
 
 import { AppComponent } from './app.component';
@@ -106,6 +107,7 @@ const appRoutes: Routes = [
     NgbModalModule.forRoot(),
     NgbDatepickerModule.forRoot(),
     NgbTimepickerModule.forRoot(),
+    DateTimePickerModule,
     DatePickerModule
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],

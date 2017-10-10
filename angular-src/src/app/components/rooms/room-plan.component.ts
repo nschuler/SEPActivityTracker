@@ -6,8 +6,6 @@ import { EducatorService } from '../../services/educator.service';
 import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule} from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DatePickerOptions } from 'ng2-datepicker';
-
 
 import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
@@ -36,6 +34,10 @@ const colors: any = {
 })
 
 export class RoomPlanComponent implements OnInit {
+  public moment: Date = new Date();
+  public startMoment: any;
+  public endMoment: any;
+
   date: Date;
 
   dateStruct: NgbDateStruct;
@@ -51,7 +53,7 @@ export class RoomPlanComponent implements OnInit {
   room_id: number; // Identifies which room has been selected
   enrolledChildren = [];
   allChildren = [];
-  view: string = 'month';
+  view: string = 'day';
 
   viewDate: Date = new Date();
 
@@ -212,7 +214,7 @@ export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
   <form class="form-inline">
   <div class="form-group">
   <div class="input-group">
-  <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker>
+  <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker> 
   </div>
   </div>
   </form>
@@ -236,7 +238,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
   @Input() placeholder: string;
 
   date: Date;
-  options: DatePickerOptions;
+  // options: DatePickerOptions;
 
 
   dateStruct: NgbDateStruct;
