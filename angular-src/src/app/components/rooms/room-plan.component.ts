@@ -100,6 +100,50 @@ export class RoomPlanComponent implements OnInit {
     this.educatorService.getChildrenInRoom(this.room_id).subscribe(data => {
       this.enrolledChildren = data.children;
     }, err => {console.log(err);});
+
+    // EXAMPLE of creating activity instance
+    // let newActivity = {
+    //   room_id: "1",
+    //   activity_id: "7",
+    //   start_time: "04:00pm",
+    //   end_time: "05:00pm",
+    //   length: "60",
+    //   sunday: "1",
+    //   monday: "1",
+    //   tuesday: "1",
+    //   wednesday: "1",
+    //   thursday: "1",
+    //   friday: "1",
+    //   saturday: "1",
+    // }
+    // this.educatorService.createActivityInstance(newActivity).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    // EXAMPLE of updating activity instance
+    // let activityData = {
+    //   id: "15",
+    //   room_id: "1",
+    //   activity_id: "7",
+    //   start_time: "04:30pm",
+    //   end_time: "05:30pm",
+    //   length: "60",
+    //   sunday: "1",
+    //   monday: "0",
+    //   tuesday: "1",
+    //   wednesday: "0",
+    //   thursday: "1",
+    //   friday: "0",
+    //   saturday: "1",
+    // }
+    // this.educatorService.updateActivityInstance(activityData).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    // EXAMPLE of deleting activity instance
+    // this.educatorService.deleteActivityInstance("15").subscribe(data => {
+    //   console.log(data);
+    // });
   }
 
   getAllChildren() {
