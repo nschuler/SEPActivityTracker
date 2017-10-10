@@ -19,17 +19,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class TimetableComponent implements OnInit {
   familyName: string;
   address: string;
-  boolLike: boolean;
   roomActivities: any; //(temp)
   childActivities: string;
 
   childArray = [];
   notesArray = [];
-  commentsArray = [];
 
   activitiesArray = [];
   selectedActivities = [];
-  
+  selectedComments = [];
+  chosenActivity = Object;
+
+  test = ["1", "2", "3"];
 
   childInfo = Object;
   childIdParam: number;
@@ -49,6 +50,7 @@ export class TimetableComponent implements OnInit {
     this.childIdParam = this.route.snapshot.params['child'];
 
     let family = JSON.parse(this.parentService.loadFamily());
+    
     if(family)
       this.displayChild(family);
 
@@ -64,10 +66,8 @@ export class TimetableComponent implements OnInit {
       initialDate: new Date()
     });
 
+    // roomId is hard-coded.
     this.parentService.getActivityRecords("1").subscribe(data => {
-      console.log(data);
-      console.log(this.date.formatted);
-
       if (data.success) {
         for (var i = 0; i < data.records.length; i++) {
             this.activitiesArray.push(data.records[i]);
@@ -97,7 +97,6 @@ export class TimetableComponent implements OnInit {
   displayChild(family) {
     this.familyName = family.familyName;
     this.address = family.address;
-    this.boolLike = false;
 
     for (var i = 0; i < family.children.length; i++) {
       if (family.children[i].id == this.childIdParam) {
@@ -106,15 +105,14 @@ export class TimetableComponent implements OnInit {
     }
   }
 
-  updateDate($event) {
-    console.log('YTB')
-  }
-
   getCurrentDate($event) {
-    this.date=$event;
-    console.log(this.date.formatted);
-
+    this.date = $event;
     this.selectedActivities = [];
+    this.selectedComments = []
+
+    //TELLS YOU DAY OF WEEK 
+    // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
+    //console.log(this.date.momentObj.day());
 
     for (var i = 0; i < this.activitiesArray.length; i++) {
       if (this.date.formatted == this.activitiesArray[i].date.split("T")[0]) {
@@ -125,21 +123,40 @@ export class TimetableComponent implements OnInit {
     console.log(this.selectedActivities);
   }
 
-  leaveComment(activity) {
-    let dialogRef = this.dialog.open(MyDialogComponent, {
+  addComment(activityId) {
+    for (var i = 0; i < this.selectedActivities.length; i++) {
+      if (activityId == this.selectedActivities[i].activity_record_id) {
+        this.chosenActivity = this.selectedActivities[i];
+
+        let commentsObj = JSON.parse(this.selectedActivities[i].comments)
+
+        if (commentsObj.comments.length > 0) {
+          console.log(commentsObj.comments.length)
+          console.log(commentsObj.comments[0])
+          console.log(commentsObj.comments[0].comment)
+
+          this.selectedComments.push(commentsObj.comments[0].comment)
+        }
+      }
+    }
+
+    let dialogRef = this.dialog.open(MyCommentComponent, {
       width: '600px',
-      data: {activity: activity.name, data: activity.description}
-    });
+      data: {
+        name: this.chosenActivity.name,
+        comments: this.selectedComments
+      }
+    })
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        this.commentsArray.push(result)
+        this.selectedComments.push(result)
       }
     });
   }
 
   addNote() {
-    let dialogRef = this.dialog.open(MyDialogComponent, {
+    let dialogRef = this.dialog.open(MyNoteComponent, {
       width: '600px',
     });
 
@@ -153,19 +170,41 @@ export class TimetableComponent implements OnInit {
 
 @Component({
   selector: 'app-my-dialog',
-  templateUrl: './my-dialog.component.html',
-  styleUrls: ['./my-dialog.component.css']
+  templateUrl: './note-dialog.component.html',
+  styleUrls: ['./note-dialog.component.css']
 })
 
-export class MyDialogComponent implements OnInit {
+export class MyNoteComponent implements OnInit {
   note: String;
-  constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+  constructor(public thisDialogRef: MdDialogRef<MyNoteComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
   }
 
   onCloseConfirm() {
     this.thisDialogRef.close(this.note);
+  }
+
+  onCloseCancel() {
+    this.thisDialogRef.close(null);
+  }
+}
+
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './comment-dialog.component.html',
+  styleUrls: ['./comment-dialog.component.css']
+})
+
+export class MyCommentComponent implements OnInit {
+  comment: String;
+  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+  }
+
+  onCloseConfirm() {
+    this.thisDialogRef.close(this.comment);
   }
 
   onCloseCancel() {
