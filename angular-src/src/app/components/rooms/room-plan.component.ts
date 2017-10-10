@@ -99,7 +99,7 @@ export class RoomPlanComponent implements OnInit {
     }, err => {console.log(err);});
 
     this.educatorService.getAllActivities().subscribe(data => {
-      this.activities = data.data.activityData;
+      this.activities = data.data;
     }, err => {console.log(err);});
 
     // EXAMPLE of creating activity instance
@@ -221,7 +221,7 @@ export class RoomPlanComponent implements OnInit {
 
   addEvent(): void {
     this.events.push({
-      title: 'New event',
+      title: 'Reading Time',
       start: startOfDay(new Date()),
       end: endOfDay(new Date()),
       color: colors.yellow,
