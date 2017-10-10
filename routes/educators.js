@@ -142,4 +142,14 @@ router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (r
 	});
 });
 
+router.get('/getactivitytypes', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.getActivityTypes(req.user[0], (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Activity Types', data:data});
+		}
+	});
+});
+
 module.exports = router;

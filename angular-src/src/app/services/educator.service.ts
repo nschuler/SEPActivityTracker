@@ -150,6 +150,17 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  getActivityTypes() {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.get('http://localhost:8080/educators/getactivitytypes', {headers: headers})
+      .map(res => res.json())
+  }
+
   storeActivities(activities){
     localStorage.setItem('activities', JSON.stringify(activities));
   }

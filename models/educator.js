@@ -219,6 +219,22 @@ module.exports.deleteActivity = function(user, activity_id, callback){
 	});
 }
 
+module.exports.getActivityTypes = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM ActivityType', (err, data) => { 
+				console.log(data);
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.fetchChildrenFromDB = function(room_id, callback) {
 	mysql_query('SELECT * FROM Child WHERE room_id = ?', room_id, (err, data) => {
 		if (data) 
