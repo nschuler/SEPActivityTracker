@@ -25,12 +25,12 @@ export class TimetableComponent implements OnInit {
   childArray = [];
   notesArray = [];
 
-  activitiesArray = [];
+  recordActivities = [];  // Archived activities.
+  currentActivities = [];
+
   selectedActivities = [];
   selectedComments = [];
   chosenActivity = Object;
-
-  test = ["1", "2", "3"];
 
   childInfo = Object;
   childIdParam: number;
@@ -70,16 +70,31 @@ export class TimetableComponent implements OnInit {
     this.parentService.getActivityRecords("1").subscribe(data => {
       if (data.success) {
         for (var i = 0; i < data.records.length; i++) {
-            this.activitiesArray.push(data.records[i]);
+          this.recordActivities.push(data.records[i]);
         }
       }
 
-      console.log(this.activitiesArray);
+      console.log(this.recordActivities);
     });
 
+    // roomId is hard-coded.
     this.parentService.getCurrentActivities("1").subscribe(activityData => {
-      this.roomActivities = activityData.activities;
+      if (activityData.success) {
+        for (var i = 0; i < activityData.activities.length; i++) {
+          this.currentActivities.push(activityData.activities[i]);
+        }
+      }
+
+      console.log(this.currentActivities);
     });
+
+    var initDate = new Date()
+    console.log(initDate)
+    console.log(this.options.initialDate)
+
+    if (String(initDate) == String(this.options.initialDate)) {
+      console.log("Match");
+    }
   }
 
   getFamily() {
@@ -112,11 +127,11 @@ export class TimetableComponent implements OnInit {
 
     //TELLS YOU DAY OF WEEK 
     // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
-    //console.log(this.date.momentObj.day());
+    console.log(this.date.momentObj.day());
 
-    for (var i = 0; i < this.activitiesArray.length; i++) {
-      if (this.date.formatted == this.activitiesArray[i].date.split("T")[0]) {
-        this.selectedActivities.push(this.activitiesArray[i]);
+    for (var i = 0; i < this.recordActivities.length; i++) {
+      if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+        this.selectedActivities.push(this.recordActivities[i]);
       }
     }
 
