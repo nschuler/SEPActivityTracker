@@ -9,7 +9,7 @@ module.exports.getEducators = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT * FROM Educator', (err, educator)=>{
+			mysql_query('SELECT User.first_name, User.last_name, Educator.id, Educator.room_id FROM Educator INNER JOIN User ON Educator.id = User.id', (err, educator)=>{
 				if(err) callback(err, null);
 				callback(err, educator);
 			});
@@ -41,8 +41,16 @@ module.exports.getRooms = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT * FROM Room', (err, rooms) => { 
-				callback(err, rooms);
+			mysql_query('SELECT User.first_name, User.last_name, Educator.id, Educator.room_id FROM Educator INNER JOIN User ON Educator.id = User.id', (err, educators)=>{
+				if(err) callback(err, null);
+
+				mysql_query('SELECT * FROM Room', (err, rooms) => { 
+					let data = {
+						educators: educators,
+						rooms: rooms,
+					}
+					callback(err, data);
+				});
 			});
 		}
 		else
@@ -87,53 +95,7 @@ module.exports.getAllActivities = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('SELECT * FROM Activity', (err, activityData) => { 
-				let queryData = [];
-				for (i in activityData) {
-					queryData.push(activityData[i].id);
-				}
-
-				query = 'SELECT * FROM ActivityMeta WHERE activity_id = '.concat(queryData.join(" OR activity_id ="));
-
-				mysql_query(query, (err, activityMetaData) => { 
-					let data = {
-						activityData: activityData,
-						activityMetaData: activityMetaData,
-					}; 
-
-					callback(err, data);
-				});
-			});
-		}
-		else
-		{
-			callback(new Error('User is not an Educator'),null);
-		}
-	});
-}
-
-module.exports.getActivitiesByRoomId = function(user, room_id, callback) {
-	this.validateEducator(user.role_type, (valid) => { 
-		if(valid)
-		{
-			mysql_query('SELECT * FROM Activity WHERE room_id = ?', room_id, (err, activityData) => { 
-				let queryData = [];
-				for (i in activityData) {
-					queryData.push(activityData[i].id);
-				}
-
-				query = 'SELECT * FROM ActivityMeta WHERE activity_id = '.concat(queryData.join(" OR activity_id ="));
-
-				mysql_query(query, (err, activityMetaData) => { 
-
-					let data = {
-						activityData: activityData,
-						activityMetaData: activityMetaData,
-					}; 
-
-					callback(err, data);
-				});
-			});
+			mysql_query('SELECT * FROM Activity', callback);
 		}
 		else
 		{
@@ -206,6 +168,21 @@ module.exports.deleteActivity = function(user, activity_id, callback){
 	});
 }
 
+module.exports.getActivityTypes = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM ActivityType', (err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.fetchChildrenFromDB = function(room_id, callback) {
 	mysql_query('SELECT * FROM Child WHERE room_id = ?', room_id, (err, data) => {
 		if (data) 
@@ -261,6 +238,80 @@ module.exports.createRoom = function(user, roomData, callback) {
 		else
 		{
 			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
+
+module.exports.getActivitiesByRoomId = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Schedule WHERE room_id = ?', room_id, callback);
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.createActivityInstance = function(user, activity, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			let activityInstance = {
+				room_id: activity.room_id,
+				activity_id: activity.activity_id,
+				start_time: activity.start_time,
+				end_time: activity.end_time,
+				length: activity.length,
+				sunday: activity.sunday,
+				monday: activity.monday,
+				tuesday: activity.tuesday,
+				wednesday: activity.wednesday,
+				thursday: activity.thursday,
+				friday: activity.friday,
+				saturday: activity.saturday,
+			}
+
+			mysql_query('INSERT INTO Schedule SET ?', activityInstance,(err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.deleteActivityInstance = function(user, activity_instance_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('DELETE FROM Schedule WHERE id = ?', activity_instance_id, (err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.updateActivityInstance = function(user, activity, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+
+				' length = ?, sunday = ?, monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ? WHERE id = ?',[activity.activity_id, activity.start_time, activity.end_time, activity.length, activity.sunday, activity.monday, activity.tuesday, activity.wednesday, activity.thursday, activity.friday, activity.saturday, activity.id],(err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
 		}
 	});
 }

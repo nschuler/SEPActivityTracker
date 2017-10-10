@@ -150,6 +150,50 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  createActivityInstance(activity) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/createactivityinstance', {activity: activity}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  updateActivityInstance(activity) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/updateactivityinstance', {activity: activity}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  deleteActivityInstance(activity_instance_id) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/deleteactivityinstance', {activity_instance_id: activity_instance_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  getActivityTypes() {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.get('http://localhost:8080/educators/getactivitytypes', {headers: headers})
+      .map(res => res.json())
+  }
+
   storeActivities(activities){
     localStorage.setItem('activities', JSON.stringify(activities));
   }
