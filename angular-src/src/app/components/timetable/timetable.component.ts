@@ -40,6 +40,11 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
 
+    // EXAMPLE USE
+    // this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: 1, comment: "This is my second comment"}).subscribe(data => {
+    //   console.log(data);
+    // });
+
     this.options = new DatePickerOptions({
         format: 'YYYY-MM-DD',
         initialDate: new Date()

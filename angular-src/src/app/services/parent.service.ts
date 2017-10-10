@@ -50,6 +50,16 @@ export class ParentService {
       .map(res => res.json());
   }
 
+  deleteCommentOnChildActivityRecord(data){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.post('http://localhost:8080/parents/deletecommentonchildactivityrecord', {data: data}, {headers: headers})
+      .map(res => res.json());
+  }
+
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;

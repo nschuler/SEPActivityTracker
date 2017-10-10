@@ -77,6 +77,48 @@ module.exports.commentOnChildActivityRecord = function(user, userData, callback)
 	});
 }
 
+module.exports.deleteCommentOnChildActivityRecord = function(user, userData, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			let index = undefined;
+
+			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', userData.activityrecord_id, (err,data) => { 
+				if(err) callback(err,null);
+				let commentObject = JSON.parse(data[0].comments);
+
+				for(i in commentObject.comments)
+				{
+					if(commentObject.comments[i].comment == userData.comment)
+					{
+						if(commentObject.comments[i].author)
+						{
+							index = i;
+						}
+					}
+				}
+
+				if(index)
+				{
+					commentObject.comments.splice(index,1); // first element removed
+					
+					mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),userData.activityrecord_id],(err,data)=>{
+						callback(err,data);
+					});
+				}
+				else
+				{
+					callback(new Error('No comment was deleted'), null);
+				}
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null);
+		}
+	});
+}
+
 module.exports.getCurrentActivities = function(user, room_id, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
