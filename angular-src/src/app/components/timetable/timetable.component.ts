@@ -121,7 +121,7 @@ export class TimetableComponent implements OnInit {
   }
 
   leaveComment(activity) {
-    let dialogRef = this.dialog.open(MyDialogComponent, {
+    let dialogRef = this.dialog.open(MyNoteComponent, {
       width: '600px',
       data: {activity: activity.name, data: activity.description}
     });
@@ -133,8 +133,16 @@ export class TimetableComponent implements OnInit {
     })
   }
 
+  addComment(activityId) {
+    console.log(activityId);
+
+    let dialogRef = this.dialog.open(MyCommentComponent, {
+      width: '600px',
+    });    
+  }
+
   addNote() {
-    let dialogRef = this.dialog.open(MyDialogComponent, {
+    let dialogRef = this.dialog.open(MyNoteComponent, {
       width: '600px',
     });
 
@@ -148,19 +156,42 @@ export class TimetableComponent implements OnInit {
 
 @Component({
   selector: 'app-my-dialog',
-  templateUrl: './my-dialog.component.html',
-  styleUrls: ['./my-dialog.component.css']
+  templateUrl: './note-dialog.component.html',
+  styleUrls: ['./note-dialog.component.css']
 })
 
-export class MyDialogComponent implements OnInit {
+export class MyNoteComponent implements OnInit {
   note: String;
-  constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+  constructor(public thisDialogRef: MdDialogRef<MyNoteComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
   }
 
   onCloseConfirm() {
     this.thisDialogRef.close(this.note);
+  }
+
+  onCloseCancel() {
+    this.thisDialogRef.close(null);
+  }
+}
+
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './comment-dialog.component.html',
+  styleUrls: ['./comment-dialog.component.css']
+})
+
+export class MyCommentComponent implements OnInit {
+  comment: String;
+  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+  }
+
+  onCloseConfirm() {
+    this.thisDialogRef.close(this.comment);
+    console.log(this.comment);
   }
 
   onCloseCancel() {

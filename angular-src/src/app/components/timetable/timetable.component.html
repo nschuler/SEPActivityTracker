@@ -53,7 +53,7 @@
     <p>{{activity.description}}</p>
   </md-card-content>
   <md-card-actions>
-    <button md-button>COMMENT</button>
+    <button (click)="addComment(activity.activity_record_id)" md-button>COMMENT</button>
   </md-card-actions>
   </md-card>
 </div>
