@@ -56,6 +56,11 @@ export class RoomPlanComponent implements OnInit {
     color: colors.yellow,
     start: new Date(),
     end: new Date(),
+    resizable: {
+      beforeStart: true,
+      afterEnd: true
+    },
+    draggable: true,
     actions: [{
       label: '<i class="fa fa-fw fa-pencil"></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
@@ -182,17 +187,17 @@ export class RoomPlanComponent implements OnInit {
           let newStart = setDate(event.start, getDate(event.start) + count);
           let newEnd = setDate(event.end, getDate(event.end) + count);
           if (event.test == "Monday" && isMonday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           } else if (event.test == "Tuesday" && isTuesday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           } else if (event.test == "Wednesday" && isWednesday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           } else if (event.test == "Thursday" && isThursday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           } else if (event.test == "Friday" && isFriday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           } else if (event.test == "Everyday"){
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue});
+            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           }
           count++;
           day_difference--;
