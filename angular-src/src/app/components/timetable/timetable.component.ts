@@ -61,6 +61,16 @@ export class TimetableComponent implements OnInit {
     //   console.log(data);
     // });
 
+    //EXAMPLE USE of add note
+    // this.parentService.addNote({child_id: 1, note: "This is my first ever note"}).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    //EXAMPLE USE of delete note
+    // this.parentService.deleteNote({child_id: 1, note: "This is my first ever note"}).subscribe(data => {
+    //   console.log(data);
+    // });
+
     this.options = new DatePickerOptions({
       format: 'YYYY-MM-DD',
       initialDate: new Date()
