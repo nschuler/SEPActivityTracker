@@ -62,6 +62,50 @@ export class EducatorService {
       .map(res => res.json())
   }
 
+  addChildToRoom(room_id, child_id) {
+    this.loadToken(); // Grab auth token from local storage
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/addchild', {room_id: room_id, child_id: child_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  removeChildFromRoom(child_id) {
+    this.loadToken(); // Grab auth token from local storage
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/removechild', {child_id: child_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  loginToRoom(room_id) {
+    this.loadToken(); // Grab auth token from local storage
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/logintoroom', {room_id: room_id}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  logoutOfRoom() {
+    this.loadToken(); // Grab auth token from local storage
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.get('http://localhost:8080/educators/logoutofroom', {headers: headers})
+      .map(res => res.json())
+  }
+
   updateRoom(room) {
     this.loadToken(); // Grab auth token from local storage
 

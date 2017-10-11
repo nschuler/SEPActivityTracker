@@ -76,6 +76,36 @@ module.exports.getChildrenInRoom = function(user, room_id, callback) {
 	});
 }
 
+module.exports.addChildToRoom = function(user, room_id, child_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('UPDATE Child Set room_id = ? WHERE id = ?',[room_id, child_id], (err,data) => {
+				callback(err,data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.removeChildFromRoom = function(user, child_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('UPDATE Child Set room_id = ? WHERE id = ?',[null, child_id], (err,data) => {
+				callback(err,data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.updateRoom = function(user, room, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
@@ -110,6 +140,36 @@ module.exports.getRoomById = function(user, room_id, callback) {
 		{
 			mysql_query('SELECT * FROM Room WHERE id = ?', room_id, (err, roomData) => { 
 				callback(err, roomData);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
+
+module.exports.loginToRoom = function(user, room_id, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('UPDATE Educator Set room_id = ? WHERE id = ?', [room_id, user.id], (err, data) => { 
+				callback(err, data);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'), null);
+		}
+	});
+}
+
+module.exports.logoutOfRoom = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('UPDATE Educator Set room_id = ? WHERE id = ?', [null, user.id], (err, data) => { 
+				callback(err, data);
 			});
 		}
 		else

@@ -40,6 +40,28 @@ router.post('/childrenroom', passport.authenticate('jwt', {session:false}), (req
 	});
 });
 
+// Add Child to Room
+router.post('/addchild', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.addChildToRoom(req.user[0], req.body.room_id, req.body.child_id, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Child Added to Room'});
+		}
+	});
+});
+
+// Remove Child from Room
+router.post('/removechild', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.removeChildFromRoom(req.user[0], req.body.child_id, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Child Removed from Room'});
+		}
+	});
+});
+
 // Rooms
 router.get('/rooms', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Educator.getRooms(req.user[0], (err, data) => { 
@@ -92,12 +114,22 @@ router.post('/roombyid', passport.authenticate('jwt', {session:false}), (req, re
 	});
 });
 
-router.post('/deleteroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.deleteRoomByID(req.user[0].id, req.body.room_id, (err, data) => { 
+router.post('/logintoroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.loginToRoom(req.user[0], req.body.room_id, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Room Deleted'});
+			res.json({success: true, msg:'Logged in to room'});
+		}
+	});
+});
+
+router.get('/logoutofroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.logoutOfRoom(req.user[0], (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Logged out of room'});
 		}
 	});
 });
@@ -108,6 +140,16 @@ router.post('/createroom', passport.authenticate('jwt', {session:false}), (req, 
 			res.json({success: false, msg:'Request failed'});
 		} else {
 			res.json({success: true, msg:'Room Created' + data});
+		}
+	});
+});
+
+router.post('/deleteroom', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
+	Educator.deleteRoomByID(req.user[0], req.body.room_id, (err, data) => { 
+		if(err){ 
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Room Deleted'});
 		}
 	});
 });

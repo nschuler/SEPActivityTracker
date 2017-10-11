@@ -1,108 +1,113 @@
 <ng-template #modalContent let-close="close">
-    <div class="modal-header">
-      <h5 class="modal-title">Event action occurred</h5>
-      <button type="button" class="close" (click)="close()">
-        <span aria-hidden="true">&times;</span>
-      </button>
+  <div class="modal-header">
+    <h5 class="modal-title">Event action occurred</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
     </div>
-    <div class="modal-body">
-      <div>
-        Action:
-        <pre>{{ modalData?.action }}</pre>
-      </div>
-      <div>
-        Event:
-        <pre>{{ modalData?.event | json }}</pre>
-      </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
-    </div> 
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">OK</button>
+  </div> 
 </ng-template>
 
+<div class="section usage-section ">
+  <h1>Admin!</h1>
+  <a [routerLink]="['/rooms/admin',room_id]">Enter room admin panel</a>   
+  <hr>
+</div> 
 
 <div class="row text-center">
   <div class="col-md-4">
     <div class="btn-group">
       <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange(viewDate)">Previous</div>
       <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate" (viewDateChange)="viewDateChange(viewDate)">Today</div>
-    <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange(viewDate)">Next</div>
+      <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange(viewDate)">Next</div>
+    </div>
   </div>
-</div>
 
-<div class="col-md-4">
-  <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
-</div>
-
-<div class="col-md-4">
-  <div class="btn-group">
-    <div class="btn btn-primary" (click)="viewChange('week')" [class.active]="view === 'week'">Week</div>
-    <div class="btn btn-primary" (click)="viewChange('day')" [class.active]="view === 'day'">Day</div>
+  <div class="col-md-4">
+    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
   </div>
-</div>
 
-<hr>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div class="btn btn-primary" (click)="viewChange('week')" [class.active]="view === 'week'">Week</div>
+      <div class="btn btn-primary" (click)="viewChange('day')" [class.active]="view === 'day'">Day</div>
+    </div>
+  </div>
 
-<div [ngSwitch]="view">
-  <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-week-view>
-  <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [dayStartHour]="5" [dayEndHour]="17" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-day-view>
-</div>
+  <hr>
 
-<hr>
+  <div [ngSwitch]="view">
+    <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-week-view>
+    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [dayStartHour]="5" [dayEndHour]="17" (eventTimesChanged)="eventTimesChanged($event)"></mwl-calendar-day-view>
+  </div>
 
-<h3>
-  <button class="btn btn-primary pull-right" (click)="addEvent()">Add new</button>
-  <div class="clearfix"></div>
-</h3>
+  <hr>
 
-<br>
+  <h3>
+    <button class="btn btn-primary pull-right" (click)="addEvent()">Add new</button>
+    <div class="clearfix"></div>
+  </h3>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Activity</th>
-      <th>Activity Date/Time</th>
-      <th>Recurring</th>
-      <th>Options</th>
-    </tr>
-  </thead>
+  <br>
 
-<tbody>
-    <tr *ngFor="let event of events; let index = index">
-      <td>
-        <!-- <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()"></td> -->
-        {{event.title}}
-        <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next(); updateColour(event);">
-          <option *ngFor="let activity of activities">{{activity.name}}</option>
-        </select>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Activity</th>
+        <th>Activity Date/Time</th>
+        <th>Recurring</th>
+        <th>Options</th>
+      </tr>
+    </thead>
 
-      <td>
-        <div class="input-control">
-          <label for="input1">Start Date/Time:</label>
-          <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
-          <br>
-          <label for="input1">Finish Time:</label>
-          <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next()" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>
-        </div>
-      </td>
+    <tbody>
+      <tr *ngFor="let event of events; let index = index">
+        <td>
+          <!-- <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()"></td> -->
+          {{event.title}}
+          <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next(); updateColour(event);">
+            <option *ngFor="let activity of activities">{{activity.name}}</option>
+          </select>
 
-      <td>
-        <select class="form-control" [(ngModel)]="event.test" (ngModelChange)="updateRecurring(event);">
-          <option *ngFor="let option of repeatOptions">{{option}}</option>
-        </select>
-        <label for="input1">End Date:</label>
-        <owl-date-time [(ngModel)]="event.recurEnd"  [dateFormat]="'YYYY-MM-DD'" [type]="'calendar'" [placeHolder]="'yyyy/mm/dd'" (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
-      </td>
+          <td>
+            <div class="input-control">
+              <label for="input1">Start Date/Time:</label>
+              <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
+              <br>
+              <label for="input1">Finish Time:</label>
+              <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next()" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>
+            </div>
+          </td>
 
-      <td>
-        <button class="btn btn-danger" (click)="updateRecurring(event); refresh.next()">Submit</button>
-        <button class="btn btn-primary" (click)="events.splice(index, 1); refresh.next()">Delete</button>
-      </td>
-    </tr>
-</tbody>
-</table>
+          <td>
+            <select class="form-control" [(ngModel)]="event.test" (ngModelChange)="updateRecurring(event);">
+              <option *ngFor="let option of repeatOptions">{{option}}</option>
+            </select>
+            <label for="input1">End Date:</label>
+            <owl-date-time [(ngModel)]="event.recurEnd"  [dateFormat]="'YYYY-MM-DD'" [type]="'calendar'" [placeHolder]="'yyyy/mm/dd'" (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
+          </td>
 
-<br><hr>
+          <td>
+            <button class="btn btn-danger" (click)="updateRecurring(event); refresh.next()">Submit</button>
+            <button class="btn btn-primary" (click)="events.splice(index, 1); refresh.next()">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br><hr>
 
 <!-- <div id="content-wrapper" [mnFullpage]="options"
 [mnFullpageNavigation]="true"
@@ -114,6 +119,4 @@
   <h1>Admin !</h1>
   <a [routerLink]="['/rooms/admin',room_id]">Lets enter the room admin panel!</a>   
 </div> -->
-
-
-</div>
+<!-- </div> -->

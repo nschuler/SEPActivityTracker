@@ -1,43 +1,58 @@
-<h1 style="text-align: center;">Assigned Staff !</h1>
-<br>
-<div class="text-center">
-  <button [ngClass]="{disabled : enrolled}" class="btn btn-primary" (click)="enrolled || joinRoom()">Log in to Room</button>
-</div>
-<br>
-<br>
-<md-nav-list style="width: 300px; margin:0 auto;" layout-align="center center">
-  <a md-list-item *ngFor="let educator of assignedEducators" style="text-align: center;">
-    <span style="flex: 1 1 auto;">[{{ educator.id }}] - {{educator.first_name}}</span>
-    <a (click)="deleteEducator(educator); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a>
-  </a>
-  <p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">No Staff currently enrolled in this Room!</p>
-</md-nav-list>
-<br>
-<hr>
-<h1 style="text-align: center;">Children !</h1>
-<br>
-<p style="text-align:center; font-size: 25px;" [hidden]="assignedEducators.length">Log in to room to be able to add children!</p>
-<div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
-  <table class="table table-striped" [hidden]="!assignedEducators.length">
-    <thead>
-      <tr style="text-align: center;">
-        <th style="text-align: center;">First Name</th>
-        <th style="text-align: center;">Last Name</th>
-        <th style="text-align: center;">DOB</th>
-        <th style="text-align: center;">Allergens</th>
-        <th style="text-align: center;">Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let child of enrolledChildren | paginate: { itemsPerPage: 10, currentPage: p }">
-        <td style="text-align: center;"> {{ child.first_name }} </td>
-        <td style="text-align: center;"> {{ child.last_name }} </td>
-        <td style="text-align: center;"> {{ child.dob }} </td>
-        <td style="text-align: center;"> {{ child.allergens }} </td>
-        <td style="text-align: center;"><a (click)="deleteChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 style="text-align: right;" [hidden]="!assignedEducators.length"><b>Total Children: {{ enrolledChildren.length }}</b></h5>
-  <pagination-controls (pageChange)="p = $event" [hidden]="!assignedEducators.length"></pagination-controls>
+<div class="row">
+  <div class="col-md-6">
+    <h1 style="text-align: center;">Children allocated to Room {{this.room_id}}</h1>
+    <br/>
+    <p style="text-align:center; font-size: 25px;" [hidden]="loggedIn">Log in to the room manage children!</p>
+    <div [hidden]="!loggedIn">
+      <div class="text-center">
+        <select class="form-control" required #mychildid>
+          <option *ngFor="let child of otherChildren" [value]="child.id">{{child.id}}. {{child.first_name}} {{child.last_name}} (<i *ngIf="child.room_id">Allocated to Room {{child.room_id}}</i><i *ngIf="!child.room_id">Not allocated</i>)</option>
+        </select>
+        <button  class="btn waves-effect waves-light right" type="submit" name="action" (click)="addChild(mychildid.value)">Add Child</button>
+      </div>
+      <div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
+        <table class="table table-striped">
+          <thead>
+            <tr style="text-align: center;">
+              <th style="text-align: center;">First Name</th>
+              <th style="text-align: center;">Last Name</th>
+              <th style="text-align: center;">DOB</th>
+              <th style="text-align: center;">Allergens</th>
+              <th style="text-align: center;">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let child of roomChildren | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td style="text-align: center;"> {{ child.first_name }} </td>
+              <td style="text-align: center;"> {{ child.last_name }} </td>
+              <td style="text-align: center;"> {{ child.dob }} </td>
+              <td style="text-align: center;"> {{ child.allergens }} </td>
+              <td style="text-align: center;"><a (click)="removeChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
+            </tr>
+          </tbody>
+        </table>
+        <h5 style="text-align: right;" [hidden]="!roomEducators.length"><b>Total Children: {{ roomChildren.length }}</b></h5>
+        <pagination-controls (pageChange)="p = $event" [hidden]="!roomEducators.length"></pagination-controls>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+  <div class="col-md-6">
+    <h1 style="text-align: center;">Staff allocated to Room {{this.room_id}}</h1>
+    <br>
+    <div class="text-center">
+      <button [ngClass]="{disabled : loggedIn}" class="btn btn-primary" (click)="loggedIn || joinRoom()">Login to Room</button>
+      <button [ngClass]="{disabled : !loggedIn}" class="btn btn-default" (click)="!loggedIn || leaveRoom()">Logout of Room</button>
+    </div>
+    <br>
+    <br>
+    <md-nav-list style="width: 300px; margin:0 auto;" layout-align="center center">
+      <a md-list-item *ngFor="let educator of roomEducators" style="text-align: center;">
+        <span style="flex: 1 1 auto;">[{{ educator.id }}] - {{educator.first_name}} {{educator.last_name}}</span>
+      </a>
+      <p style="text-align:center; font-size: 25px;" [hidden]="roomEducators.length">No Staff currently loggedIn in this Room!</p>
+    </md-nav-list>
+  </div>
+  <hr>
 </div>

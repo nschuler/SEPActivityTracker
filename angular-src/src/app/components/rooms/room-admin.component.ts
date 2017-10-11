@@ -18,77 +18,104 @@ import { DatePickerOptions } from 'ng2-datepicker';
 })
 export class RoomAdminComponent implements OnInit {
   room_id: number; // Identifies which room has been selected
-  enrolledChildren = [];
-  allChildren = [];
-  educators = [];
-  assignedEducators = [];
-  enrolled = false;
+  loggedIn = false;
   user: any;
+
+  roomChildren = [];
+  otherChildren = [];
+  roomEducators = [];
 
   constructor(private authService: AuthService, public dialog: MdDialog, private route: ActivatedRoute, private location: Location, public fullpageService: MnFullpageService, private educatorService: EducatorService) { }
 
   ngOnInit() {
   	this.room_id = +this.route.snapshot.params['room'];
-
     this.user = JSON.parse(this.authService.loadUserData());
 
-    this.educatorService.getChildrenInRoom(this.room_id).subscribe(data => {
-      this.enrolledChildren = data.children;
-    }, err => {console.log(err);});
-
-    this.fetchEducators();
+    this.populateChildren();
+    this.populateEducators();
   }
 
-  getAllChildren() {
+  populateChildren() {
     this.educatorService.getChildren().subscribe(data => {
-      for (var i = 0; i < data.children.length; i++) {
-        this.allChildren.push(
+      if(data.success)
+      {
+        this.roomChildren = [];
+        this.otherChildren = [];
+        for(var i = 0; i < data.children.length; i++)
         {
-          'id' : data.children[i].id,
-          'name' : data.children[i].id + ". " + data.children[i].first_name + " " + data.children[i].last_name
-        });
+          if(data.children[i].room_id == this.room_id)
+          {
+            this.roomChildren.push(data.children[i]);
+          } else {
+            this.otherChildren.push(data.children[i]);
+          }
+        }
       }
-    }, err => {console.log(err);});
+    });
   }
 
-  fetchEducators() {
+  populateEducators() {
     this.educatorService.getEducators().subscribe(data => {
       if(data.success)
       {
-        for (var i=0; i<data.educators.length; i++) {
-            this.educators.push(data.educators[i])
+        this.roomEducators = [];
+        for(var i = 0; i < data.educators.length; i++) {
+          if(data.educators[i].room_id == this.room_id)
+          {
+            if(data.educators[i].id == this.user.id)
+            {
+              this.loggedIn = true;
+            }
+            this.roomEducators.push(data.educators[i]);
+          }
         }
-        this.fetchAssignedEducator()
       }
-    }, err => {console.log(err);});
+    });
   }
 
-  fetchAssignedEducator() {
-    for (var i=0; i<this.educators.length; i++) {
-      if (this.educators[i].room_id != null) {
-        if (this.educators[i].id == this.user.id) {
-          this.enrolled = true;
-        }
-        this.assignedEducators.push(this.educators[i])
+  addChild(child_id:string): void{
+    this.educatorService.addChildToRoom(this.room_id, child_id).subscribe(data => {
+      if(data.success)
+      {
+        this.populateChildren();
       }
-    }
+    });
   }
 
-  deleteChild(child) {
-    var index = this.enrolledChildren.indexOf(child);
-    this.enrolledChildren.splice(index, 1);
+  removeChild(child) {
+    this.educatorService.removeChildFromRoom(child.id).subscribe(data => {
+      if(data.success)
+      {
+        var index = this.roomChildren.indexOf(child);
+        this.roomChildren.splice(index, 1);
+        this.populateChildren();
+      }
+    });
   }
 
-  deleteEducator(educator) {
-    var index = this.assignedEducators.indexOf(educator);
-    this.assignedEducators.splice(index, 1);
-    if (educator.id == this.user.id) {
-      this.enrolled = false;
-    }
+  leaveRoom() {
+    this.educatorService.logoutOfRoom().subscribe(data => {
+      if(data.success)
+      {
+        this.loggedIn = false;
+        this.populateEducators();
+        for(var i = 0; i < this.roomEducators.length; i++) {
+          if(this.user.id == this.roomEducators[i].id)
+          {
+            this.roomEducators.splice(i, 1);
+          }
+        } 
+      }
+    });
   }
 
   joinRoom() {
-    this.enrolled = true;
-    this.assignedEducators.push(this.user)
+    this.educatorService.loginToRoom(this.room_id).subscribe(data => {
+      if(data.success)
+      {
+        this.roomEducators.push(this.user)
+        this.populateEducators();
+      }
+    });
   }
 }
