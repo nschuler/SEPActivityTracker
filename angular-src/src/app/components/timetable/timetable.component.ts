@@ -66,7 +66,7 @@ export class TimetableComponent implements OnInit {
       initialDate: new Date()
     });
 
-    // roomId is hard-coded.
+    // Populate recordActivities array
     this.parentService.getActivityRecords("1").subscribe(data => {
       if (data.success) {
         for (var i = 0; i < data.records.length; i++) {
@@ -77,7 +77,7 @@ export class TimetableComponent implements OnInit {
       console.log(this.recordActivities);
     });
 
-    // roomId is hard-coded.
+    // Populate currentActivities array
     this.parentService.getCurrentActivities("1").subscribe(activityData => {
       if (activityData.success) {
         for (var i = 0; i < activityData.activities.length; i++) {
@@ -87,14 +87,6 @@ export class TimetableComponent implements OnInit {
 
       console.log(this.currentActivities);
     });
-
-    var initDate = new Date()
-    console.log(initDate)
-    console.log(this.options.initialDate)
-
-    if (String(initDate) == String(this.options.initialDate)) {
-      console.log("Match");
-    }
   }
 
   getFamily() {
@@ -131,6 +123,7 @@ export class TimetableComponent implements OnInit {
 
     for (var i = 0; i < this.recordActivities.length; i++) {
       if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+        this.recordActivities[i].comments = JSON.parse(this.recordActivities[i]['comments']);
         this.selectedActivities.push(this.recordActivities[i]);
       }
     }
@@ -138,36 +131,27 @@ export class TimetableComponent implements OnInit {
     console.log(this.selectedActivities);
   }
 
-  addComment(activityId) {
-    for (var i = 0; i < this.selectedActivities.length; i++) {
-      if (activityId == this.selectedActivities[i].activity_record_id) {
-        this.chosenActivity = this.selectedActivities[i];
+  addComment(activity) {
+    console.log(activity)
+    console.log(activity.comments.comments[0])
 
-        let commentsObj = JSON.parse(this.selectedActivities[i].comments)
-
-        if (commentsObj.comments.length > 0) {
-          console.log(commentsObj.comments.length)
-          console.log(commentsObj.comments[0])
-          console.log(commentsObj.comments[0].comment)
-
-          this.selectedComments.push(commentsObj.comments[0].comment)
+    if (activity.comments.comments.length == 0) {
+      let dialogRef = this.dialog.open(MyCommentComponent, {
+        width: '600px',
+        data: {
+          name: activity.name
         }
-      }
+
+      })
+    } else {
+      let dialogRef = this.dialog.open(MyCommentComponent, {
+        width: '600px',
+        data: {
+          name: activity.name,
+          comments: [activity.comments.comments[0].comment]
+        }
+      })     
     }
-
-    let dialogRef = this.dialog.open(MyCommentComponent, {
-      width: '600px',
-      data: {
-        name: this.chosenActivity.name,
-        comments: this.selectedComments
-      }
-    })
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        this.selectedComments.push(result)
-      }
-    });
   }
 
   addNote() {
