@@ -27,8 +27,16 @@ export class ParentComponent implements OnInit {
       this.greeting = "Good Afternoon";
      }
      //
+     this.authService.getProfile().subscribe(profile => {
+      this.userName = profile.user.first_name + " " + profile.user.last_name;
+    },
+    err => {
+      console.log(err);
+      return false;
+    });
+
+     //family
     this.parentService.getFamily().subscribe(data => {
-      this.userName = data.family.familyName;
      //assign children to the child object for display purposes
       for(let i in data.family.children){
         this.children.push(new Child(data.family.children[i].first_name , data.family.familyName, data.family.children[i].family_id, data.family.children[i].id, data.family.children[i].room_id));
@@ -40,8 +48,8 @@ export class ParentComponent implements OnInit {
       return false;
     });
   }
-
 }
+
 
 class Child {
   firstName: string;
