@@ -101,6 +101,7 @@ export class TimetableComponent implements OnInit {
 
   getFamily() {
     this.parentService.getFamily().subscribe(data => {
+      console.log(data)
       if(data.success) {
         this.displayChild(data.family);
       }
@@ -135,6 +136,8 @@ export class TimetableComponent implements OnInit {
       if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
         this.recordActivities[i].comments = JSON.parse(this.recordActivities[i]['comments']);
         this.selectedActivities.push(this.recordActivities[i]);
+
+        console.log(this.recordActivities[i])
       }
     }
 
@@ -142,25 +145,23 @@ export class TimetableComponent implements OnInit {
   }
 
   addComment(activity) {
-    console.log(activity)
-    console.log(activity.comments.comments[0])
+    for (var i = 0; i < activity.comments.comments.length; i++) {
+      this.selectedComments.push(activity.comments.comments[i].comment)
+    }
 
-    if (activity.comments.comments.length == 0) {
-      let dialogRef = this.dialog.open(MyCommentComponent, {
-        width: '600px',
-        data: {
-          name: activity.name
-        }
-      })
-    } else {
-      let dialogRef = this.dialog.open(MyCommentComponent, {
+    let dialogRef = this.dialog.open(MyCommentComponent, {
         width: '600px',
         data: {
           name: activity.name,
-          comments: [activity.comments.comments[0].comment]
+          comments: this.selectedComments
         }
-      })     
-    }
+      }) 
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.selectedComments.push(result)
+      }
+    })
   }
 
   addNote() {
