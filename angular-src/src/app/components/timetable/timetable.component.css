@@ -25,7 +25,7 @@
 }
 
 .noteField {
-	height: 80%;
+  height: 80%;
 }
 
 .noteButton {
@@ -68,4 +68,14 @@
 	float: right;
 	margin-top: 8px;
 	padding-right: 10px;
+}
+
+.noteWrapper{
+  margin-left: 15px;
+
+}
+
+.panel {
+box-shadow: none;
+  display: none;
 }

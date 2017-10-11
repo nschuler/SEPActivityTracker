@@ -39,12 +39,35 @@ router.post('/commentonchildactivityrecord', passport.authenticate('jwt', {sessi
 	});
 });
 
+// Delete Comment on Activity Record
 router.post('/deletecommentonchildactivityrecord', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Parent.deleteCommentOnChildActivityRecord(req.user[0], req.body.data, (err, data) => {
 		if(err){
 			res.json({success: false, msg:'Request Failed'});
 		} else {
 			res.json({success: true, msg:'Comment Deleted'});
+		}
+	});
+});
+
+// Add Note on Child
+router.post('/addnote', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.addNote(req.user[0], req.body.data, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Note Made'});
+		}
+	});
+});
+
+// Delete Note on Child
+router.post('/deletenote', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.deleteNote(req.user[0], req.body.data, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Note Deleted'});
 		}
 	});
 });

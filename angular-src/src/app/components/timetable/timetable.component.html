@@ -24,18 +24,21 @@
         </div>
 
         <!-- Child Notes -->
-        <div class="notes">
-          <div class="noteField">
-            <legend style="margin-left: 15px;">Notes</legend>
-            <div class="noteDisplay">
-              <li class="list-group-item" *ngFor="let note of notesArray">{{note}}</li>
+          <button (click)=" expandBoy($event)" class = "showNote" style =" margin-left: 40%;">View Notes</button>
+            <div class = "panel">
+              <div class="notes">
+               <div class="noteField">
+                  <legend style="margin-left: 15px;">Notes</legend>
+                  <div class="noteDisplay">
+                    <li class="list-group-item" *ngFor="let note of notesArray">{{note}}</li>
+                  </div>
+              </div>
+              <div class="noteButton">
+                <button (click)="addNote()">Add Note</button>
+              </div>
             </div>
-          </div>
-          <div class="noteButton">
-            <button (click)="addNote()">Add Note</button>
-          </div>
         </div>
-    </div>
+      </div>
 </div>
 
 <legend style="padding-bottom: 15px;">
