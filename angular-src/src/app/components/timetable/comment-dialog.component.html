@@ -1,0 +1,21 @@
+<div>
+  <h2 md-dialog-title>Leave a Comment on: {{data.name}}</h2>
+  <hr>
+  <md-dialog-content>
+    <div class="noteDisplay">
+      <li class="list-group-item" *ngFor="let x of data.comments">{{x}}</li>
+    </div>
+    <div>
+      <form>
+        <div class="form-group" style="padding-top: 10px;">
+          <input type="textarea" [(ngModel)]="comment" name="comment" class="form-control">
+        </div>
+      </form>
+    </div>
+  </md-dialog-content>
+  <hr>
+  <md-dialog-actions>
+    <button md-raised-button (click)="onCloseConfirm()">CONFIRM</button>
+    <button md-raised-button (click)="onCloseCancel()">CANCEL</button>
+  </md-dialog-actions>
+</div>

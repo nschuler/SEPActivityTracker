@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .wrapper{
   display:grid;
   grid-template-columns: 30% 70%;
@@ -6,12 +7,25 @@
 .wrapper > div{
   background: #ffffff;
   padding: 1em;
+=======
+.profile {
+	height: 600px;
+	margin-bottom: 25px;
+}
+
+.imgBox {
+	height: 80%;
+	width: 50%;
+	float: left;
+	text-align: center;
+>>>>>>> user-route
 }
 
 .wrapper > div:nth-child(odd){
   background: #ffffff;
 }
 
+<<<<<<< HEAD
 .example-card{
   background: #e6f9ff;
   top: -55px;
@@ -28,6 +42,43 @@
 	font-size: 16px;
 	top: 430px;
 	left: 30px;
+=======
+.information {
+	height: 50%;
+}
+
+.notes {
+	height: 50%;
+}
+
+.noteField {
+	height: 80%;
+}
+
+.noteButton {
+	height: 20%;
+	margin-left: 15px;
+}
+
+.noteDisplay {
+	height:170px;
+	width:100;
+	border:1px solid #ccc;
+	overflow:auto;
+	margin-left: 15px;
+}
+
+.activityBox {
+	height: 500px;
+	width: 65%;
+	margin: 0 auto;
+	margin-top: 25px;
+	margin-bottom: 50px;
+}
+
+.activityCard {
+	margin-bottom: 10px;
+>>>>>>> user-route
 }
 
 .commentsBar {

@@ -19,15 +19,32 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class TimetableComponent implements OnInit {
   familyName: string;
   address: string;
+<<<<<<< HEAD
   boolLike: boolean;
 
+=======
+>>>>>>> user-route
   roomActivities: any; //(temp)
 
   childActivities: string;
 
   childArray = [];
+<<<<<<< HEAD
 
   commentsArray = [];
+=======
+  notesArray = [];
+
+  recordActivities = [];  // Archived activities.
+  currentActivities = [];
+
+  selectedActivities = [];
+  selectedComments = [];
+  chosenActivity = Object;
+
+  childInfo = Object;
+  childIdParam: number;
+>>>>>>> user-route
 
   date: DateModel;
   options: DatePickerOptions;
@@ -41,17 +58,35 @@ export class TimetableComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+<<<<<<< HEAD
     //get Id from below!
     //console.log(this.parseURLParams(window.location.search));
     let test = +this.route.snapshot.params['child'];
     console.log("Child with Id - ",test);
+=======
+    this.childIdParam = this.route.snapshot.params['child'];
+
+    let family = JSON.parse(this.parentService.loadFamily());
+    
+    if(family)
+      this.displayChild(family);
+
+    this.getFamily();
+>>>>>>> user-route
+
+    // EXAMPLE USE
+    // this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: 1, comment: "This is my second comment"}).subscribe(data => {
+    //   console.log(data);
+    // });
 
     this.options = new DatePickerOptions({
         format: 'YYYY-MM-DD',
         initialDate: new Date()
       });
 
+    // roomId is hard-coded.
     this.parentService.getActivityRecords("1").subscribe(data => {
+<<<<<<< HEAD
       console.log(data);
 
       // if(data.success) {
@@ -63,11 +98,39 @@ export class TimetableComponent implements OnInit {
       //   }
       // }
       this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
+=======
+      if (data.success) {
+        for (var i = 0; i < data.records.length; i++) {
+          this.recordActivities.push(data.records[i]);
+        }
+      }
+
+      console.log(this.recordActivities);
+>>>>>>> user-route
     });
 
+    // roomId is hard-coded.
     this.parentService.getCurrentActivities("1").subscribe(activityData => {
-      this.roomActivities = activityData.activities;
+      if (activityData.success) {
+        for (var i = 0; i < activityData.activities.length; i++) {
+          this.currentActivities.push(activityData.activities[i]);
+        }
+      }
+
+      console.log(this.currentActivities);
     });
+<<<<<<< HEAD
+=======
+
+    var initDate = new Date()
+    console.log(initDate)
+    console.log(this.options.initialDate)
+
+    if (String(initDate) == String(this.options.initialDate)) {
+      console.log("Match");
+    }
+  }
+>>>>>>> user-route
 
     this.parentService.getFamily().subscribe(data => {
       if(data.success)
@@ -118,6 +181,7 @@ export class TimetableComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
   likeActivity() {
     if(this.boolLike == true) {
       console.log("You have unliked this activity!");
@@ -126,43 +190,122 @@ export class TimetableComponent implements OnInit {
     } else {
       console.log("You have liked this activity!");
           console.log(this.childArray)
+=======
+  displayChild(family) {
+    this.familyName = family.familyName;
+    this.address = family.address;
 
-      this.boolLike = true;
+    for (var i = 0; i < family.children.length; i++) {
+      if (family.children[i].id == this.childIdParam) {
+        this.childInfo = family.children[i];
+      }
     }
   }
 
-  updateDate($event) {
-    console.log('YTB')
-  }
-
   getCurrentDate($event) {
-    this.date=$event;
-    console.log(this.date);
+    this.date = $event;
+    this.selectedActivities = [];
+    this.selectedComments = []
+
+    //TELLS YOU DAY OF WEEK 
+    // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
+    console.log(this.date.momentObj.day());
+>>>>>>> user-route
+
+    for (var i = 0; i < this.recordActivities.length; i++) {
+      if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+        this.selectedActivities.push(this.recordActivities[i]);
+      }
+    }
+
+    console.log(this.selectedActivities);
   }
 
+  addComment(activityId) {
+    for (var i = 0; i < this.selectedActivities.length; i++) {
+      if (activityId == this.selectedActivities[i].activity_record_id) {
+        this.chosenActivity = this.selectedActivities[i];
+
+        let commentsObj = JSON.parse(this.selectedActivities[i].comments)
+
+        if (commentsObj.comments.length > 0) {
+          console.log(commentsObj.comments.length)
+          console.log(commentsObj.comments[0])
+          console.log(commentsObj.comments[0].comment)
+
+          this.selectedComments.push(commentsObj.comments[0].comment)
+        }
+      }
+    }
+
+    let dialogRef = this.dialog.open(MyCommentComponent, {
+      width: '600px',
+      data: {
+        name: this.chosenActivity.name,
+        comments: this.selectedComments
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.selectedComments.push(result)
+      }
+    });
+  }
+
+<<<<<<< HEAD
   leaveComment(activity) {
      let dialogRef = this.dialog.open(MyDialogComponent, {
+=======
+  addNote() {
+    let dialogRef = this.dialog.open(MyNoteComponent, {
+>>>>>>> user-route
       width: '600px',
-      data: {activity: activity.name, data: activity.description}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
+<<<<<<< HEAD
           this.commentsArray.push(result)
+=======
+          this.notesArray.push(result)
+>>>>>>> user-route
       }
     })
   }
 }
 
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './note-dialog.component.html',
+  styleUrls: ['./note-dialog.component.css']
+})
+
+export class MyNoteComponent implements OnInit {
+  note: String;
+  constructor(public thisDialogRef: MdDialogRef<MyNoteComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+  }
+
+  onCloseConfirm() {
+    this.thisDialogRef.close(this.note);
+  }
+
+  onCloseCancel() {
+    this.thisDialogRef.close(null);
+  }
+}
 
 @Component({
   selector: 'app-my-dialog',
-  templateUrl: './my-dialog.component.html',
-  styleUrls: ['./my-dialog.component.css']
+  templateUrl: './comment-dialog.component.html',
+  styleUrls: ['./comment-dialog.component.css']
 })
-export class MyDialogComponent implements OnInit {
-  comment: any;
-  constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+export class MyCommentComponent implements OnInit {
+  comment: String;
+  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
     }

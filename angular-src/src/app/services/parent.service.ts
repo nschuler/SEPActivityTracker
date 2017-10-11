@@ -50,6 +50,9 @@ export class ParentService {
       .map(res => res.json());
   }
 
+<<<<<<< HEAD
+=======
+>>>>>>> user-route
   loadToken(){
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;
