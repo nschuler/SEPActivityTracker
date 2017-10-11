@@ -140,7 +140,6 @@ export class TimetableComponent implements OnInit {
         console.log(this.recordActivities[i])
       }
     }
-
     console.log(this.selectedActivities);
   }
 
