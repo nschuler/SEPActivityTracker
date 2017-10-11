@@ -6,15 +6,26 @@ import { EducatorService } from '../../services/educator.service';
 import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule} from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DatePickerOptions } from 'ng2-datepicker';
+
 
 import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { startOfDay, endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours,  getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear} from 'date-fns';
 
 const colors: any = {
-  red: {primary: '#ad2121',secondary: '#FAE3E3'},
-  blue: {primary: '#1e90ff',secondary: '#D1E8FF'},
-  yellow: {primary: '#e3bc08',secondary: '#FDF1BA'}
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
 };
 
 @Component({
@@ -25,10 +36,6 @@ const colors: any = {
 })
 
 export class RoomPlanComponent implements OnInit {
-  public moment: Date = new Date();
-  public startMoment: any;
-  public endMoment: any;
-
   date: Date;
 
   dateStruct: NgbDateStruct;
@@ -37,20 +44,20 @@ export class RoomPlanComponent implements OnInit {
 
   datePicker: any;
 
-  activities = [];
+
 
   animal: string;
   name: string;
   room_id: number; // Identifies which room has been selected
   enrolledChildren = [];
   allChildren = [];
-  view: string = 'day';
+  view: string = 'month';
 
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [{
     title: 'Painting',
-    color: colors.yelow,
+    color: colors.yellow,
     start: new Date(),
     end: new Date(),
     actions: [
@@ -91,50 +98,6 @@ export class RoomPlanComponent implements OnInit {
     this.educatorService.getChildrenInRoom(this.room_id).subscribe(data => {
       this.enrolledChildren = data.children;
     }, err => {console.log(err);});
-
-    // EXAMPLE of creating activity instance
-    // let newActivity = {
-    //   room_id: "1",
-    //   activity_id: "7",
-    //   start_time: "04:00pm",
-    //   end_time: "05:00pm",
-    //   length: "60",
-    //   sunday: "1",
-    //   monday: "1",
-    //   tuesday: "1",
-    //   wednesday: "1",
-    //   thursday: "1",
-    //   friday: "1",
-    //   saturday: "1",
-    // }
-    // this.educatorService.createActivityInstance(newActivity).subscribe(data => {
-    //   console.log(data);
-    // });
-
-    // EXAMPLE of updating activity instance
-    // let activityData = {
-    //   id: "15",
-    //   room_id: "1",
-    //   activity_id: "7",
-    //   start_time: "04:30pm",
-    //   end_time: "05:30pm",
-    //   length: "60",
-    //   sunday: "1",
-    //   monday: "0",
-    //   tuesday: "1",
-    //   wednesday: "0",
-    //   thursday: "1",
-    //   friday: "0",
-    //   saturday: "1",
-    // }
-    // this.educatorService.updateActivityInstance(activityData).subscribe(data => {
-    //   console.log(data);
-    // });
-
-    // EXAMPLE of deleting activity instance
-    // this.educatorService.deleteActivityInstance("15").subscribe(data => {
-    //   console.log(data);
-    // });
   }
 
   getAllChildren() {
@@ -249,7 +212,7 @@ export const DATE_TIME_PICKER_CONTROL_VALUE_ACCESSOR: any = {
   <form class="form-inline">
   <div class="form-group">
   <div class="input-group">
-  <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker> 
+  <ng2-datepicker [options]="options" [(ngModel)]="dateStruct" (ngModelChange)="updateDate()" name="date"></ng2-datepicker>
   </div>
   </div>
   </form>
@@ -273,7 +236,7 @@ export class DateTimePickerComponent implements ControlValueAccessor {
   @Input() placeholder: string;
 
   date: Date;
-  // options: DatePickerOptions;
+  options: DatePickerOptions;
 
 
   dateStruct: NgbDateStruct;

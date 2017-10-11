@@ -18,35 +18,31 @@ export class ActivitiesEditComponent implements OnInit {
   selected_activity_type: string;
 
   // Make this dynamically pulled from DB
-  activityTypes = [];
+  activityTypes = [{id:1, name: "Care"}, {id:2, name: "Learning"}, {id:3, name: "Leisure"}];
 
   constructor(private route: ActivatedRoute, private location: Location, private educatorService: EducatorService, private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
     this.activity_id = +this.route.snapshot.params['activity'];
 
-    this.educatorService.getActivityTypes().subscribe(data => {
-      this.activityTypes = data.data;
-
-      let activities = JSON.parse(this.educatorService.loadActivities());
-      if(activities)
+    let activities = JSON.parse(this.educatorService.loadActivities());
+    if(activities)
+    {
+      for(var i = 0; i < activities.length; i++)
       {
-        for(var i = 0; i < activities.length; i++)
+        if(activities[i].id == this.activity_id)
         {
-          if(activities[i].id == this.activity_id)
-          {
 
-            this.selected_activity_type = this.activityTypes[activities[i].type - 1].name
-            this.activity_name = activities[i].name;
-            this.activity_description = activities[i].description;
-          }
+          this.selected_activity_type = this.activityTypes[activities[i].type - 1].name
+          this.activity_name = activities[i].name;
+          this.activity_description = activities[i].description;
         }
       }
-      else
-      {
-        // TODO get activity from db
-      }
-    }, err => {console.log(err);});
+    }
+    else
+    {
+      // TODO get activity from db
+    }
   }
 
   updateActivity(activity_type:string) { 

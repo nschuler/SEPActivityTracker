@@ -1,5 +1,4 @@
 <html>
-<<<<<<< HEAD
   <body>
     <h1><b> {{greeting}} {{userName}} family, your children:</b></h1>
     <div>
@@ -18,23 +17,3 @@
     </div>
   </body>
 </html>
-=======
-<body>
-  <h1><b> {{greeting}} {{first_name}},<br> here are your children:</b></h1>
-  <div>
-    <md-list>
-      <md-grid-list cols = "3"  *ngFor="let child of children">
-        <a [routerLink]="['/timetable',child.childId]">
-          <div class="shell">
-            <img src="http://images.fandango.com/images/fandangoblog/everettcollection_topgun-170602.jpg" alt="Tom Cruise is now your child" class ="tomCruise">
-            <div class="name">
-              {{child.firstName}} {{child.familyName}}
-            </div>
-          </div>
-        </a>
-      </md-grid-list>
-    </md-list>
-  </div>
-</body>
-</html>
->>>>>>> user-route

@@ -18,7 +18,7 @@
 					<td> {{ room.name }} </td>
 					<td> {{ room.schedule_id }} </td>
 					<td> {{ room.description }} </td>
-					<td><li *ngFor="let educator of room.educator">{{ educator.first_name }}</li></td>
+					<td><li *ngFor="let educator of room.educator">{{ educator }}</li></td>
 					<td><a [routerLink]="['/rooms/edit',room.id]"><i class="material-icons center">mode_edit</i></a></td>
       				<td><a (click)="deleteRoom(room); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
 				</tr>

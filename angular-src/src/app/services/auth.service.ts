@@ -62,10 +62,6 @@ export class AuthService {
   	return tokenNotExpired('id_token');
   }
 
-  educatorLoggedIn(){
-    return (tokenNotExpired('id_token') && JSON.parse(this.loadProfile()).role_type == '2');
-  }
-
   logout(){
   	this.authToken = null;
   	this.user = null;

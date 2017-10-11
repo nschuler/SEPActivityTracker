@@ -142,44 +142,4 @@ router.post('/updateactivity', passport.authenticate('jwt', {session:false}), (r
 	});
 });
 
-router.get('/getactivitytypes', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getActivityTypes(req.user[0], (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Types', data:data});
-		}
-	});
-});
-
-router.post('/createactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.createActivityInstance(req.user[0], req.body.activity, (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Created'});
-		}
-	});
-});
-
-router.post('/deleteactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.deleteActivityInstance(req.user[0], req.body.activity_instance_id, (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Deleted'});
-		}
-	});
-});
-
-router.post('/updateactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.updateActivityInstance(req.user[0], req.body.activity, (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Updated'});
-		}
-	});
-});
-
 module.exports = router;

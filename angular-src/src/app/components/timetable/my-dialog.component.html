@@ -1,10 +1,13 @@
 <div>
-  <h2 md-dialog-title>Leave a Note</h2>
+  <h2 md-dialog-title>Activity: {{data.activity}}</h2>
   <hr>
   <md-dialog-content>
+    <pre>{{data.data}}</pre>
+    <hr>
     <form>
       <div class="form-group">
-        <input type="textarea" [(ngModel)]="note" name="comment" class="form-control">
+        <label>Leave a comment</label>
+        <input type="textarea" [(ngModel)]="comment" name="comment" class="form-control">
       </div>
     </form>
   </md-dialog-content>

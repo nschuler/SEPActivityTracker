@@ -1,12 +1,8 @@
 <div *ngIf="educator">
-	<div class="jumbotron text-center">
-		<h1>Welcome {{user.first_name}}</h1>
-		<p class="lead">Here is your educator dashboard</p>
-		<div>
-			<a [routerLink]="['/rooms']" class="btn btn-primary">Rooms</a>
-			<a [routerLink]="['/activities']" class="btn btn-primary">Activities</a>
-		</div>
-	</div>
+	<h1>Some Educator dashboard component here</h1>
+	<!-- example routing 
+	<app-room-list></app-room-list> 
+	-->
 </div>
 <div *ngIf="parent">
 	<app-parent></app-parent>

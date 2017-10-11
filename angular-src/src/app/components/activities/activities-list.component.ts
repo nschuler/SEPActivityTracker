@@ -27,7 +27,7 @@ export class ActivitiesListComponent implements OnInit {
     this.educatorService.getAllActivities().subscribe(data => {
       if(data.success)
       {
-        let activityData = data.data;
+        let activityData = data.data.activityData
         this.educatorService.storeActivities(activityData);
         this.displayActivities(activityData);
       }
