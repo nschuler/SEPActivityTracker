@@ -39,7 +39,7 @@ export class TimetableComponent implements OnInit {
   options: DatePickerOptions;
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private authService: AuthService,
     private parentService: ParentService,
     private router: Router,
@@ -50,7 +50,7 @@ export class TimetableComponent implements OnInit {
     this.childIdParam = this.route.snapshot.params['child'];
 
     let family = JSON.parse(this.parentService.loadFamily());
-    
+
     if(family)
       this.displayChild(family);
 
@@ -125,7 +125,7 @@ export class TimetableComponent implements OnInit {
     this.selectedActivities = [];
     this.selectedComments = []
 
-    //TELLS YOU DAY OF WEEK 
+    //TELLS YOU DAY OF WEEK
     // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
     console.log(this.date.momentObj.day());
 
@@ -181,6 +181,16 @@ export class TimetableComponent implements OnInit {
       }
     })
   }
+
+  expandBoy($event){
+    var panel = $event.toElement.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+  } else {
+      panel.style.display = "block";
+  }
+  }
+
 }
 
 @Component({
