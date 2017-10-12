@@ -50,6 +50,34 @@ export class ParentService {
       .map(res => res.json());
   }
 
+  addNote(data){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.post('http://localhost:8080/parents/addnote', {data: data}, {headers: headers})
+      .map(res => res.json());
+  }
+
+  deleteNote(data){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.post('http://localhost:8080/parents/deletenote', {data: data}, {headers: headers})
+      .map(res => res.json());
+  }
+
+  storeFamily(family){
+    localStorage.setItem('family', JSON.stringify(family));
+  }
+
+  loadFamily(){
+    return localStorage.getItem('family');
+  }
+
   deleteCommentOnChildActivityRecord(data){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage

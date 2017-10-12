@@ -1,0 +1,27 @@
+div.shell{
+  margin-left: 5%;;
+  float: left;
+  border: 2px solid #cccccc;
+  border-radius: 5px;
+  width: 30%;
+  margin: 1%;
+  background-color:#E6E6E6;
+}
+h1{
+  text-align: center;
+}
+div.name{
+  width: 100%;
+  text-align: center;
+  vertical-align:bottom;
+  color: black;
+  font-weight: bold;
+}
+img.tomCruise{
+  width: 80%;
+  height: 30%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 5%;
+  border:3px solid #cccccc;
+}

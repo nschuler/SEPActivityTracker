@@ -50,22 +50,23 @@ module.exports.getActivityRecords = function(user, child_id, callback) {
 	});
 }
 
-module.exports.commentOnChildActivityRecord = function(user, userData, callback) {
+module.exports.commentOnChildActivityRecord = function(user, commentData, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
+			//TODO: validate whether parent is in same family as child
 			let newComment = {
-				comment: userData.comment,
+				comment: commentData.comment,
 				date: Date.now(),
 				author: user.username
 			}
 
-			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', userData.activityrecord_id, (err,data) => { 
+			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', commentData.activityrecord_id, (err,data) => { 
 				if(err) callback(err,null);
 				let commentObject = JSON.parse(data[0].comments);
 				commentObject.comments.push(newComment); // Add new comment
 				
-				mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),userData.activityrecord_id],(err,data)=>{
+				mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),commentData.activityrecord_id],(err,data)=>{
 					callback(err,data);
 				});
 			});
@@ -77,19 +78,21 @@ module.exports.commentOnChildActivityRecord = function(user, userData, callback)
 	});
 }
 
-module.exports.deleteCommentOnChildActivityRecord = function(user, userData, callback) {
+module.exports.deleteCommentOnChildActivityRecord = function(user, commentData, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
+			//TODO: validate whether parent is in same family as child
+
 			let index = undefined;
 
-			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', userData.activityrecord_id, (err,data) => { 
+			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', commentData.activityrecord_id, (err,data) => { 
 				if(err) callback(err,null);
 				let commentObject = JSON.parse(data[0].comments);
 
 				for(i in commentObject.comments)
 				{
-					if(commentObject.comments[i].comment == userData.comment)
+					if(commentObject.comments[i].comment == commentData.comment)
 					{
 						if(commentObject.comments[i].author)
 						{
@@ -102,7 +105,80 @@ module.exports.deleteCommentOnChildActivityRecord = function(user, userData, cal
 				{
 					commentObject.comments.splice(index,1); // first element removed
 					
-					mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),userData.activityrecord_id],(err,data)=>{
+					mysql_query('UPDATE ChildActivityRecord SET comments = ? WHERE id = ?',[JSON.stringify(commentObject),commentData.activityrecord_id],(err,data)=>{
+						callback(err,data);
+					});
+				}
+				else
+				{
+					callback(new Error('No comment was deleted'), null);
+				}
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null);
+		}
+	});
+}
+
+module.exports.addNote = function(user, noteData, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			//TODO: validate whether parent is in the same faily as child
+
+			let newNote = {
+				note: noteData.note,
+				date: Date.now(),
+				author: user.username
+			}
+
+			mysql_query('SELECT notes FROM Child WHERE id = ?', noteData.child_id, (err,data) => { 
+				if(err) callback(err,null);
+				let notesObject = JSON.parse(data[0].notes);
+				notesObject.notes.push(newNote); // Add new comment
+				
+				mysql_query('UPDATE Child SET notes = ? WHERE id = ?',[JSON.stringify(notesObject),noteData.child_id],(err,data)=>{
+					callback(err,data);
+				});
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
+module.exports.deleteNote = function(user, noteData, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			//TODO: validate whether parent is in same family as child
+
+			let index = undefined;
+
+			mysql_query('SELECT notes FROM Child WHERE id = ?', noteData.child_id, (err,data) => { 
+				if(err) callback(err,null);
+				let notesObject = JSON.parse(data[0].notes);
+
+				for(i in notesObject.notes)
+				{
+					if(notesObject.notes[i].note == noteData.note)
+					{
+						if(notesObject.notes[i].author)
+						{
+							index = i;
+						}
+					}
+				}
+
+				if(index)
+				{
+					notesObject.notes.splice(index,1); // first element removed
+					
+					mysql_query('UPDATE Child SET notes = ? WHERE id = ?',[JSON.stringify(notesObject),noteData.child_id],(err,data)=>{
 						callback(err,data);
 					});
 				}

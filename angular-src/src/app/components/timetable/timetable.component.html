@@ -1,66 +1,68 @@
-<h3><b>Viewing Activities for: <ng2-datepicker [options]="options" [(ngModel)]="date"></ng2-datepicker></b></h3>
+<div class="profile">
 
-<md-tab-group>
-    <md-tab *ngFor="let x of childArray" label="{{x.first_name}}">
-        <md-grid-list cols="2" rowHeight="1:2">
-            <md-grid-tile class="gray" md-rowspan="3" md-colspan="1.5" md-colspan-sm="1" md-colspan-xs="1">
-                <md-grid-tile-header style="background: #1a8cff; font-size: 16px;">
-                    <h3>Profile</h3>
-                </md-grid-tile-header>
-                <div>
-                    <img src="https://1.bp.blogspot.com/_5tsELtz6AzA/RzJamBoiS9I/AAAAAAAAAaU/-MzQIx1TO0M/s320/Bennett+passport.jpg&w=310&h=214" alt="Child" class="image">
-                    <div class="childInfo">
-                        <h3><b>About {{x.first_name}}</b></h3>
-                        <b>DOB:</b> {{x.dob}}<br>
-                        <b>Surname:</b> {{this.familyName}}<br>
-                        <b>Address:</b> {{this.address}}<br>
-                        <br>
-                        <h3><b>Information</b></h3>
-                        <b>Allergies:</b> {{x.allergens}}<br>
-                        <b>Family ID:</b> #{{x.family_id}}<br>
-                        <b>Child ID:</b> #{{x.child_id}}<br>
-                        <br>
-                    </div>
-                </div>
-            </md-grid-tile>
+    <!-- Image Box -->
+    <div class="imgBox">
+      <span class="helper"></span>
+      <img src="http://placehold.it/450x450">
+    </div>
 
-            <md-grid-tile class="gray">
-                <md-grid-tile-header style="background: #1a8cff; font-size: 16px;">
-                    <h3>Activities - Currently in Room #{{x.room_id}}</h3>
-                </md-grid-tile-header>
-                <div>
-                    <md-card class="example-card" *ngFor="let activity of x.activities">
-                        <md-card-header>
-                            <md-card-title><b>{{ activity.name }}</b></md-card-title>
-                            <md-card-subtitle>{{ activity.start_time }} - {{ activity.end_time }}</md-card-subtitle>
-                        </md-card-header>
-                        <md-card-content>
-                            <p>{{ activity.description }}</p>
-                        </md-card-content>
-                        <md-card-actions>
-                            <button (click)="likeActivity()" md-button>{{this.boolLike ? "UNLIKE" : "LIKE"}}</button>
-                            <button (click)="leaveComment(activity)" md-button>COMMENT</button>
-                        </md-card-actions>
-                    </md-card>
-                </div>
-            </md-grid-tile>
-        </md-grid-list>
-    </md-tab>
-</md-tab-group>
+    <!-- Information Box -->
+    <div class="infoBox">
 
-<md-grid-list cols="2" rowHeight="1:2">
-    <md-toolbar md-scroll-shrink class="commentsBar"><div class="md-toolbar-tools">Comments</div></md-toolbar>
-</md-grid-list>
-<br>
-<md-card class="comment-card" *ngFor="let x of commentsArray">
-  <md-card-header>
-    <div md-card-avatar class="example-header-image"></div>
-    <md-card-title>Maria Pavlova</md-card-title>
-    <md-card-subtitle>Parent</md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <p>
-      {{x}}
-    </p>
-  </md-card-content>
-</md-card>
+        <!-- Child Information -->
+        <div class="information">
+          <div class="row">
+            <legend>Profile</legend>
+            <ul class="list-group">
+              <li class="list-group-item"><b>First Name: </b>{{child.first_name}}</li>
+              <li class="list-group-item"><b>Last Name: </b>{{familyName}}</li>
+              <li class="list-group-item"><b>Address: </b>{{address}}</li>
+              <li class="list-group-item"><b>DOB: </b>{{child.dob}}</li>
+              <li class="list-group-item"><b>Allergens: </b>{{child.allergens}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Child Notes -->
+          <button (click)=" expandBoy($event)" class = "showNote btn btn-primary" style =" margin-left: 40%;">View Notes</button>
+            <div class = "panel">
+              <div class="notes">
+               <div class="noteField">
+                  <legend style="margin-left: 15px;">Notes</legend>
+                  <div class="noteDisplay">
+                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
+                  </div>
+              </div>
+              <div class="noteButton">
+                <button class="btn btn-primary" (click)="addNote()">Add Note</button>
+              </div>
+            </div>
+        </div>
+      </div>
+</div>
+<br />
+<legend style="padding-bottom: 15px;" class="text-center">
+  Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker>
+</legend>
+
+<p style="text-align:center; font-size: 25px;" [hidden]="selectedActivities.length">No record of any activities on this day.<br /></p>
+<!-- Child Activities -->
+<div [hidden]="!selectedActivities.length">
+  <div class="activityBox">
+    <md-card class="activityCard" *ngFor="let activity of selectedActivities">
+      <md-card-header>
+        <md-card-title>{{activity.name}} - {{activity.type}}</md-card-title>
+        <md-card-subtitle>{{activity.start_time}} - {{activity.end_time}}</md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+        <p>{{activity.description}}</p>
+      </md-card-content>
+      <md-card-actions>
+        <div>
+          <button (click)="addComment(activity)" md-button>COMMENT</button>
+          <p class="comments">{{activity.comments.length}} Comments</p>
+        </div>
+      </md-card-actions>
+    </md-card>
+  </div>
+</div>

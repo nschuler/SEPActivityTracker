@@ -2,13 +2,13 @@
   <div class="col-md-6">
     <h1 style="text-align: center;">Children allocated to Room {{this.room_id}}</h1>
     <br/>
-    <p style="text-align:center; font-size: 25px;" [hidden]="loggedIn">Log in to the room manage children!</p>
+    <p style="text-align:center; font-size: 25px;" [hidden]="loggedIn">Login to the room to manage children!</p>
     <div [hidden]="!loggedIn">
       <div class="text-center">
         <select class="form-control" required #mychildid>
           <option *ngFor="let child of otherChildren" [value]="child.id">{{child.id}}. {{child.first_name}} {{child.last_name}} (<i *ngIf="child.room_id">Allocated to Room {{child.room_id}}</i><i *ngIf="!child.room_id">Not allocated</i>)</option>
         </select>
-        <button  class="btn waves-effect waves-light right" type="submit" name="action" (click)="addChild(mychildid.value)">Add Child</button>
+        <button  class="btn btn-primary" type="submit" name="action" (click)="addChild(mychildid.value)">Add Child</button>
       </div>
       <div class="code-block" style="margin-top:50px; width: 100%; height: 100%;">
         <table class="table table-striped">

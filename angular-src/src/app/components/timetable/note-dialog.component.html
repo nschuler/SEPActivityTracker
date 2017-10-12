@@ -1,0 +1,16 @@
+<div>
+  <h2 md-dialog-title>Leave a Note</h2>
+  <hr>
+  <md-dialog-content>
+    <form>
+      <div class="form-group">
+        <input type="textarea" [(ngModel)]="note" name="comment" class="form-control">
+      </div>
+    </form>
+  </md-dialog-content>
+  <hr>
+  <md-dialog-actions>
+    <button class="btn btn-primary" (click)="onCloseConfirm()">CONFIRM</button>
+    <button class="btn btn-primary" (click)="onCloseCancel()">CANCEL</button>
+  </md-dialog-actions>
+</div>

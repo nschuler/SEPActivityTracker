@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { ParentService } from '../../services/parent.service';
 import { DatePickerOptions, DateModel } from 'ng2-datepicker';
 import { MdDialog, MdDialogRef, MdSnackBar, MdTabsModule } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -15,98 +15,120 @@ import { Router } from '@angular/router';
   templateUrl: './timetable.component.html',
   styleUrls: ['./timetable.component.css']
 })
+
 export class TimetableComponent implements OnInit {
+  username: string;
+  child = {
+    address: undefined,
+    first_name: undefined,
+    last_name: undefined,
+    family_name: undefined,
+    id: undefined,
+    dob: undefined,
+    allergens: undefined,
+    room_id: undefined,
+    notes: undefined,
+  };
+
   familyName: string;
   address: string;
-  boolLike: boolean;
-
   roomActivities: any; //(temp)
-
   childActivities: string;
 
   childArray = [];
+  notesArray = [];
 
-  commentsArray = [];
+  recordActivities = [];  // Archived activities.
+  currentActivities = [];
+
+  selectedActivities = [];
+  selectedComments = [];
+  chosenActivity = Object;
+
+  childInfo = Object;
+  childIdParam: number;
 
   date: DateModel;
   options: DatePickerOptions;
 
   constructor(
-    private authService: AuthService, 
+    private route: ActivatedRoute,
+    private authService: AuthService,
     private parentService: ParentService,
     private router: Router,
     public dialog: MdDialog
     ) { }
 
   ngOnInit() {
+    this.childIdParam = this.route.snapshot.params['child'];
+    this.username = JSON.parse(this.authService.loadUserData()).username;
+
+    let family = JSON.parse(this.parentService.loadFamily());
+
+    if(family)
+      this.displayChild2(family);
+
+    this.getFamily();
 
     // EXAMPLE USE
     // this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: 1, comment: "This is my second comment"}).subscribe(data => {
     //   console.log(data);
     // });
 
+    //EXAMPLE USE of add note
+    // this.parentService.addNote({child_id: 1, note: "My son is feeling VERY sick today."}).subscribe(data => {
+    //   console.log(data);
+    // });
+
+    //EXAMPLE USE of delete note
+    // this.parentService.deleteNote({child_id: 1, note: "This is my first ever note"}).subscribe(data => {
+    //   console.log(data);
+    // });
+
     this.options = new DatePickerOptions({
-        format: 'YYYY-MM-DD',
-        initialDate: new Date()
-      });
+      format: 'YYYY-MM-DD',
+      initialDate: new Date()
+    });
 
+    // Populate recordActivities array
     this.parentService.getActivityRecords("1").subscribe(data => {
-      console.log(data);
-
-      // if(data.success) {
-      //   for(var i = 0; i < data.records.length; i++) {
-      //     var JSONcomments = JSON.parse(data.records[i].comments);
-      //     for(var x = 0; x < JSONcomments.comments.length; x++) {
-      //       this.commentsArray.push(JSONcomments.comments[x].comment)
-      //     }
-      //   }
-      // }
-      this.commentsArray.push("Thanks for doing the painting exercises, my son would have loved them!")
-    });
-
-    this.parentService.getCurrentActivities("1").subscribe(activityData => { 
-      this.roomActivities = activityData.activities;
-    });
-
-    this.parentService.getFamily().subscribe(data => {
-      if(data.success)
-      {
-        this.familyName = data.family.familyName;
-        this.address = data.family.address;
-        this.boolLike = false;
-
-        // Populate the child array
-        for (var i = 0; i < data.family.children.length; i++) {
-          var first_name = data.family.children[i].first_name
-          var dob = data.family.children[i].dob
-          var family_id = data.family.children[i].family_id
-          var room_id = data.family.children[i].room_id
-          var allergens = data.family.children[i].allergens
-          var child_id = data.family.children[i].id
-
-          if(room_id == 1)
-          {
-            this.childArray.push({
-              'first_name': first_name,
-              'dob': dob,
-              'family_id': family_id,
-              'room_id': room_id,
-              'allergens': allergens,
-              'child_id': child_id,
-              'activities': this.roomActivities
-            });
-          } else {
-            this.childArray.push({
-              'first_name': first_name,
-              'dob': dob,
-              'family_id': family_id,
-              'room_id': room_id,
-              'allergens': allergens,
-              'child_id': child_id
-              // 'activities': this.roomActivities
-            });
-          }
+      if (data.success) {
+        for (var i = 0; i < data.records.length; i++) {
+          //this.recordActivities.push(data.records[i]);
+          this.recordActivities.push({
+            child_id: data.records[i].child_id,
+            comments: JSON.parse(data.records[i].comments).comments,
+            date: data.records[i].date,
+            description: data.records[i].description,
+            end_time: data.records[i].end_time,
+            start_time: data.records[i].start_time,
+            id: data.records[i].id,
+            name: data.records[i].name,
+            room_name: data.records[i].room_name,
+            type: data.records[i].type,
+          });
         }
+      }
+      //console.log(this.recordActivities);
+    });
+
+    // Populate currentActivities array
+    this.parentService.getCurrentActivities("1").subscribe(activityData => {
+      if (activityData.success) {
+        for (var i = 0; i < activityData.activities.length; i++) {
+          this.currentActivities.push(activityData.activities[i]);
+        }
+      }
+
+      //console.log(this.currentActivities);
+    });
+  }
+
+  getFamily() {
+    this.parentService.getFamily().subscribe(data => {
+      if(data.success) {
+        // this.displayChild(data.family);
+        this.displayChild2(data.family);
       }
     },
     err => {
@@ -115,45 +137,150 @@ export class TimetableComponent implements OnInit {
     });
   }
 
-  likeActivity() {
-    if(this.boolLike == true) {
-      console.log("You have unliked this activity!");
-          console.log(this.childArray)
-      this.boolLike = false;
-    } else {
-      console.log("You have liked this activity!");
-          console.log(this.childArray)
+  displayChild2(family) {
+    this.familyName = family.familyName;
+    this.address = family.address;
 
-      this.boolLike = true;
+    for(var i = 0; i < family.children.length; i++)
+    {
+      if (family.children[i].id == this.childIdParam) {
+        this.child = {
+          address: family.children[i].address,
+          first_name: family.children[i].first_name,
+          last_name: family.children[i].last_name,
+          family_name: family.children[i].family_name,
+          id: family.children[i].id,
+          dob: family.children[i].dob,
+          allergens: family.children[i].allergens,
+          room_id: family.children[i].room_id,
+          notes: JSON.parse(family.children[i].notes).notes,
+        }
+        break;
+      }
     }
   }
 
-  leaveComment(activity) {
-     let dialogRef = this.dialog.open(MyDialogComponent, {
+  // displayChild(family) {
+  //   this.familyName = family.familyName;
+  //   this.address = family.address;
+  //   this.notesArray = [];
+
+  //   for (var i = 0; i < family.children.length; i++) {
+  //     if (family.children[i].id == this.childIdParam) {
+  //       this.childInfo = family.children[i];
+
+  //       let notes = JSON.parse(family.children[i].notes).notes;
+  //       let date: Date;
+
+  //       for(var j = 0; j < notes.length; j++) {
+  //         date = new Date(notes[j].date);
+  //         let formattedDate = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+  //         this.notesArray.push({date:formattedDate,author: notes[j].author, note: notes[j].note});
+  //       }
+  //       break;
+  //     }
+  //   }
+  // }
+
+  getCurrentDate($event) {
+    this.date = $event;
+    this.selectedActivities = [];
+    this.selectedComments = []
+
+    //TELLS YOU DAY OF WEEK
+    // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
+    // console.log(this.date.momentObj.day());
+
+    for (var i = 0; i < this.recordActivities.length; i++) {
+      if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+        this.selectedActivities.push(this.recordActivities[i]);
+      }
+    }
+    //console.log(this.selectedActivities);
+  }
+
+  addComment(activity) {
+    this.selectedComments = [];
+
+    for (var i = 0; i < activity.comments.length; i++) {
+      this.selectedComments.push(activity.comments[i].comment)
+    }
+
+    let dialogRef = this.dialog.open(MyCommentComponent, {
+        width: '600px',
+        data: {
+          name: activity.name,
+          comments: this.selectedComments
+        }
+      }) 
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.selectedComments.push(result)
+        //PUSH TO DATABASE
+      }
+    })
+  }
+
+  addNote() {
+    let dialogRef = this.dialog.open(MyNoteComponent, {
       width: '600px',
-      data: {activity: activity.name, data: activity.description}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-          this.commentsArray.push(result)
+        var date: Date = new Date();
+        let formattedDate = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+        //this.notesArray.push({note:result, date:formattedDate, author:this.username});
+        this.child.notes.push({note:result, date:formattedDate, author:this.username});
       }
     });
   }
-}
 
+  expandBoy($event){
+    var panel = $event.toElement.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  }
+}
 
 @Component({
   selector: 'app-my-dialog',
-  templateUrl: './my-dialog.component.html',
-  styleUrls: ['./my-dialog.component.css']
+  templateUrl: './note-dialog.component.html',
+  styleUrls: ['./note-dialog.component.css']
 })
-export class MyDialogComponent implements OnInit {
-  comment: any;
-  constructor(public thisDialogRef: MdDialogRef<MyDialogComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+export class MyNoteComponent implements OnInit {
+  note: String;
+  constructor(public thisDialogRef: MdDialogRef<MyNoteComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
-    }
+  }
+
+  onCloseConfirm() {
+    this.thisDialogRef.close(this.note);
+  }
+
+  onCloseCancel() {
+    this.thisDialogRef.close(null);
+  }
+}
+
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './comment-dialog.component.html',
+  styleUrls: ['./comment-dialog.component.css']
+})
+
+export class MyCommentComponent implements OnInit {
+  comment: String;
+  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+  }
 
   onCloseConfirm() {
     this.thisDialogRef.close(this.comment);
