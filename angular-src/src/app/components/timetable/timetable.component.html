@@ -14,11 +14,11 @@
           <div class="row">
             <legend>Profile</legend>
             <ul class="list-group">
-              <li class="list-group-item"><b>First Name: </b>{{childInfo.first_name}}</li>
+              <li class="list-group-item"><b>First Name: </b>{{child.first_name}}</li>
               <li class="list-group-item"><b>Last Name: </b>{{familyName}}</li>
               <li class="list-group-item"><b>Address: </b>{{address}}</li>
-              <li class="list-group-item"><b>DOB: </b>{{childInfo.dob}}</li>
-              <li class="list-group-item"><b>Allergens: </b>{{childInfo.allergens}}</li>
+              <li class="list-group-item"><b>DOB: </b>{{child.dob}}</li>
+              <li class="list-group-item"><b>Allergens: </b>{{child.allergens}}</li>
             </ul>
           </div>
         </div>
@@ -30,7 +30,7 @@
                <div class="noteField">
                   <legend style="margin-left: 15px;">Notes</legend>
                   <div class="noteDisplay">
-                    <li class="list-group-item" *ngFor="let note of notesArray">{{note}}</li>
+                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
                   </div>
               </div>
               <div class="noteButton">
@@ -41,7 +41,7 @@
       </div>
 </div>
 
-<legend style="padding-bottom: 15px;">
+<legend style="padding-bottom: 15px;" class="text-center">
   Viewing Activities for: <ng2-datepicker [options]="options" (ngModelChange)="getCurrentDate($event)" [(ngModel)]="date"></ng2-datepicker>
 </legend>
 

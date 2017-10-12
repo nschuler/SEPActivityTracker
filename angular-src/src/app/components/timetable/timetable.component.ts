@@ -17,6 +17,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 
 export class TimetableComponent implements OnInit {
+  username: string;
+  child = {
+    address: undefined,
+    first_name: undefined,
+    last_name: undefined,
+    family_name: undefined,
+    id: undefined,
+    dob: undefined,
+    allergens: undefined,
+    room_id: undefined,
+    notes: undefined,
+  };
+
   familyName: string;
   address: string;
   roomActivities: any; //(temp)
@@ -48,11 +61,12 @@ export class TimetableComponent implements OnInit {
 
   ngOnInit() {
     this.childIdParam = this.route.snapshot.params['child'];
+    this.username = JSON.parse(this.authService.loadUserData()).username;
 
     let family = JSON.parse(this.parentService.loadFamily());
 
     if(family)
-      this.displayChild(family);
+      this.displayChild2(family);
 
     this.getFamily();
 
@@ -62,7 +76,7 @@ export class TimetableComponent implements OnInit {
     // });
 
     //EXAMPLE USE of add note
-    // this.parentService.addNote({child_id: 1, note: "This is my first ever note"}).subscribe(data => {
+    // this.parentService.addNote({child_id: 1, note: "My son is feeling VERY sick today."}).subscribe(data => {
     //   console.log(data);
     // });
 
@@ -81,10 +95,10 @@ export class TimetableComponent implements OnInit {
       if (data.success) {
         for (var i = 0; i < data.records.length; i++) {
           this.recordActivities.push(data.records[i]);
+          //this.recordActivities.push(new ActivityRecord(data.records[i].activity_record_id,data.records[i].child_id,data.records[i].comments,data.records[i].date,data.records[i].commentsdata.records[i].start_time,data.records[i].commentsdata.records[i].end_time,data.records[i].commentsdata.records[i].type,data.records[i].commentsdata.records[i].room_name,data.records[i].commentsdata.records[i].description));
         }
       }
-
-      console.log(this.recordActivities);
+      //console.log(this.recordActivities);
     });
 
     // Populate currentActivities array
@@ -95,15 +109,15 @@ export class TimetableComponent implements OnInit {
         }
       }
 
-      console.log(this.currentActivities);
+      //console.log(this.currentActivities);
     });
   }
 
   getFamily() {
     this.parentService.getFamily().subscribe(data => {
-      console.log(data)
       if(data.success) {
-        this.displayChild(data.family);
+        // this.displayChild(data.family);
+        this.displayChild2(data.family);
       }
     },
     err => {
@@ -112,16 +126,50 @@ export class TimetableComponent implements OnInit {
     });
   }
 
-  displayChild(family) {
+  displayChild2(family) {
     this.familyName = family.familyName;
     this.address = family.address;
 
-    for (var i = 0; i < family.children.length; i++) {
+    for(var i = 0; i < family.children.length; i++)
+    {
       if (family.children[i].id == this.childIdParam) {
-        this.childInfo = family.children[i];
+        this.child = {
+          address: family.children[i].address,
+          first_name: family.children[i].first_name,
+          last_name: family.children[i].last_name,
+          family_name: family.children[i].family_name,
+          id: family.children[i].id,
+          dob: family.children[i].dob,
+          allergens: family.children[i].allergens,
+          room_id: family.children[i].room_id,
+          notes: JSON.parse(family.children[i].notes).notes,
+        }
+        break;
       }
     }
   }
+
+  // displayChild(family) {
+  //   this.familyName = family.familyName;
+  //   this.address = family.address;
+  //   this.notesArray = [];
+
+  //   for (var i = 0; i < family.children.length; i++) {
+  //     if (family.children[i].id == this.childIdParam) {
+  //       this.childInfo = family.children[i];
+
+  //       let notes = JSON.parse(family.children[i].notes).notes;
+  //       let date: Date;
+
+  //       for(var j = 0; j < notes.length; j++) {
+  //         date = new Date(notes[j].date);
+  //         let formattedDate = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+  //         this.notesArray.push({date:formattedDate,author: notes[j].author, note: notes[j].note});
+  //       }
+  //       break;
+  //     }
+  //   }
+  // }
 
   getCurrentDate($event) {
     this.date = $event;
@@ -130,20 +178,21 @@ export class TimetableComponent implements OnInit {
 
     //TELLS YOU DAY OF WEEK
     // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
-    console.log(this.date.momentObj.day());
+    // console.log(this.date.momentObj.day());
 
     for (var i = 0; i < this.recordActivities.length; i++) {
       if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
         this.recordActivities[i].comments = JSON.parse(this.recordActivities[i]['comments']);
         this.selectedActivities.push(this.recordActivities[i]);
 
-        console.log(this.recordActivities[i])
+        //console.log(this.recordActivities[i])
       }
     }
-    console.log(this.selectedActivities);
+    //console.log(this.selectedActivities);
   }
 
   addComment(activity) {
+    this.selectedComments = [];
     for (var i = 0; i < activity.comments.comments.length; i++) {
       this.selectedComments.push(activity.comments.comments[i].comment)
     }
@@ -159,6 +208,7 @@ export class TimetableComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.selectedComments.push(result)
+        //PUSH TO DATABASE
       }
     })
   }
@@ -170,20 +220,22 @@ export class TimetableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-          this.notesArray.push(result)
+        var date: Date = new Date();
+        let formattedDate = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+        //this.notesArray.push({note:result, date:formattedDate, author:this.username});
+        this.child.notes.push({note:result, date:formattedDate, author:this.username});
       }
-    })
+    });
   }
 
   expandBoy($event){
     var panel = $event.toElement.nextElementSibling;
     if (panel.style.display === "block") {
       panel.style.display = "none";
-  } else {
+    } else {
       panel.style.display = "block";
+    }
   }
-  }
-
 }
 
 @Component({
@@ -227,5 +279,29 @@ export class MyCommentComponent implements OnInit {
 
   onCloseCancel() {
     this.thisDialogRef.close(null);
+  }
+}
+
+class ActivityRecord {
+  activity_record_id: string;
+  child_id: string;
+  comments: Object;
+  date: string;
+  end_time: string;
+  start_time: string;
+  type: string;
+  room_name: string;
+  description: string;
+
+  constructor(activity_record_id: string, child_id: string, comments: Object, date: string, start_time: string, end_time: string, type: string, room_name: string, description: string) {
+    this.activity_record_id = activity_record_id;
+    this.child_id = child_id;
+    this.comments = comments;
+    this.date = date;
+    this.start_time = start_time;
+    this.end_time = end_time;
+    this.type = type;
+    this.room_name = room_name;
+    this.description = description;
   }
 }
