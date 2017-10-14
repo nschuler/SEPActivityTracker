@@ -10,7 +10,7 @@ import RRule from 'rrule';
 
 import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
-import { startOfDay, startOfMonth, startOfWeek, endOfDay, endOfWeek, subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours, getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear, isMonday, isTuesday, isWednesday, isThursday, isFriday} from 'date-fns';
+import { startOfDay, startOfMonth, startOfWeek, endOfDay, endOfWeek, subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours, getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday} from 'date-fns';
 
 const colors: any = {
   red: {primary: '#ad2121',secondary: '#FAE3E3'},
@@ -52,10 +52,10 @@ export class RoomPlanComponent implements OnInit {
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [{
-    title: 'Painting',
+    title: 'Reading Time',
     color: colors.yellow,
-    start: new Date(),
-    end: new Date(),
+    start: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 8, 0, 0),
+    end: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 11, 0, 0),
     resizable: {
       beforeStart: true,
       afterEnd: true
@@ -99,7 +99,11 @@ export class RoomPlanComponent implements OnInit {
     }, err => {console.log(err);});
 
     this.educatorService.getAllActivities().subscribe(data => {
-      this.activities = data.data;
+      // for (var i = 0; i < data.data.length; i++) {
+      //   // this.activities = data.data;
+      //   this.activities.push(data.data[i].name)
+      // }
+      this.activities = data.data
     }, err => {console.log(err);});
 
     // EXAMPLE of creating activity instance
@@ -184,19 +188,20 @@ export class RoomPlanComponent implements OnInit {
     if (day_difference != 0) {
       let count = 1;
       do {
+        console.log(event.title)
           let newStart = setDate(event.start, getDate(event.start) + count);
           let newEnd = setDate(event.end, getDate(event.end) + count);
-          if (event.test == "Monday" && isMonday(newStart)) {
+          if (event.recurring == "Monday" && isMonday(newStart)) {
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Tuesday" && isTuesday(newStart)) {
+          } else if (event.recurring == "Tuesday" && isTuesday(newStart)) {
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Wednesday" && isWednesday(newStart)) {
+          } else if (event.recurring == "Wednesday" && isWednesday(newStart)) {
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Thursday" && isThursday(newStart)) {
+          } else if (event.recurring == "Thursday" && isThursday(newStart)) {
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Friday" && isFriday(newStart)) {
+          } else if (event.recurring == "Friday" && isFriday(newStart)) {
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Everyday"){
+          } else if (event.recurring == "Everyday" && !isSaturday(newStart) && !isSunday(newStart)){
             this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
           }
           count++;
@@ -249,9 +254,9 @@ export class RoomPlanComponent implements OnInit {
     this.refresh.next();
   }
 
-  updateColour(event) {
+  updateActivityName(event) {
     console.log(event);
-    event.color = colors.blue;
+    event.title = event.title;
   }
 
   // updateCalendarEvents(): void {
