@@ -295,21 +295,28 @@ export class RoomPlanComponent implements OnInit {
 
 @Component({
   selector: 'dialog-overview-example-dialog',
-  template: `<h1 md-dialog-title>{{data.event | json }}</h1>
+  template: `<h1 md-dialog-title>{{event.title}}</h1>
   <div md-dialog-content>
-  <p>What's your favorite animal?</p>
-  <input mdInput tabindex="1" [(ngModel)]="data.action">
+    <p>Activity Colour:
+    <input mdInput tabindex="1" [(ngModel)]="event.color.primary"></p><br>
+    <p>Activity Start time: 
+    <input mdInput tabindex="1" [(ngModel)]="event.start" style="width:300px;"></p><br>
+    <p>Activity End time: 
+    <input mdInput tabindex="1" [(ngModel)]="event.end" style="width:300px;"></p><br>
   </div>
   <div md-dialog-actions>
-  <button md-button [md-dialog-close]="data.action" tabindex="2">Ok</button>
-  <button md-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+  <button md-button [md-dialog-close]="data.action" tabindex="2">Submit</button>
+  <button md-button (click)="onNoClick()" tabindex="-1">Cancel</button>
   </div>`,
 })
 export class DialogOverviewExampleDialog {
-
+  event: any;
   constructor(
     public dialogRef: MdDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MD_DIALOG_DATA) public data: any) { }
+    @Inject(MD_DIALOG_DATA) public data: any) { 
+     this.event = data.event
+     console.log(this.event)
+    }
 
   onNoClick(): void {
     this.dialogRef.close();
