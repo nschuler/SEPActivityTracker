@@ -27,6 +27,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { TimetableComponent } from './components/timetable/timetable.component';
 import { ParentComponent } from './components/parent/parent.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
 
 
 import { ValidateService } from './services/validate.service';
@@ -63,6 +64,7 @@ const appRoutes: Routes = [
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
   {path:'parent', component:ParentComponent},
+  {path:'teacher', component:TeacherComponent},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
 ]
 
@@ -76,7 +78,7 @@ const appRoutes: Routes = [
     DashboardComponent,
     ProfileComponent,
     TimetableComponent,
-
+    TeacherComponent,
     ParentComponent,
 
     RoomListComponent,
