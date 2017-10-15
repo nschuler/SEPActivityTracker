@@ -76,7 +76,7 @@ export class TimetableComponent implements OnInit {
     // });
 
     //EXAMPLE USE of add note
-    // this.parentService.addNote({child_id: 1, note: "My son is feeling VERY sick today."}).subscribe(data => {
+    // this.parentService.addNote({child_id: 1, note: "Please make sure my son drinks plenty of water"}).subscribe(data => {
     //   console.log(data);
     // });
 
@@ -235,6 +235,10 @@ export class TimetableComponent implements OnInit {
         this.child.notes.push({note:result, date:formattedDate, author:this.username});
       }
     });
+  }
+
+  formatDate(date) {
+    return date.substr(0,10);
   }
 
   expandBoy($event){

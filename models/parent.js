@@ -58,7 +58,7 @@ module.exports.commentOnChildActivityRecord = function(user, commentData, callba
 			let newComment = {
 				comment: commentData.comment,
 				date: Date.now(),
-				author: user.username
+				author: user.first_name + " " + user.last_name
 			}
 
 			mysql_query('SELECT comments FROM ChildActivityRecord WHERE id = ?', commentData.activityrecord_id, (err,data) => { 
@@ -131,7 +131,7 @@ module.exports.addNote = function(user, noteData, callback) {
 			let newNote = {
 				note: noteData.note,
 				date: Date.now(),
-				author: user.username
+				author: user.first_name + " " + user.last_name
 			}
 
 			mysql_query('SELECT notes FROM Child WHERE id = ?', noteData.child_id, (err,data) => { 

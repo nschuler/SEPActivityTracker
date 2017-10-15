@@ -40,6 +40,7 @@ import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
 import { RoomAdminComponent } from './components/rooms/room-admin.component';
+import { ViewNoteComponent } from './components/rooms/room-admin.component';
 import { RoomPlanComponent, DialogOverviewExampleDialog, DateTimePickerComponent } from './components/rooms/room-plan.component';
 import { MyNoteComponent } from './components/timetable/timetable.component';
 import { MyCommentComponent } from './components/timetable/timetable.component';
@@ -91,9 +92,9 @@ const appRoutes: Routes = [
     ActivitiesEditComponent,
     DialogOverviewExampleDialog,
     DateTimePickerComponent,
-    RoomAdminComponent,
     MyNoteComponent,
-    MyCommentComponent
+    MyCommentComponent,
+    ViewNoteComponent
    ],
 
   imports: [
@@ -124,6 +125,6 @@ const appRoutes: Routes = [
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent, MyNoteComponent, MyCommentComponent]
+  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent, MyNoteComponent, MyCommentComponent, ViewNoteComponent]
 })
 export class AppModule { }
