@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MnFullpageOptions, MnFullpageService } from 'ngx-fullpage';
 import { EducatorService } from '../../services/educator.service';
-import { MdDialogModule, MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule, MdListModule, MdSelectModule} from '@angular/material';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdDatepickerModule, MdListModule, MdSelectModule} from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerOptions } from 'ng2-datepicker';
@@ -33,6 +33,16 @@ export class RoomAdminComponent implements OnInit {
 
     this.populateChildren();
     this.populateEducators();
+  }
+
+  formatDate(date) {
+    return date.substr(0,10);
+  }
+
+  formatNotes(notesData) {
+    let notes = JSON.parse(notesData);
+    console.log(notes);
+    return 'work in progress';
   }
 
   populateChildren() {
@@ -117,5 +127,36 @@ export class RoomAdminComponent implements OnInit {
         this.populateEducators();
       }
     });
+  }
+
+  viewNotes(notes) {
+    let dialogRef = this.dialog.open(ViewNoteComponent, {
+      width: '600px',
+      data: {
+          notes: JSON.parse(notes).notes,
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'app-my-dialog',
+  templateUrl: './note-dialog.component.html',
+  styleUrls: ['./note-dialog.component.css']
+})
+
+export class ViewNoteComponent implements OnInit {
+  constructor(public thisDialogRef: MdDialogRef<ViewNoteComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+
+  ngOnInit() {
+  }
+
+  parseDate(dateData) {
+    let date = new Date(dateData);
+    return date.toString();
+  }
+
+  onClose() {
+    this.thisDialogRef.close();
   }
 }

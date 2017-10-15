@@ -18,6 +18,7 @@
               <th style="text-align: center;">Last Name</th>
               <th style="text-align: center;">DOB</th>
               <th style="text-align: center;">Allergens</th>
+              <th style="text-align: center;">Notes</th>
               <th style="text-align: center;">Remove</th>
             </tr>
           </thead>
@@ -25,8 +26,9 @@
             <tr *ngFor="let child of roomChildren | paginate: { itemsPerPage: 10, currentPage: p }">
               <td style="text-align: center;"> {{ child.first_name }} </td>
               <td style="text-align: center;"> {{ child.last_name }} </td>
-              <td style="text-align: center;"> {{ child.dob }} </td>
+              <td style="text-align: center;"> {{ formatDate(child.dob) }} </td>
               <td style="text-align: center;"> {{ child.allergens }} </td>
+              <td style="text-align: center;"><a (click)="viewNotes(child.notes)"><i class="material-icons center">note</i></a></td>
               <td style="text-align: center;"><a (click)="removeChild(child); $event.stopPropagation()"><i class="material-icons center red-text">delete</i></a></td>
             </tr>
           </tbody>
@@ -53,6 +55,6 @@
       </a>
       <p style="text-align:center; font-size: 25px;" [hidden]="roomEducators.length">No Staff currently loggedIn in this Room!</p>
     </md-nav-list>
+    <hr>
   </div>
-  <hr>
 </div>
