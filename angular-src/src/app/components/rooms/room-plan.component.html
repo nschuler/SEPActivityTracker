@@ -85,7 +85,7 @@
           <td>
             <div class="input-control">
               <label for="input1">Start Date/Time:</label>
-              <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
+              <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next(); alterStartTime(event);" [inputId]="'input1'"></owl-date-time>
               <br>
               <label for="input1">Finish Time:</label>
               <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next()" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>

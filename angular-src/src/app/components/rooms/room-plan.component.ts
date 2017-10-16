@@ -130,7 +130,6 @@ export class RoomPlanComponent implements OnInit {
     newEnd
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
-    console.log(event.end)
     event.end = newEnd;
     this.refresh.next();
   }
@@ -177,6 +176,14 @@ export class RoomPlanComponent implements OnInit {
     });
   }
 
+  alterStartTime(event) {
+    if (getDate(event.start) != getDate(event.end))
+    {
+      event.end = setDate(event.end, getDate(event.start))
+      this.refresh.next();
+    }
+  }
+
   deleteActivity(activity) {
     this.educatorService.deleteActivityInstance(activity.activity_id).subscribe(data => {
       console.log(data);
@@ -189,10 +196,10 @@ export class RoomPlanComponent implements OnInit {
       room_id: 3, 
       title: 'Reading Time',
       activity_title_id: null, 
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      start_string: startOfDay(new Date()).toString(), 
-      end_string: endOfDay(new Date()).toString(), 
+      start: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 8, 0, 0),
+      end: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 11, 0, 0),
+      start_string: (new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 8, 0, 0)).toString(), 
+      end_string: (new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 11, 0, 0)).toString(), 
       color: colors.red,
       draggable: true,
       resizable: {
