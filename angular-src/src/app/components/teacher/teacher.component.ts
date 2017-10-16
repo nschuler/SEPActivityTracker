@@ -62,7 +62,10 @@ export class TeacherComponent implements OnInit {
       console.log(data.data[i].end_time);
       var sDate = new Date(data.data[i].start_time);
       var eDate = new Date(data.data[i].end_time);
+      if(sDate.getDate()== new Date().getDate()){
+        //add a month checker so that the 31st of this month and next month and the month after done make the list
       this.activities.push(new Activity("Activity",sDate.getHours(),eDate.getHours()));
+      }
       i++;
     }
     console.log(this.activities);
@@ -100,6 +103,15 @@ err => {
 
        }else{
         //THIS IS CHILREN
+        //im actually ashamed by this code\\
+        var name = panel.childNodes[i+2].textContent;
+        var z = 0;
+        while(z <  this.enrolledChildren.length){
+          if(name == this.enrolledChildren[z].firstName){
+            console.log(this.enrolledChildren[z]);
+          }
+          z++;
+        }
        }
     }
   // console.log(panel.childNodes[3].checked);
