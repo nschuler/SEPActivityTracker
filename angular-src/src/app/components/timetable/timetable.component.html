@@ -24,13 +24,15 @@
         </div>
 
         <!-- Child Notes -->
-          <button (click)=" expandBoy($event)" class = "showNote btn btn-primary" style =" margin-left: 40%;">View Notes</button>
+          <button (click)="expandBoy($event)" class = "showNote btn btn-primary" style =" margin-left: 40%;">View Notes</button>
             <div class = "panel">
               <div class="notes">
                <div class="noteField">
                   <legend style="margin-left: 15px;">Notes</legend>
                   <div class="noteDisplay">
-                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
+                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)
+                      <button style="float: right;" (click)="removeNote(note.note)">x</button>
+                    </li>
                   </div>
               </div>
               <div class="noteButton">

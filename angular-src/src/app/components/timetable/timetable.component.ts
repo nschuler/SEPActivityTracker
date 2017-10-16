@@ -81,7 +81,7 @@ export class TimetableComponent implements OnInit {
     // });
 
     //EXAMPLE USE of delete note
-    // this.parentService.deleteNote({child_id: 1, note: "This is my first ever note"}).subscribe(data => {
+    // this.parentService.deleteNote({child_id: 1, note: "Please make sure my son drinks plenty of water"}).subscribe(data => {
     //   console.log(data);
     // });
 
@@ -240,13 +240,33 @@ export class TimetableComponent implements OnInit {
       width: '600px',
     });
 
+    console.log(this.child)
+
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         var date: Date = new Date();
         let formattedDate = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+       
+        // Push note to DB
+        this.parentService.addNote({child_id: this.child.id, note: result}).subscribe(data => {
+          console.log(data);
+        });
+
         //this.notesArray.push({note:result, date:formattedDate, author:this.username});
         this.child.notes.push({note:result, date:formattedDate, author:this.username});
       }
+    });
+  }
+
+  removeNote(note) {    
+    for (var i = 0; i < this.child.notes.length; i++) {
+      if (note == this.child.notes[i].note) {
+        this.child.notes.splice(i, 1)
+      }
+    }
+
+    this.parentService.deleteNote({child_id: this.child.id, note: note}).subscribe(data => {
+      console.log(data);
     });
   }
 
