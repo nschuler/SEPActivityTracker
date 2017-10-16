@@ -191,15 +191,16 @@ export class RoomPlanComponent implements OnInit {
   }
 
   addEvent(): void {
+    console.log(this.viewDate)
     this.events.push({
       activity_schedule_id: null, 
       room_id: 3, 
       title: 'Reading Time',
       activity_title_id: null, 
-      start: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 8, 0, 0),
-      end: new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 11, 0, 0),
-      start_string: (new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 8, 0, 0)).toString(), 
-      end_string: (new Date(getYear(new Date()), getMonth(new Date()), getDate(new Date()), 11, 0, 0)).toString(), 
+      start: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
+      end: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0),
+      start_string: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
+      end_string: (getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0).toString(), 
       color: colors.red,
       draggable: true,
       resizable: {
@@ -207,7 +208,7 @@ export class RoomPlanComponent implements OnInit {
         afterEnd: true
       },
       actions: [{
-        label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => {this.handleEvent('Edited', event);}
+        label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => {this.handleEvent('Deleted', event);}
       },
       {
         label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => {this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event);}
@@ -243,14 +244,14 @@ export class RoomPlanComponent implements OnInit {
 
 @Component({
   selector: 'dialog-overview-example-dialog',
-  template: `<h1 md-dialog-title>{{event.title}}</h1>
+  template: `<h1 md-dialog-title>{{activity.title}}</h1>
   <div md-dialog-content>
   <p>Activity Colour:
-  <input mdInput tabindex="1" [(ngModel)]="event.color.primary"></p><br>
+  <input mdInput tabindex="1" [(ngModel)]="activity.color.primary"></p><br>
   <p>Activity Start time: 
-  <input mdInput tabindex="1" [(ngModel)]="event.start" style="width:300px;"></p><br>
+  <input mdInput tabindex="1" [(ngModel)]="activity.start" style="width:300px;"></p><br>
   <p>Activity End time: 
-  <input mdInput tabindex="1" [(ngModel)]="event.end" style="width:300px;"></p><br>
+  <input mdInput tabindex="1" [(ngModel)]="activity.end" style="width:300px;"></p><br>
   </div>
   <div md-dialog-actions>
   <button md-button [md-dialog-close]="data.action" tabindex="2">Submit</button>
@@ -258,12 +259,12 @@ export class RoomPlanComponent implements OnInit {
   </div>`,
 })
 export class DialogOverviewExampleDialog {
-  event: any;
+  activity: any;
   constructor(
     public dialogRef: MdDialogRef<DialogOverviewExampleDialog>,
     @Inject(MD_DIALOG_DATA) public data: any) { 
-    this.event = data.event
-    console.log(this.event)
+    this.activity = data.activity
+    console.log(this.activity)
   }
 
   onNoClick(): void {
