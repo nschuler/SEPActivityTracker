@@ -55,10 +55,14 @@ export class TeacherComponent implements OnInit {
 
   this.educatorService.getActivitiesByRoomId(room_id)
   .subscribe(data => {
-    //this.activities = data.data;
     var i = 0;
+    console.log(data.data[0]);
     while( i < data.data.length){
-      this.activities.push(new Activity("Activity",data.data[i].start_time,data.data[i].end_time));
+      console.log(data.data[i].start_time);
+      console.log(data.data[i].end_time);
+      var sDate = new Date(data.data[i].start_time);
+      var eDate = new Date(data.data[i].end_time);
+      this.activities.push(new Activity("Activity",sDate.getHours(),eDate.getHours()));
       i++;
     }
     console.log(this.activities);
@@ -77,7 +81,6 @@ this.educatorService.getChildrenInRoom(room_id)
     i++;
   }
   this.currentChild = this.enrolledChildren[0];
-  console.log(this.currentChild);
 },
 err => {
   console.log("Failed to load Room By ID" + err);
