@@ -1,0 +1,31 @@
+<html>
+    <!-- left side column -->
+      <div class = "act_info_box">
+
+        <h2>Activities</h2>
+        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target)" >
+            <h1><b>Activity name</b></h1>
+            <input type="checkbox" class = "act_checkbox" ng-model ="checkbox" >
+            <p class ="act_p">time: {{activity.start_time}} - {{activity.end_time}}</p>
+        </md-list>
+
+      </div>
+    <!-- middle stuff -->
+          <div class="mid_section">
+              <h3><b>About {{currentChild.first_name}}</b></h3>
+              <p><b>DOB:</b> {{currentChild.dob}}</p>
+              <br>
+              <h3><b>Information</b></h3>
+              <p><b>Allergies:</b> {{currentChild.allergens}}</p>
+              <p><b>Family ID:</b> #{{currentChild.family_id}}</p>
+
+          </div>
+    <!-- right column -->
+    <div class = "child_info_box">
+
+              <h2>Children</h2>
+              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="null" >
+                  <h1><b>{{child.first_name}}</b></h1>
+              </md-list>
+            </div>
+    </html>

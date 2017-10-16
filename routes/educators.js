@@ -194,16 +194,6 @@ router.get('/getactivitytypes', passport.authenticate('jwt', {session:false}), (
 	});
 });
 
-router.post('/createactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.createActivityInstance(req.user[0], req.body.activity, (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Created'});
-		}
-	});
-});
-
 router.post('/deleteactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
 	Educator.deleteActivityInstance(req.user[0], req.body.activity_instance_id, (err, data) => { 
 		if(err){ 
@@ -214,12 +204,12 @@ router.post('/deleteactivityinstance', passport.authenticate('jwt', {session:fal
 	});
 });
 
-router.post('/updateactivityinstance', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-	Educator.updateActivityInstance(req.user[0], req.body.activity, (err, data) => { 
+router.post('/updateactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.updateActivities(req.user[0], req.body.activities, (err, data) => { 
 		if(err){ 
 			res.json({success: false, msg:'Request failed'});
 		} else {
-			res.json({success: true, msg:'Activity Updated'});
+			res.json({success: true, msg:'Activities Updated'});
 		}
 	});
 });

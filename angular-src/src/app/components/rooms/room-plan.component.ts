@@ -10,7 +10,7 @@ import RRule from 'rrule';
 
 import { NgbModal, NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent } from 'angular-calendar';
-import { startOfDay, startOfMonth, startOfWeek, endOfDay, endOfWeek, subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours, getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear, isMonday, isTuesday, isWednesday, isThursday, isFriday} from 'date-fns';
+import { startOfDay, startOfMonth, startOfWeek, endOfDay, endOfWeek, subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours,  getSeconds, getMinutes,  getHours, getDate,  getMonth,  getYear,  setSeconds,  setMinutes,  setHours,  setDate,  setMonth, setYear, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isSunday} from 'date-fns';
 
 const colors: any = {
   red: {primary: '#ad2121',secondary: '#FAE3E3'},
@@ -51,30 +51,8 @@ export class RoomPlanComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  events: CalendarEvent[] = [{
-    title: 'Painting',
-    color: colors.yellow,
-    start: new Date(),
-    end: new Date(),
-    resizable: {
-      beforeStart: true,
-      afterEnd: true
-    },
-    draggable: true,
-    actions: [{
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      }
-    }]
-  }];
+
+  events = [];
 
   refresh: Subject<any> = new Subject();
 
@@ -99,52 +77,29 @@ export class RoomPlanComponent implements OnInit {
     }, err => {console.log(err);});
 
     this.educatorService.getAllActivities().subscribe(data => {
-      this.activities = data.data;
+      this.activities = data.data
+
+      this.educatorService.getActivitiesByRoomId(this.room_id).subscribe(data => {
+        for (var i = 0; i < data.data.length; i++) {
+          this.events.push(
+          {
+            activity_schedule_id: data.data[i].id, 
+            room_id: data.data[i].room_id, 
+            title: this.fetchActivityName(data.data[i].activity_id), 
+            activity_title_id: data.data[i].activity_id, 
+            start: new Date(data.data[i].start_time), 
+            end: new Date(data.data[i].end_time), 
+            start_string: data.data[i].start_time, 
+            end_string: data.data[i].end_time,
+            color: colors.blue, 
+            resizable: {beforeStart: true,afterEnd: true}, 
+            draggable: true,
+            actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]
+          });
+          this.refresh.next();
+        }
+      }, err => {console.log(err);});
     }, err => {console.log(err);});
-
-    // EXAMPLE of creating activity instance
-    // let newActivity = {
-    //   room_id: "1",
-    //   activity_id: "7",
-    //   start_time: "04:00pm",
-    //   end_time: "05:00pm",
-    //   length: "60",
-    //   sunday: "1",
-    //   monday: "1",
-    //   tuesday: "1",
-    //   wednesday: "1",
-    //   thursday: "1",
-    //   friday: "1",
-    //   saturday: "1",
-    // }
-    // this.educatorService.createActivityInstance(newActivity).subscribe(data => {
-    //   console.log(data);
-    // });
-
-    // EXAMPLE of updating activity instance
-    // let activityData = {
-    //   id: "15",
-    //   room_id: "1",
-    //   activity_id: "7",
-    //   start_time: "04:30pm",
-    //   end_time: "05:30pm",
-    //   length: "60",
-    //   sunday: "1",
-    //   monday: "0",
-    //   tuesday: "1",
-    //   wednesday: "0",
-    //   thursday: "1",
-    //   friday: "0",
-    //   saturday: "1",
-    // }
-    // this.educatorService.updateActivityInstance(activityData).subscribe(data => {
-    //   console.log(data);
-    // });
-
-    // EXAMPLE of deleting activity instance
-    // this.educatorService.deleteActivityInstance("15").subscribe(data => {
-    //   console.log(data);
-    // });
   }
 
   getAllChildren() {
@@ -171,46 +126,48 @@ export class RoomPlanComponent implements OnInit {
     event,
     newStart,
     newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  }: any): void {
     event.start = newStart;
-    console.log(event.end)
     event.end = newEnd;
+    event.start_string = newStart.toString()
+    event.end_string = newEnd.toString()
+    console.log(event.start_time)
     this.refresh.next();
   }
 
   updateRecurring(event) {
-
     let day_difference = getDate(event.recurEnd) - getDate(event.start)
     if (day_difference != 0) {
       let count = 1;
       do {
-          let newStart = setDate(event.start, getDate(event.start) + count);
-          let newEnd = setDate(event.end, getDate(event.end) + count);
-          if (event.test == "Monday" && isMonday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Tuesday" && isTuesday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Wednesday" && isWednesday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Thursday" && isThursday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Friday" && isFriday(newStart)) {
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          } else if (event.test == "Everyday"){
-            this.events.push({title: event.title, start: newStart, end: newEnd, color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: CalendarEvent }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
-          }
-          count++;
-          day_difference--;
+        let newStart = setDate(event.start, getDate(event.start) + count);
+        let newEnd = setDate(event.end, getDate(event.end) + count);
+
+        if (event.recurring == "Monday" && isMonday(newStart)) {
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        } else if (event.recurring == "Tuesday" && isTuesday(newStart)) {
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        } else if (event.recurring == "Wednesday" && isWednesday(newStart)) {
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        } else if (event.recurring == "Thursday" && isThursday(newStart)) {
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        } else if (event.recurring == "Friday" && isFriday(newStart)) {
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        } else if (event.recurring == "Everyday" && !isSaturday(newStart) && !isSunday(newStart)){
+          this.events.push({activity_schedule_id: null, room_id: this.room_id, title: event.title, activity_title_id: event.activity_title_id, start: newStart, end: newEnd, start_string: newStart.toString(), end_string: newEnd.toString(), color: colors.blue, resizable: {beforeStart: true,afterEnd: true}, draggable: true,actions: [{ label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => { this.handleEvent('Edited', event); } }, { label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => { this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event); } }]});
+        }
+        count++;
+        day_difference--;
       } 
       while (day_difference > 0);
     }
     this.refresh.next();
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
+  handleEvent(action: string, activity): void {
     let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '500px',
-      data: { event: event, action: action }
+      data: { activity: activity, action: action }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -219,92 +176,102 @@ export class RoomPlanComponent implements OnInit {
     });
   }
 
+  alterStartTime(event) {
+    if (getDate(event.start) != getDate(event.end))
+    {
+      event.end = setDate(event.end, getDate(event.start))
+    }
+    event.start_time = event.start.toString()
+    event.end_time = event.end.toString()
+    this.refresh.next();
+  }
+
+  alterEndTime(event) {
+    event.end_time = event.end.toString()
+  }
+
+  deleteActivity(activity) {
+    this.educatorService.deleteActivityInstance(activity.activity_schedule_id).subscribe(data => {
+      console.log(data);
+    });
+  }
+
   addEvent(): void {
     this.events.push({
+      activity_schedule_id: null, 
+      room_id: this.room_id, 
       title: 'Reading Time',
-      start: startOfDay(new Date()),
-      end: endOfDay(new Date()),
-      color: colors.yellow,
+      activity_title_id: 7, 
+      start: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
+      end: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0),
+      start_string: (new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0)).toString(),
+      end_string: (new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0)).toString(), 
+      color: colors.red,
       draggable: true,
       resizable: {
         beforeStart: true,
         afterEnd: true
       },
-      actions: [
-      {
-        label: '<i class="fa fa-fw fa-pencil"></i>',
-        onClick: ({ event }: { event: CalendarEvent }): void => {
-          this.handleEvent('Edited', event);
-        }
+      actions: [{
+        label: '<i class="fa fa-fw fa-pencil"></i>', onClick: ({ event }: { event: any }): void => {this.handleEvent('Deleted', event);}
       },
       {
-        label: '<i class="fa fa-fw fa-times"></i>',
-        onClick: ({ event }: { event: CalendarEvent }): void => {
-          this.events = this.events.filter(iEvent => iEvent !== event);
-          this.handleEvent('Deleted', event);
-        }
-      }
-      ]
+        label: '<i class="fa fa-fw fa-times"></i>', onClick: ({ event }: { event: any }): void => {this.events = this.events.filter(iEvent => iEvent !== event); this.handleEvent('Deleted', event);}
+      }]
     });
     this.refresh.next();
   }
 
-  updateColour(event) {
-    console.log(event);
-    event.color = colors.blue;
+  updateActivityName(event) {
+    event.title = event.title;
+
+    for (var i = 0; i < this.activities.length; i++) {
+      if (event.title == this.activities[i].name) {
+        event.activity_title_id = this.activities[i].id
+      }
+    }
   }
 
-  // updateCalendarEvents(): void {
-  //   const startOfPeriod: any = {
-  //     month: startOfMonth,
-  //     week: startOfWeek,
-  //     day: startOfDay
-  //   };
+  saveSchedule() {
+    console.log(this.events)
+    this.educatorService.updateActivities(this.events).subscribe(data => {
+      console.log(data);
+    });
+  }
 
-  //   const endOfPeriod: any = {
-  //     month: endOfMonth,
-  //     week: endOfWeek,
-  //     day: endOfDay
-  //   };
-
-  //   this.recurringEvents.forEach(event => {
-  //     var rule: RRule = new RRule(
-  //       Object.assign({}, event.rrule, {
-  //         dtstart: startOfPeriod[this.view](this.viewDate),
-  //         until: new Date("2017-11-11T15:10:10.530Z")
-  //       })
-  //     );
-
-  //     rule.all().forEach(date => {
-  //       this.events.push(
-  //         Object.assign({}, event, {
-  //           start: new Date(date)
-  //         })
-
-  //       );
-  //       console.log(date)
-  //     });
-  //   });
-  // }
+  fetchActivityName(activity_id) {
+    for (var i = 0; i < this.activities.length; i++) {
+      if (activity_id == this.activities[i].id) {
+        return this.activities[i].name
+      }
+    }
+  }
 }
 
 @Component({
   selector: 'dialog-overview-example-dialog',
-  template: `<h1 md-dialog-title>{{data.event | json }}</h1>
+  template: `<h1 md-dialog-title>{{activity.title}}</h1>
   <div md-dialog-content>
-  <p>What's your favorite animal?</p>
-  <input mdInput tabindex="1" [(ngModel)]="data.action">
+  <p>Activity Colour:
+  <input mdInput tabindex="1" [(ngModel)]="activity.color.primary"></p><br>
+  <p>Activity Start time: 
+  <input mdInput tabindex="1" [(ngModel)]="activity.start" style="width:300px;"></p><br>
+  <p>Activity End time: 
+  <input mdInput tabindex="1" [(ngModel)]="activity.end" style="width:300px;"></p><br>
   </div>
   <div md-dialog-actions>
-  <button md-button [md-dialog-close]="data.action" tabindex="2">Ok</button>
-  <button md-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+  <button md-button [md-dialog-close]="data.action" tabindex="2">Submit</button>
+  <button md-button (click)="onNoClick()" tabindex="-1">Cancel</button>
   </div>`,
 })
 export class DialogOverviewExampleDialog {
-
+  activity: any;
   constructor(
     public dialogRef: MdDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MD_DIALOG_DATA) public data: any) { }
+    @Inject(MD_DIALOG_DATA) public data: any) { 
+    this.activity = data.activity
+    console.log(this.activity)
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

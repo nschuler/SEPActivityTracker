@@ -1,0 +1,14 @@
+<div>
+  <h2 md-dialog-title>View Notes</h2>
+  <hr>
+  <md-dialog-content>
+    <div>
+      <li class="list-group-item" *ngFor="let note of data.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{parseDate(note.date)}}</i>)</li>
+    </div>
+    <p style="text-align:center; font-size: 25px;" [hidden]="data.notes.length">No notes to view</p>
+  </md-dialog-content>
+  <hr>
+  <md-dialog-actions>
+    <button class="btn btn-primary" (click)="onClose()">CLOSE</button>
+  </md-dialog-actions>
+</div>

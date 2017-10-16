@@ -35,8 +35,9 @@
     </div>
   </div>
 
+
   <div class="col-md-4">
-    <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
+    <h3 style="font-size: 24px; !important"><b>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</b></h3>
   </div>
 
   <div class="col-md-4">
@@ -45,7 +46,7 @@
       <div class="btn btn-primary" (click)="viewChange('day')" [class.active]="view === 'day'">Day</div>
     </div>
   </div>
-
+</div>
   <hr>
 
   <div [ngSwitch]="view">
@@ -56,6 +57,7 @@
   <hr>
 
   <h3>
+    <button class="btn btn-primary pull-right" (click)="saveSchedule()" id="saveScheduleBtn">Save Schedule</button>
     <button class="btn btn-primary pull-right" (click)="addEvent()">Add new</button>
     <div class="clearfix"></div>
   </h3>
@@ -76,47 +78,33 @@
       <tr *ngFor="let event of events; let index = index">
         <td>
           <!-- <input type="text" class="form-control" [(ngModel)]="event.title" (keyup)="refresh.next()"></td> -->
-          {{event.title}}
-          <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next(); updateColour(event);">
+          <select class="form-control" [(ngModel)]="event.title" (ngModelChange)="refresh.next(); updateActivityName(event);">
             <option *ngFor="let activity of activities">{{activity.name}}</option>
           </select>
 
           <td>
             <div class="input-control">
               <label for="input1">Start Date/Time:</label>
-              <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next()" [inputId]="'input1'"></owl-date-time>
+              <owl-date-time [(ngModel)]="event.start"  (ngModelChange)="refresh.next(); alterStartTime(event);" [inputId]="'input1'"></owl-date-time>
               <br>
               <label for="input1">Finish Time:</label>
-              <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next()" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>
+              <owl-date-time [(ngModel)]="event.end" [type]="'timer'" [dateFormat]="'hh:mm'" (ngModelChange)="refresh.next(); alterEndTime(event);" [placeHolder]="'hh:mm'" [inputId]="'input3'"></owl-date-time>
             </div>
           </td>
 
           <td>
-            <select class="form-control" [(ngModel)]="event.test" (ngModelChange)="updateRecurring(event);">
+          <label for="input1">Recurring Options:</label>
+            <select class="form-control" [(ngModel)]="event.recurring">
               <option *ngFor="let option of repeatOptions">{{option}}</option>
             </select>
-            <label for="input1">End Date:</label>
+            <label for="input1">Recurring End Date:</label>
             <owl-date-time [(ngModel)]="event.recurEnd"  [dateFormat]="'YYYY-MM-DD'" [type]="'calendar'" [placeHolder]="'yyyy/mm/dd'" (ngModelChange)="refresh.next()" [inputId]="'end'"></owl-date-time>
           </td>
 
           <td>
-            <button class="btn btn-danger" (click)="updateRecurring(event); refresh.next()">Submit</button>
-            <button class="btn btn-primary" (click)="events.splice(index, 1); refresh.next()">Delete</button>
+            <button class="btn btn-danger"  (click)="updateRecurring(event); refresh.next()">Submit</button>
+            <button class="btn btn-primary" (click)="events.splice(index, 1); refresh.next(); deleteActivity(event);">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
-
-    <br><hr>
-
-<!-- <div id="content-wrapper" [mnFullpage]="options"
-[mnFullpageNavigation]="true"
-[mnFullpageKeyboardScrolling]="true"
-[mnFullpageSlidesNavigation]="true">
-
-
-<div class="section usage-section ">
-  <h1>Admin !</h1>
-  <a [routerLink]="['/rooms/admin',room_id]">Lets enter the room admin panel!</a>   
-</div> -->
-<!-- </div> -->

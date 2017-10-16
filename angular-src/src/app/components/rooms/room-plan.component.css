@@ -523,3 +523,12 @@ button {
 .owl-dateTime-btnWrapper .owl-dateTime-btn:last-child {
     border-left: 1px solid #0061a1
 }
+
+#saveScheduleBtn {
+  background-color: #4CAF50;
+  border-color: #43A047
+}
+
+#saveScheduleBtn:hover {
+     background-color: #388E3C;
+  }

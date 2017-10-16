@@ -27,6 +27,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { TimetableComponent } from './components/timetable/timetable.component';
 import { ParentComponent } from './components/parent/parent.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
 
 
 import { ValidateService } from './services/validate.service';
@@ -39,6 +40,7 @@ import { RoomListComponent } from './components/rooms/room-list.component';
 import { RoomEditComponent } from './components/rooms/room-edit.component';
 import { RoomAddComponent } from './components/rooms/room-add.component';
 import { RoomAdminComponent } from './components/rooms/room-admin.component';
+import { ViewNoteComponent } from './components/rooms/room-admin.component';
 import { RoomPlanComponent, DialogOverviewExampleDialog, DateTimePickerComponent } from './components/rooms/room-plan.component';
 import { MyNoteComponent } from './components/timetable/timetable.component';
 import { MyCommentComponent } from './components/timetable/timetable.component';
@@ -63,6 +65,7 @@ const appRoutes: Routes = [
   {path:'activities', component:ActivitiesListComponent, canActivate:[AuthGuard]},
   {path:'activities/edit/:activity', component:ActivitiesEditComponent, canActivate:[AuthGuard]},
   {path:'parent', component:ParentComponent},
+  {path:'teacher', component:TeacherComponent},
   {path:'activities/create', component:ActivitiesCreateComponent, canActivate:[AuthGuard]}
 ]
 
@@ -76,7 +79,7 @@ const appRoutes: Routes = [
     DashboardComponent,
     ProfileComponent,
     TimetableComponent,
-
+    TeacherComponent,
     ParentComponent,
 
     RoomListComponent,
@@ -89,9 +92,9 @@ const appRoutes: Routes = [
     ActivitiesEditComponent,
     DialogOverviewExampleDialog,
     DateTimePickerComponent,
-    RoomAdminComponent,
     MyNoteComponent,
-    MyCommentComponent
+    MyCommentComponent,
+    ViewNoteComponent
    ],
 
   imports: [
@@ -122,6 +125,6 @@ const appRoutes: Routes = [
   ],
   providers: [ValidateService, AuthService, AuthGuard, ParentService, EducatorService, DndModule, { provide: BrowserXhr, useClass: NgProgressBrowserXhr }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent, MyNoteComponent, MyCommentComponent]
+  entryComponents: [DialogOverviewExampleDialog, DateTimePickerComponent, MyNoteComponent, MyCommentComponent, ViewNoteComponent]
 })
 export class AppModule { }

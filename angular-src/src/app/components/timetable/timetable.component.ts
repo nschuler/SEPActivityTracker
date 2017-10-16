@@ -76,7 +76,7 @@ export class TimetableComponent implements OnInit {
     // });
 
     //EXAMPLE USE of add note
-    // this.parentService.addNote({child_id: 1, note: "My son is feeling VERY sick today."}).subscribe(data => {
+    // this.parentService.addNote({child_id: 1, note: "Please make sure my son drinks plenty of water"}).subscribe(data => {
     //   console.log(data);
     // });
 
@@ -113,15 +113,28 @@ export class TimetableComponent implements OnInit {
     });
 
     // Populate currentActivities array
-    this.parentService.getCurrentActivities("1").subscribe(activityData => {
-      if (activityData.success) {
-        for (var i = 0; i < activityData.activities.length; i++) {
-          this.currentActivities.push(activityData.activities[i]);
-        }
-      }
+    // this.parentService.getCurrentActivities("3").subscribe(activityData => {
+    //   if (activityData.success) {
+    //     console.log("current", activityData);
+    //     // for (var i = 0; i < activityData.activities.length; i++) {
+    //     //   this.currentActivities.push(activityData.activities[i]);
+    //     // }
+    //   }
 
-      //console.log(this.currentActivities);
-    });
+    //   //console.log(this.currentActivities);
+    // });
+
+    // let temp = new Date("2015-03");
+    // this.parentService.getActivities("1",temp.toString()).subscribe(activityData => {
+    //   if (activityData.success) {
+    //     console.log("future", activityData);
+    //     // for (var i = 0; i < activityData.activities.length; i++) {
+    //       //   this.currentActivities.push(activityData.activities[i]);
+    //       // }
+    //     }
+
+    //     //console.log(this.currentActivities);
+    //   });
   }
 
   getFamily() {
@@ -235,6 +248,10 @@ export class TimetableComponent implements OnInit {
         this.child.notes.push({note:result, date:formattedDate, author:this.username});
       }
     });
+  }
+
+  formatDate(date) {
+    return date.substr(0,10);
   }
 
   expandBoy($event){

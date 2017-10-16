@@ -83,4 +83,15 @@ router.post('/currentactivities', passport.authenticate('jwt', {session:false}),
 	});
 });
 
+// Child Future Activities
+router.post('/getactivities', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Parent.getActivities(req.user[0], req.body.room_id, req.body.date, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request Failed'});
+		} else {
+			res.json({success: true, msg:'Future Activities', activities:data});
+		}
+	});
+});
+
 module.exports = router;
