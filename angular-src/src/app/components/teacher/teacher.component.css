@@ -35,7 +35,10 @@ border: 1px solid black;
 .act_checkbox{
  float: right;
 }
-
+.act_checkbox_kid{
+  margin-top:0;
+  float: right;
+ }
 
 
 .child_info_box{
@@ -67,4 +70,12 @@ border: 1px solid black;
   width:25%;
   text-align: center;
 
+}
+
+.noteDisplay {
+	height:170px;
+	width:100;
+	border:1px solid #ccc;
+	overflow:auto;
+	margin-left: 15px;
 }

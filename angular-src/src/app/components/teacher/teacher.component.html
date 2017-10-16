@@ -3,29 +3,33 @@
       <div class = "act_info_box">
 
         <h2>Activities</h2>
-        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target)" >
-            <h1><b>Activity name</b></h1>
+        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target,3)" >
+            <h1><b>{{activity.activityName}}</b></h1>
             <input type="checkbox" class = "act_checkbox" ng-model ="checkbox" >
-            <p class ="act_p">time: {{activity.start_time}} - {{activity.end_time}}</p>
+          <p class ="act_p"><b>time:</b> {{activity.start}} - {{activity.end}}</p>
         </md-list>
 
       </div>
     <!-- middle stuff -->
           <div class="mid_section">
-              <h3><b>About {{currentChild.first_name}}</b></h3>
+              <h3>About {{currentChild.firstName}} {{currentChild.familyName}}</h3>
               <p><b>DOB:</b> {{currentChild.dob}}</p>
               <br>
               <h3><b>Information</b></h3>
               <p><b>Allergies:</b> {{currentChild.allergens}}</p>
-              <p><b>Family ID:</b> #{{currentChild.family_id}}</p>
-
+              <br>
+              <h3>Notes:</h3>
+              <div class="noteDisplay">
+                <li class="list-group-item" *ngFor="let note of currentChild.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
+              </div>
           </div>
     <!-- right column -->
     <div class = "child_info_box">
 
               <h2>Children</h2>
-              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="null" >
-                  <h1><b>{{child.first_name}}</b></h1>
+              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="clickableBoi($event.currentTarget,$event.target,1)" >
+                <input type="checkbox" class = "act_checkbox_kid" ng-model ="checkbox" >
+                <h1>{{child.firstName}}</h1>
               </md-list>
             </div>
     </html>
