@@ -336,7 +336,6 @@ module.exports.updateActivities = function(user, activities, callback) {
 		{
 			let failed = false
 			for (var i = 0, len = activities.length; i < len; i++) {
-
 				// If the activity already has a ID in the schedule table - NOT A NEW ACTIVITY TO THE SCHEDULE - UPDATE IT
 			  	if (activities[i].activity_schedule_id != null) {
 				  	mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+

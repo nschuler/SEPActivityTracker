@@ -18,8 +18,6 @@ const colors: any = {
   yellow: {primary: '#e3bc08',secondary: '#FDF1BA'}
 };
 
-console.log(typeof colors.yellow)
-
 
 @Component({
   selector: 'app-room-plan',
@@ -128,9 +126,12 @@ export class RoomPlanComponent implements OnInit {
     event,
     newStart,
     newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  }: any): void {
     event.start = newStart;
     event.end = newEnd;
+    event.start_string = newStart.toString()
+    event.end_string = newEnd.toString()
+    console.log(event.start_time)
     this.refresh.next();
   }
 
@@ -139,7 +140,6 @@ export class RoomPlanComponent implements OnInit {
     if (day_difference != 0) {
       let count = 1;
       do {
-        console.log(event.title)
         let newStart = setDate(event.start, getDate(event.start) + count);
         let newEnd = setDate(event.end, getDate(event.end) + count);
 
@@ -180,27 +180,32 @@ export class RoomPlanComponent implements OnInit {
     if (getDate(event.start) != getDate(event.end))
     {
       event.end = setDate(event.end, getDate(event.start))
-      this.refresh.next();
     }
+    event.start_time = event.start.toString()
+    event.end_time = event.end.toString()
+    this.refresh.next();
+  }
+
+  alterEndTime(event) {
+    event.end_time = event.end.toString()
   }
 
   deleteActivity(activity) {
-    this.educatorService.deleteActivityInstance(activity.activity_id).subscribe(data => {
+    this.educatorService.deleteActivityInstance(activity.activity_schedule_id).subscribe(data => {
       console.log(data);
     });
   }
 
   addEvent(): void {
-    console.log(this.viewDate)
     this.events.push({
       activity_schedule_id: null, 
       room_id: 3, 
       title: 'Reading Time',
-      activity_title_id: null, 
+      activity_title_id: 7, 
       start: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
       end: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0),
-      start_string: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
-      end_string: (getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0).toString(), 
+      start_string: (new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0)).toString(),
+      end_string: (new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 11, 0, 0)).toString(), 
       color: colors.red,
       draggable: true,
       resizable: {
@@ -221,13 +226,14 @@ export class RoomPlanComponent implements OnInit {
     event.title = event.title;
 
     for (var i = 0; i < this.activities.length; i++) {
-      if (event.title = this.activities[i].name) {
+      if (event.title == this.activities[i].name) {
         event.activity_title_id = this.activities[i].id
       }
     }
   }
 
   saveSchedule() {
+    console.log(this.events)
     this.educatorService.updateActivities(this.events).subscribe(data => {
       console.log(data);
     });
