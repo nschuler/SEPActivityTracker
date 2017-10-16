@@ -113,19 +113,25 @@ export class TimetableComponent implements OnInit {
     });
 
     // Populate currentActivities array
-    // this.parentService.getCurrentActivities("3").subscribe(activityData => {
-    //   if (activityData.success) {
-    //     console.log("current", activityData);
-    //     // for (var i = 0; i < activityData.activities.length; i++) {
-    //     //   this.currentActivities.push(activityData.activities[i]);
-    //     // }
-    //   }
+    this.parentService.getCurrentActivities("1").subscribe(activityData => {
+      if (activityData.success) {
+        console.log("current activities for room 1", activityData);
+        // for (var i = 0; i < activityData.activities.length; i++) {
+        //   this.currentActivities.push(activityData.activities[i]);
+        // }
+      }
 
-    //   //console.log(this.currentActivities);
-    // });
+      //console.log(this.currentActivities);
+    });
 
-    // let temp = new Date("2015-03");
-    // this.parentService.getActivities("1",temp.toString()).subscribe(activityData => {
+    this.parentService.getCurrentActivities("3").subscribe(activityData => {
+      if (activityData.success) {
+        console.log("current activities for room 3", activityData);
+      }
+    });
+
+    //let temp = new Date("2015-03");
+    // this.parentService.getActivities("3","2017-10-16").subscribe(activityData => {
     //   if (activityData.success) {
     //     console.log("future", activityData);
     //     // for (var i = 0; i < activityData.activities.length; i++) {

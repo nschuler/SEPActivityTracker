@@ -205,14 +205,19 @@ module.exports.getCurrentActivities = function(user, room_id, callback) {
 				let startDate;
 				let endDate;
 
+				let temp;
+
 				activityArray = [];
 
 				for(i in schedule)
 				{
-					startDate = new Date(schedule[i].start_time);
-					endDate = new Date(schedule[i].end_time);
+					temp = schedule[i].start_time.indexOf("GMT");
+					startDate = new Date(schedule[i].start_time.slice(0,temp));
+					temp = schedule[i].end_time.indexOf("GMT");
+					endDate = new Date(schedule[i].end_time.slice(0,temp));
 
-					if(startDate.getDate() == dateNow.getDate() && startDate.getMonth() == dateNow.getMonth() && startDate.getYear() && dateNow.getYear())
+
+					if(startDate.getDate() == dateNow.getDate() && startDate.getMonth() == dateNow.getMonth() && startDate.getYear() == dateNow.getYear())
 					{
 						activityArray.push({
 							start_time: startDate.getHours() + ":" + ((startDate.getMinutes() < 10) ? "0" + startDate.getMinutes() : startDate.getMinutes()) + ((startDate.getHours() < 12) ? "AM" : "PM"),
@@ -251,7 +256,7 @@ module.exports.getActivities = function(user, room_id, date_data, callback) {
 					startDate = new Date(schedule[i].start_time);
 					endDate = new Date(schedule[i].end_time);
 
-					if(startDate.getDate() == date.getDate() && startDate.getMonth() == date.getMonth() && startDate.getYear() && date.getYear())
+					if(startDate.getDate() == date.getDate() && startDate.getMonth() == date.getMonth() && startDate.getYear() == date.getYear())
 					{
 						activityArray.push({
 							start_time: startDate.getHours() + ":" + ((startDate.getMinutes() < 10) ? "0" + startDate.getMinutes() : startDate.getMinutes()) + ((startDate.getHours() < 12) ? "AM" : "PM"),
