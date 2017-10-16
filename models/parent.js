@@ -199,12 +199,71 @@ module.exports.getCurrentActivities = function(user, room_id, callback) {
 	this.validateParent(user.role_type, (valid) => { 
 		if(valid)
 		{
-			// Query Schedule for 'activities' which matches the room_id the Child/Children is in
-			// Maybe we could query activities per day, for now, just retrieve all activities
-			
 			mysql_query('SELECT * FROM Schedule INNER JOIN Activity ON Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
 				if(err) callback(err, null);
-				callback(err, schedule);
+				let dateNow = new Date();
+				let startDate;
+				let endDate;
+
+				activityArray = [];
+
+				for(i in schedule)
+				{
+					startDate = new Date(schedule[i].start_time);
+					endDate = new Date(schedule[i].end_time);
+
+					if(startDate.getDate() == dateNow.getDate() && startDate.getMonth() == dateNow.getMonth() && startDate.getYear() && dateNow.getYear())
+					{
+						activityArray.push({
+							start_time: startDate.getHours() + ":" + ((startDate.getMinutes() < 10) ? "0" + startDate.getMinutes() : startDate.getMinutes()) + ((startDate.getHours() < 12) ? "AM" : "PM"),
+							end_time: endDate.getHours() + ":" + ((endDate.getMinutes() < 10) ? "0" + endDate.getMinutes() : endDate.getMinutes()) + ((endDate.getHours() < 12) ? "AM" : "PM"),
+							type: schedule[i].type,
+							name: schedule[i].name,
+							description: schedule[i].description
+						});
+					}
+				}
+
+				callback(err, activityArray);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not a Parent'),null)
+		}
+	});
+}
+
+module.exports.getActivities = function(user, room_id, date_data, callback) {
+	this.validateParent(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Schedule INNER JOIN Activity ON Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
+				if(err) callback(err, null);
+				let date = new Date(date_data);
+				let startDate;
+				let endDate;
+
+				activityArray = [];
+
+				for(i in schedule)
+				{
+					startDate = new Date(schedule[i].start_time);
+					endDate = new Date(schedule[i].end_time);
+
+					if(startDate.getDate() == date.getDate() && startDate.getMonth() == date.getMonth() && startDate.getYear() && date.getYear())
+					{
+						activityArray.push({
+							start_time: startDate.getHours() + ":" + ((startDate.getMinutes() < 10) ? "0" + startDate.getMinutes() : startDate.getMinutes()) + ((startDate.getHours() < 12) ? "AM" : "PM"),
+							end_time: endDate.getHours() + ":" + ((endDate.getMinutes() < 10) ? "0" + endDate.getMinutes() : endDate.getMinutes()) + ((endDate.getHours() < 12) ? "AM" : "PM"),
+							type: schedule[i].type,
+							name: schedule[i].name,
+							description: schedule[i].description
+						});
+					}
+				}
+
+				callback(err, activityArray);
 			});
 		}
 		else

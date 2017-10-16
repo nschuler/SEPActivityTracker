@@ -30,6 +30,16 @@ export class ParentService {
       .map(res => res.json());
   }
 
+  getActivities(room_id, date){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.post('http://localhost:8080/parents/getactivities', {room_id: room_id, date: date}, {headers: headers})
+      .map(res => res.json());
+  }
+
   getActivityRecords(child_id){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage
