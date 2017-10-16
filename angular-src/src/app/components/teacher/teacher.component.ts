@@ -11,23 +11,13 @@ import { element } from 'protractor';
 })
 export class TeacherComponent implements OnInit {
 
-  child = {
-    address: undefined,
-    first_name: undefined,
-    last_name: undefined,
-    family_name: undefined,
-    id: undefined,
-    dob: undefined,
-    allergens: undefined,
-    room_id: undefined,
-    notes: undefined,
-  };
+
   // child currently being viewed
   currentChild: any;
   // activities in current viewed room
   activities: any[];
   // children in current viewed room
-  enrolledChildren: any[];
+  enrolledChildren: Child[] = [];
   // rooms available in drop down
   myRoom: any;
   myId: any;
@@ -65,7 +55,6 @@ export class TeacherComponent implements OnInit {
   this.educatorService.getActivitiesByRoomId(room_id)
   .subscribe(data => {
     this.activities = data.data;
-    console.log(data.data);
 },
   err => {
     console.log("Failed to load Room By ID" + err);
@@ -73,24 +62,56 @@ export class TeacherComponent implements OnInit {
 
 this.educatorService.getChildrenInRoom(room_id)
 .subscribe(data => {
-  this.enrolledChildren = data.children;
+  //this.enrolledChildren = data.children;
+  var i = 0;
+  //this.enrolledChildren = data.children;
+  while(i< data.children.length ){
+    this.makeChild(data.children[i].first_name, data.children[i].last_name, data.children[i].id,data.children[i].dob,data.children[i].allergens,data.children[i].notes,i)
+    i++;
+  }
   this.currentChild = this.enrolledChildren[0];
-  console.log(this.enrolledChildren[0]);
 },
 err => {
   console.log("Failed to load Room By ID" + err);
 });
   }
 
-  clickableBoi(panel,clicked){
+  clickableBoi(panel,clicked,i){
     if(clicked.tagName != "INPUT"){
-      if(panel.childNodes[3].checked == true){
-        panel.childNodes[3].checked = false;
+      if(panel.childNodes[i].checked == true){
+        panel.childNodes[i].checked = false;
        }else{
-        panel.childNodes[3].checked = true;
+        panel.childNodes[i].checked = true;
        }
     }
-   console.log(panel.childNodes);
   // console.log(panel.childNodes[3].checked);
+  }
+
+  makeChild(fName, lName, id,dob,allergens,notes,i){
+    var formattedNotes = JSON.parse(notes).notes;
+    //this.enrolledChildren.push(
+     var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
+     //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
+     this.enrolledChildren.push(temp);
+  }
+
+}
+class Child {
+  firstName: any;
+  familyName: any;
+  dob: any;
+  address: string;
+  allergens: any;
+  childId: any;
+  notes: any;
+
+  constructor(firstname, familyName, childId, dob, allergens, notes ) {
+    this.firstName = firstname;
+    this.familyName = familyName;
+    this.childId = childId;
+    this.dob = dob;
+    this.allergens = allergens;
+    this.notes = notes;
+
   }
 }
