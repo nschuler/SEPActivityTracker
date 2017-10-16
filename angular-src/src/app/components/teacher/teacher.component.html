@@ -4,9 +4,9 @@
 
         <h2>Activities</h2>
         <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target,3)" >
-            <h1><b>Activity Name</b></h1>
+            <h1><b>{{activity.activityName}}</b></h1>
             <input type="checkbox" class = "act_checkbox" ng-model ="checkbox" >
-          <p class ="act_p"><b>time:</b> time period - time period</p>
+          <p class ="act_p"><b>time:</b> {{activity.start}} - {{activity.end}}</p>
         </md-list>
 
       </div>

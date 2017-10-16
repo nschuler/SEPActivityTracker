@@ -15,7 +15,7 @@ export class TeacherComponent implements OnInit {
   // child currently being viewed
   currentChild: any;
   // activities in current viewed room
-  activities: any[];
+  activities: any[] = [];
   // children in current viewed room
   enrolledChildren: Child[] = [];
   // rooms available in drop down
@@ -46,7 +46,8 @@ export class TeacherComponent implements OnInit {
 
     this.educatorService.getRoomById(room_id)
     .subscribe(data => {
-      this.myRoom = data.data[0];
+      //this.myRoom = data.data[0];
+
   },
     err => {
       console.log("Failed to load Room By ID" + err);
@@ -54,7 +55,13 @@ export class TeacherComponent implements OnInit {
 
   this.educatorService.getActivitiesByRoomId(room_id)
   .subscribe(data => {
-    this.activities = data.data;
+    //this.activities = data.data;
+    var i = 0;
+    while( i < data.data.length){
+      this.activities.push(new Activity("Activity",data.data[i].start_time,data.data[i].end_time));
+      i++;
+    }
+    console.log(this.activities);
 },
   err => {
     console.log("Failed to load Room By ID" + err);
@@ -70,6 +77,7 @@ this.educatorService.getChildrenInRoom(room_id)
     i++;
   }
   this.currentChild = this.enrolledChildren[0];
+  console.log(this.currentChild);
 },
 err => {
   console.log("Failed to load Room By ID" + err);
@@ -82,6 +90,13 @@ err => {
         panel.childNodes[i].checked = false;
        }else{
         panel.childNodes[i].checked = true;
+       }
+       //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
+       if(i==3){
+         // THIS IS ACTIVITIES
+
+       }else{
+        //THIS IS CHILREN
        }
     }
   // console.log(panel.childNodes[3].checked);
@@ -112,6 +127,18 @@ class Child {
     this.dob = dob;
     this.allergens = allergens;
     this.notes = notes;
+
+  }
+}
+class Activity {
+  activityName: any;
+  start: any;
+  end: any;
+
+  constructor( activityName, start, end) {
+    this.activityName = activityName;
+    this.start = start;
+    this.end = end;
 
   }
 }
