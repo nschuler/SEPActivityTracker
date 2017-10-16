@@ -30,6 +30,8 @@ export class TimetableComponent implements OnInit {
     notes: undefined,
   };
 
+  dateToday: string;
+
   familyName: string;
   address: string;
   roomActivities: any; //(temp)
@@ -95,6 +97,9 @@ export class TimetableComponent implements OnInit {
       initialDate: new Date()
     });
 
+    this.dateToday = String(this.options.initialDate)
+
+
     // Populate recordActivities array
     this.parentService.getActivityRecords("1").subscribe(data => {
       if (data.success) {
@@ -115,6 +120,28 @@ export class TimetableComponent implements OnInit {
         }
       }
       //console.log(this.recordActivities);
+    });
+
+    this.parentService.getActivities("1", this.options.initialDate).subscribe(data => {
+        if (data.success) {
+          for (var i = 0; i < data.activities.length; i++) {
+            this.currentActivities.push({
+              start_time: data.activities[i].start_time,
+              end_time: data.activities[i].end_time,
+              type: data.activities[i].type,
+              name: data.activities[i].name,
+              description: data.activities[i].description,
+              comments: []
+            })
+          }
+
+          // Populate activities for today.
+          for (var i = 0; i < this.currentActivities.length; i++) {
+            this.selectedActivities.push(this.currentActivities[i]);
+          }
+        }
+
+        console.log(this.currentActivities)
     });
 
     // Populate currentActivities array
@@ -203,23 +230,34 @@ export class TimetableComponent implements OnInit {
   getCurrentDate($event) {
     this.date = $event;
     this.selectedActivities = [];
-    this.selectedComments = []
+    this.selectedComments = [] 
+
+    if (String(this.date.formatted) == "2017-10-17") {
+      for (var i = 0; i < this.currentActivities.length; i++) {
+        this.selectedActivities.push(this.currentActivities[i]);
+      }
+    } else {
+        for (var i = 0; i < this.recordActivities.length; i++) {
+          if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+            this.selectedActivities.push(this.recordActivities[i]);
+        }
+      }
+    }
 
     //TELLS YOU DAY OF WEEK
     // Where saturady = 0, sunday = 1, monday = 2, tuesday = 3 etc..
     // console.log(this.date.momentObj.day());
-
-    for (var i = 0; i < this.recordActivities.length; i++) {
-      if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
-        this.selectedActivities.push(this.recordActivities[i]);
-      }
-    }
+    // for (var i = 0; i < this.recordActivities.length; i++) {
+    //   if (this.date.formatted == this.recordActivities[i].date.split("T")[0]) {
+    //     this.selectedActivities.push(this.recordActivities[i]);
+    //   }
+    // }
     //console.log(this.selectedActivities);
   }
 
   addComment(activity) {
-    this.selectedComments = [];
     console.log(activity)
+    this.selectedComments = []
 
     for (var i = 0; i < activity.comments.length; i++) {
       this.selectedComments.push(activity.comments[i].comment)
@@ -242,6 +280,7 @@ export class TimetableComponent implements OnInit {
           console.log(data);
 
         this.selectedComments.push(result)
+        console.log(this.selectedComments)
         });
       }
     })
@@ -331,8 +370,14 @@ export class MyCommentComponent implements OnInit {
   ngOnInit() {
   }
 
-  removeComment(data, comment) {
-    this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: data.activityId, comment: comment}).subscribe(data => {
+  removeComment(commentData, comment) {
+    console.log(commentData)
+
+    for (var x = 0; x < commentData.comments.length; x++) {
+      console.log(commentData.comments[x])
+    }
+
+    this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: commentData.activityId, comment: comment}).subscribe(data => {
       console.log(data);
     });
   }
