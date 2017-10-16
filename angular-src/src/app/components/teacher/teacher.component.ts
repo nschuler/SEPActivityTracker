@@ -34,7 +34,7 @@ export class TeacherComponent implements OnInit {
 
         if(this.myId == data.educators[i].id){
           //this.room_id = data.educators[i].room_id;
-         this.getRoom(data.educators[i].room_id);
+          this.getRoom(data.educators[i].room_id);
           break;
         }
         i++;
@@ -48,7 +48,7 @@ export class TeacherComponent implements OnInit {
     .subscribe(data => {
       //this.myRoom = data.data[0];
 
-  },
+    },
     err => {
       console.log("Failed to load Room By ID" + err);
   });
@@ -94,14 +94,14 @@ err => {
     if(clicked.tagName != "INPUT"){
       if(panel.childNodes[i].checked == true){
         panel.childNodes[i].checked = false;
-       }else{
+      }else{
         panel.childNodes[i].checked = true;
-       }
-       //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
-       if(i==3){
-         // THIS IS ACTIVITIES
+      }
+      //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
+      if(i==3){
+        // THIS IS ACTIVITIES
 
-       }else{
+      }else{
         //THIS IS CHILREN
         //im actually ashamed by this code\\
         var name = panel.childNodes[i+2].textContent;
@@ -114,15 +114,15 @@ err => {
         }
        }
     }
-  // console.log(panel.childNodes[3].checked);
+    // console.log(panel.childNodes[3].checked);
   }
 
   makeChild(fName, lName, id,dob,allergens,notes,i){
     var formattedNotes = JSON.parse(notes).notes;
     //this.enrolledChildren.push(
-     var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
-     //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
-     this.enrolledChildren.push(temp);
+    var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
+    //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
+    this.enrolledChildren.push(temp);
   }
 
 }
