@@ -70,7 +70,12 @@ export class TimetableComponent implements OnInit {
 
     this.getFamily();
 
-    // EXAMPLE USE
+    //EXAMPLE USE of add comment
+    // this.parentService.commentOnChildActivityRecord({activityrecord_id: 1, comment: "This is my second comment"}).subscribe(data => {
+    //   console.log(data);
+    // });)
+
+    //EXAMPLE USE of delete comment
     // this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: 1, comment: "This is my second comment"}).subscribe(data => {
     //   console.log(data);
     // });
@@ -214,6 +219,7 @@ export class TimetableComponent implements OnInit {
 
   addComment(activity) {
     this.selectedComments = [];
+    console.log(activity)
 
     for (var i = 0; i < activity.comments.length; i++) {
       this.selectedComments.push(activity.comments[i].comment)
@@ -223,14 +229,20 @@ export class TimetableComponent implements OnInit {
         width: '600px',
         data: {
           name: activity.name,
-          comments: this.selectedComments
+          comments: this.selectedComments,
+          activityId: activity.id
         }
       }) 
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
+
+        // Push comment to DB
+        this.parentService.commentOnChildActivityRecord({activityrecord_id: activity.id, comment: result}).subscribe(data => {
+          console.log(data);
+
         this.selectedComments.push(result)
-        //PUSH TO DATABASE
+        });
       }
     })
   }
@@ -258,16 +270,16 @@ export class TimetableComponent implements OnInit {
     });
   }
 
-  removeNote(note) {    
+  removeNote(note) {  
+    this.parentService.deleteNote({child_id: this.child.id, note: note}).subscribe(data => {
+      console.log(data);
+    });
+
     for (var i = 0; i < this.child.notes.length; i++) {
       if (note == this.child.notes[i].note) {
         this.child.notes.splice(i, 1)
       }
     }
-
-    this.parentService.deleteNote({child_id: this.child.id, note: note}).subscribe(data => {
-      console.log(data);
-    });
   }
 
   formatDate(date) {
@@ -314,9 +326,15 @@ export class MyNoteComponent implements OnInit {
 
 export class MyCommentComponent implements OnInit {
   comment: String;
-  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string) { }
+  constructor(public thisDialogRef: MdDialogRef<MyCommentComponent>, @Inject(MD_DIALOG_DATA) public data: string, private parentService: ParentService) { }
 
   ngOnInit() {
+  }
+
+  removeComment(data, comment) {
+    this.parentService.deleteCommentOnChildActivityRecord({activityrecord_id: data.activityId, comment: comment}).subscribe(data => {
+      console.log(data);
+    });
   }
 
   onCloseConfirm() {
