@@ -34,7 +34,7 @@ export class TeacherComponent implements OnInit {
 
         if(this.myId == data.educators[i].id){
           //this.room_id = data.educators[i].room_id;
-         this.getRoom(data.educators[i].room_id);
+          this.getRoom(data.educators[i].room_id);
           break;
         }
         i++;
@@ -48,69 +48,74 @@ export class TeacherComponent implements OnInit {
     .subscribe(data => {
       //this.myRoom = data.data[0];
 
-  },
+    },
     err => {
       console.log("Failed to load Room By ID" + err);
-  });
+    });
 
-  this.educatorService.getActivitiesByRoomId(room_id)
-  .subscribe(data => {
-    var i = 0;
-    console.log(data.data[0]);
-    while( i < data.data.length){
-      console.log(data.data[i].start_time);
-      console.log(data.data[i].end_time);
-      var sDate = new Date(data.data[i].start_time);
-      var eDate = new Date(data.data[i].end_time);
-      this.activities.push(new Activity("Activity",sDate.getHours(),eDate.getHours()));
-      i++;
-    }
-    console.log(this.activities);
-},
-  err => {
-    console.log("Failed to load Room By ID" + err);
-});
+    // Example
+    // this.educatorService.getTodaysActivitiesByRoomId("1","2017-10-17").subscribe(data => {
+    //     console.log(data);
+    //   });
 
-this.educatorService.getChildrenInRoom(room_id)
-.subscribe(data => {
-  //this.enrolledChildren = data.children;
-  var i = 0;
-  //this.enrolledChildren = data.children;
-  while(i< data.children.length ){
-    this.makeChild(data.children[i].first_name, data.children[i].last_name, data.children[i].id,data.children[i].dob,data.children[i].allergens,data.children[i].notes,i)
-    i++;
-  }
-  this.currentChild = this.enrolledChildren[0];
-},
-err => {
-  console.log("Failed to load Room By ID" + err);
-});
+    this.educatorService.getActivitiesByRoomId(room_id)
+    .subscribe(data => {
+      var i = 0;
+      console.log(data.data[0]);
+      while( i < data.data.length){
+        console.log(data.data[i].start_time);
+        console.log(data.data[i].end_time);
+        var sDate = new Date(data.data[i].start_time);
+        var eDate = new Date(data.data[i].end_time);
+        this.activities.push(new Activity("Activity",sDate.getHours(),eDate.getHours()));
+        i++;
+      }
+      console.log(this.activities);
+    },
+    err => {
+      console.log("Failed to load Room By ID" + err);
+    });
+
+    this.educatorService.getChildrenInRoom(room_id)
+    .subscribe(data => {
+      //this.enrolledChildren = data.children;
+      var i = 0;
+      //this.enrolledChildren = data.children;
+      while(i< data.children.length ){
+        this.makeChild(data.children[i].first_name, data.children[i].last_name, data.children[i].id,data.children[i].dob,data.children[i].allergens,data.children[i].notes,i)
+        i++;
+      }
+      this.currentChild = this.enrolledChildren[0];
+    },
+    err => {
+      console.log("Failed to load Room By ID" + err);
+    });
   }
 
   clickableBoi(panel,clicked,i){
     if(clicked.tagName != "INPUT"){
       if(panel.childNodes[i].checked == true){
         panel.childNodes[i].checked = false;
-       }else{
+      }else{
         panel.childNodes[i].checked = true;
-       }
-       //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
-       if(i==3){
-         // THIS IS ACTIVITIES
+      }
+      //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
+      if(i==3){
+        // THIS IS ACTIVITIES
 
-       }else{
+      }else{
         //THIS IS CHILREN
-       }
+      }
     }
-  // console.log(panel.childNodes[3].checked);
+    // console.log(panel.childNodes[3].checked);
   }
 
   makeChild(fName, lName, id,dob,allergens,notes,i){
     var formattedNotes = JSON.parse(notes).notes;
     //this.enrolledChildren.push(
-     var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
-     //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
-     this.enrolledChildren.push(temp);
+    var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
+    //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
+    this.enrolledChildren.push(temp);
   }
 
 }
