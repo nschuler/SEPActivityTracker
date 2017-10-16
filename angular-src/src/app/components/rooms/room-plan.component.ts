@@ -199,7 +199,7 @@ export class RoomPlanComponent implements OnInit {
   addEvent(): void {
     this.events.push({
       activity_schedule_id: null, 
-      room_id: 3, 
+      room_id: this.room_id, 
       title: 'Reading Time',
       activity_title_id: 7, 
       start: new Date(getYear(this.viewDate), getMonth(this.viewDate), getDate(this.viewDate), 8, 0, 0),
