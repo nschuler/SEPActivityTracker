@@ -248,16 +248,13 @@ module.exports.getActivities = function(user, room_id, date_data, callback) {
 				let date = new Date(date_data);
 				let startDate;
 				let endDate;
-				let temp;
 
 				activityArray = [];
 
 				for(i in schedule)
 				{
-					temp = schedule[i].start_time.indexOf("GMT");
-					startDate = new Date(schedule[i].start_time.slice(0,temp));
-					temp = schedule[i].end_time.indexOf("GMT");
-					endDate = new Date(schedule[i].end_time.slice(0,temp));
+					startDate = new Date(schedule[i].start_time);
+					endDate = new Date(schedule[i].end_time);
 
 					if(startDate.getDate() == date.getDate() && startDate.getMonth() == date.getMonth() && startDate.getYear() == date.getYear())
 					{

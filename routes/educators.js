@@ -104,16 +104,6 @@ router.post('/activitiesbyroomid', passport.authenticate('jwt', {session:false})
 	});
 });
 
-router.post('/todaysactivitiesbyroomid', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
-	Educator.getTodaysActivitiesByRoomId(req.user[0], req.body.room_id, req.body.date, (err, data) => { 
-		if(err){ 
-			res.json({success: false, msg:'Request failed'});
-		} else {
-			res.json({success: true, msg:'Activity Data', data});
-		}
-	});
-});
-
 router.post('/roombyid', passport.authenticate('jwt', {session:false}), (req, res, next) => { 
 	Educator.getRoomById(req.user[0], req.body.room_id, (err, data) => { 
 		if(err){ 

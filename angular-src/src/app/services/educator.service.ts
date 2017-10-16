@@ -139,17 +139,6 @@ export class EducatorService {
       .map(res => res.json())
   }
 
-  getTodaysActivitiesByRoomId(room_id, date) {
-    this.loadToken();
-
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', this.authToken);
-
-    return this.http.post('http://localhost:8080/educators/todaysactivitiesbyroomid', {room_id: room_id, date: date}, {headers: headers})
-      .map(res => res.json())
-  }
-
   getRoomById(room_id) {
     this.loadToken();
 

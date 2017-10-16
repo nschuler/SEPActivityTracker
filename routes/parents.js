@@ -89,7 +89,7 @@ router.post('/getactivities', passport.authenticate('jwt', {session:false}), (re
 		if(err){
 			res.json({success: false, msg:'Request Failed'});
 		} else {
-			res.json({success: true, msg:'Activities', activities:data});
+			res.json({success: true, msg:'Future Activities', activities:data});
 		}
 	});
 });

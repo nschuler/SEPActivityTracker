@@ -315,49 +315,6 @@ module.exports.getActivitiesByRoomId = function(user, room_id, callback) {
 	});
 }
 
-module.exports.getTodaysActivitiesByRoomId = function(user, room_id, date_data, callback) {
-	this.validateEducator(user.role_type, (valid) => { 
-		if(valid)
-		{
-			// mysql_query('SELECT * FROM Schedule WHERE room_id = ?', room_id, callback);
-			mysql_query('SELECT * FROM Schedule INNER JOIN Activity ON Schedule.activity_id = Activity.id WHERE Schedule.room_id = ?', room_id, (err, schedule) => { 
-				if(err) callback(err, null);
-				let date = new Date(date_data);
-				let startDate;
-				let endDate;
-				let temp;
-
-				activityArray = [];
-
-				for(i in schedule)
-				{
-					temp = schedule[i].start_time.indexOf("GMT");
-					startDate = new Date(schedule[i].start_time.slice(0,temp));
-					temp = schedule[i].end_time.indexOf("GMT");
-					endDate = new Date(schedule[i].end_time.slice(0,temp));
-
-					if(startDate.getDate() == date.getDate() && startDate.getMonth() == date.getMonth() && startDate.getYear() == date.getYear())
-					{
-						activityArray.push({
-							start_time: startDate.getHours() + ":" + ((startDate.getMinutes() < 10) ? "0" + startDate.getMinutes() : startDate.getMinutes()) + ((startDate.getHours() < 12) ? "AM" : "PM"),
-							end_time: endDate.getHours() + ":" + ((endDate.getMinutes() < 10) ? "0" + endDate.getMinutes() : endDate.getMinutes()) + ((endDate.getHours() < 12) ? "AM" : "PM"),
-							type: schedule[i].type,
-							name: schedule[i].name,
-							description: schedule[i].description
-						});
-					}
-				}
-
-				callback(err, activityArray);
-			});
-		}
-		else
-		{
-			callback(new Error('User is not an Educator'),null);
-		}
-	});
-}
-
 module.exports.deleteActivityInstance = function(user, activity_instance_id, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
@@ -380,11 +337,11 @@ module.exports.updateActivities = function(user, activities, callback) {
 			let failed = false
 			for (var i = 0, len = activities.length; i < len; i++) {
 				// If the activity already has a ID in the schedule table - NOT A NEW ACTIVITY TO THE SCHEDULE - UPDATE IT
-				if (activities[i].activity_schedule_id != null) {
-					mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+
+			  	if (activities[i].activity_schedule_id != null) {
+				  	mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+
 						' length = ?, sunday = ?, monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ? WHERE id = ?',[activities[i].activity_title_id, activities[i].start_string, activities[i].end_string, 0, 0, 0, 0, 0, 0, 0, 0, activities[i].activity_schedule_id], (err, data) => { 
-							if (err) failed= true;
-						});
+						if (err) failed= true;
+					});
 				} else { // Its a new activity to the schedule, so we insert it
 					let activityInstance = {
 						room_id: activities[i].room_id,
