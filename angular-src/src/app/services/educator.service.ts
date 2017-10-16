@@ -194,25 +194,14 @@ export class EducatorService {
       .map(res => res.json())
   }
 
-  createActivityInstance(activity) {
+  updateActivities(activities) {
     this.loadToken();
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
 
-    return this.http.post('http://localhost:8080/educators/createactivityinstance', {activity: activity}, {headers: headers})
-      .map(res => res.json())
-  }
-
-  updateActivityInstance(activity) {
-    this.loadToken();
-
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', this.authToken);
-
-    return this.http.post('http://localhost:8080/educators/updateactivityinstance', {activity: activity}, {headers: headers})
+    return this.http.post('http://localhost:8080/educators/updateactivities', {activities: activities}, {headers: headers})
       .map(res => res.json())
   }
 

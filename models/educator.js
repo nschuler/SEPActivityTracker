@@ -315,36 +315,6 @@ module.exports.getActivitiesByRoomId = function(user, room_id, callback) {
 	});
 }
 
-module.exports.createActivityInstance = function(user, activity, callback) {
-	this.validateEducator(user.role_type, (valid) => { 
-		if(valid)
-		{
-			let activityInstance = {
-				room_id: activity.room_id,
-				activity_id: activity.activity_id,
-				start_time: activity.start_time,
-				end_time: activity.end_time,
-				length: activity.length,
-				sunday: activity.sunday,
-				monday: activity.monday,
-				tuesday: activity.tuesday,
-				wednesday: activity.wednesday,
-				thursday: activity.thursday,
-				friday: activity.friday,
-				saturday: activity.saturday,
-			}
-
-			mysql_query('INSERT INTO Schedule SET ?', activityInstance,(err, data) => { 
-				callback(err, data);
-			});
-		}
-		else
-		{
-			callback(new Error('User is not an Educator'),null);
-		}
-	});
-}
-
 module.exports.deleteActivityInstance = function(user, activity_instance_id, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
@@ -360,14 +330,46 @@ module.exports.deleteActivityInstance = function(user, activity_instance_id, cal
 	});
 }
 
-module.exports.updateActivityInstance = function(user, activity, callback) {
+module.exports.updateActivities = function(user, activities, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+
-				' length = ?, sunday = ?, monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ? WHERE id = ?',[activity.activity_id, activity.start_time, activity.end_time, activity.length, activity.sunday, activity.monday, activity.tuesday, activity.wednesday, activity.thursday, activity.friday, activity.saturday, activity.id],(err, data) => { 
-				callback(err, data);
-			});
+			let failed = false
+			for (var i = 0, len = activities.length; i < len; i++) {
+
+				// If the activity already has a ID in the schedule table - NOT A NEW ACTIVITY TO THE SCHEDULE - UPDATE IT
+			  	if (activities[i].activity_schedule_id != null) {
+				  	mysql_query('UPDATE Schedule SET activity_id = ?, start_time = ?, end_time = ?,'+
+						' length = ?, sunday = ?, monday = ?, tuesday = ?, wednesday = ?, thursday = ?, friday = ?, saturday = ? WHERE id = ?',[activities[i].activity_title_id, activities[i].start_string, activities[i].end_string, 0, 0, 0, 0, 0, 0, 0, 0, activities[i].activity_schedule_id], (err, data) => { 
+						if (err) failed= true;
+					});
+				} else { // Its a new activity to the schedule, so we insert it
+					let activityInstance = {
+						room_id: activities[i].room_id,
+						activity_id: activities[i].activity_title_id,
+						start_time: activities[i].start_string,
+						end_time: activities[i].end_string,
+						length: 0,
+						sunday: 0,
+						monday: 0,
+						tuesday: 0,
+						wednesday: 0,
+						thursday: 0,
+						friday: 0,
+						saturday: 0,
+					}
+
+					mysql_query('INSERT INTO Schedule SET ?', activityInstance,(err, data) => { 
+						if (err) failed= true;
+					});
+				}
+			}
+
+			if (!failed) {
+				callback(null, "Activity Update/Insert was Succesasful");
+			} else {
+				callback(new Error('Failed to Update Actviities Schedule'), null);
+			}
 		}
 		else
 		{

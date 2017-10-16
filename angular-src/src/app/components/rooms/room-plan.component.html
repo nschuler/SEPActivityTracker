@@ -57,6 +57,7 @@
   <hr>
 
   <h3>
+    <button class="btn btn-primary pull-right" (click)="saveSchedule()" id="saveScheduleBtn">Save Schedule</button>
     <button class="btn btn-primary pull-right" (click)="addEvent()">Add new</button>
     <div class="clearfix"></div>
   </h3>
@@ -93,7 +94,7 @@
 
           <td>
           <label for="input1">Recurring Options:</label>
-            <select class="form-control" [(ngModel)]="event.recurring" (ngModelChange)="updateRecurring(event);">
+            <select class="form-control" [(ngModel)]="event.recurring">
               <option *ngFor="let option of repeatOptions">{{option}}</option>
             </select>
             <label for="input1">Recurring End Date:</label>
