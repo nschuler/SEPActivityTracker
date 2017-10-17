@@ -30,7 +30,7 @@
                <div class="noteField">
                   <legend style="margin-left: 15px;">Notes</legend>
                   <div class="noteDisplay">
-                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)
+                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{formateDate2(note.date)}}</i>)
                       <button style="float: right;" (click)="removeNote(note.note)">x</button>
                     </li>
                   </div>
@@ -60,7 +60,7 @@
       <md-card-content>
         <p>{{activity.description}}</p>
       </md-card-content>
-      <md-card-actions>
+      <md-card-actions *ngIf="!activity.disabled">
         <div>
           <button (click)="addComment(activity)" md-button>COMMENT</button>
           <p class="comments">{{activity.comments.length}} Comments</p>
