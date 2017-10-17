@@ -3,7 +3,9 @@
   <hr>
   <md-dialog-content>
     <div class="noteDisplay">
-      <li class="list-group-item" *ngFor="let x of data.comments">{{x}}</li>
+      <li class="list-group-item" *ngFor="let x of data.comments">{{x}}
+        <button style="float: right;" (click)="removeComment(data, x)">x</button>
+      </li>
     </div>
     <div>
       <form>

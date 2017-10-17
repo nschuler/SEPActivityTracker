@@ -3,7 +3,7 @@
     <!-- Image Box -->
     <div class="imgBox">
       <span class="helper"></span>
-      <img src="http://placehold.it/450x450">
+      <img src="https://themighty.com/wp-content/uploads/2015/02/faith2.jpg">
     </div>
 
     <!-- Information Box -->
@@ -24,13 +24,15 @@
         </div>
 
         <!-- Child Notes -->
-          <button (click)=" expandBoy($event)" class = "showNote btn btn-primary" style =" margin-left: 40%;">View Notes</button>
+          <button (click)="expandBoy($event)" class = "showNote btn btn-primary" style =" margin-left: 40%;">View Notes</button>
             <div class = "panel">
               <div class="notes">
                <div class="noteField">
                   <legend style="margin-left: 15px;">Notes</legend>
                   <div class="noteDisplay">
-                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
+                    <li class="list-group-item" *ngFor="let note of child.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{formateDate2(note.date)}}</i>)
+                      <button style="float: right;" (click)="removeNote(note.note)">x</button>
+                    </li>
                   </div>
               </div>
               <div class="noteButton">
@@ -46,6 +48,7 @@
 </legend>
 
 <p style="text-align:center; font-size: 25px;" [hidden]="selectedActivities.length">No record of any activities on this day.<br /></p>
+
 <!-- Child Activities -->
 <div [hidden]="!selectedActivities.length">
   <div class="activityBox">
@@ -57,7 +60,7 @@
       <md-card-content>
         <p>{{activity.description}}</p>
       </md-card-content>
-      <md-card-actions>
+      <md-card-actions *ngIf="!activity.disabled">
         <div>
           <button (click)="addComment(activity)" md-button>COMMENT</button>
           <p class="comments">{{activity.comments.length}} Comments</p>
