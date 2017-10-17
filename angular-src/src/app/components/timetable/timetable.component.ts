@@ -127,29 +127,32 @@ export class TimetableComponent implements OnInit {
   }
 
   displayActivities() {
-    this.parentService.getActivities(this.child.room_id, this.todayString).subscribe(data => {
-      if (data.success) {
-        this.currentActivities = [];
+    if(this.child.room_id != null)
+    {
+      this.parentService.getActivities(this.child.room_id, this.todayString).subscribe(data => {
+        if (data.success) {
+          this.currentActivities = [];
 
-        for (var i = 0; i < data.activities.length; i++) {
-          this.currentActivities.push({
-            start_time: data.activities[i].start_time,
-            end_time: data.activities[i].end_time,
-            type: data.activities[i].type,
-            name: data.activities[i].name,
-            description: data.activities[i].description,
-            comments: [],
-            disabled: true
-          });
-        }
+          for (var i = 0; i < data.activities.length; i++) {
+            this.currentActivities.push({
+              start_time: data.activities[i].start_time,
+              end_time: data.activities[i].end_time,
+              type: data.activities[i].type,
+              name: data.activities[i].name,
+              description: data.activities[i].description,
+              comments: [],
+              disabled: true
+            });
+          }
 
-        // Populate activities for today.
-        this.selectedActivities = [];
-        for (var i = 0; i < this.currentActivities.length; i++) {
-          this.selectedActivities.push(this.currentActivities[i]);
+          // Populate activities for today.
+          this.selectedActivities = [];
+          for (var i = 0; i < this.currentActivities.length; i++) {
+            this.selectedActivities.push(this.currentActivities[i]);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   displayActivityRecords() {
