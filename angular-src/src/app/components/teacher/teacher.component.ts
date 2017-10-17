@@ -90,7 +90,7 @@ err => {
 });
   }
 
-  clickableBoi(panel,clicked,i){
+  clickableBoi(panel,clicked,i,data){
     if(clicked.tagName != "INPUT"){
       if(panel.childNodes[i].checked == true){
         panel.childNodes[i].checked = false;
@@ -103,15 +103,8 @@ err => {
 
       }else{
         //THIS IS CHILREN
-        //im actually ashamed by this code\\
-        var name = panel.childNodes[i+2].textContent;
-        var z = 0;
-        while(z <  this.enrolledChildren.length){
-          if(name == this.enrolledChildren[z].firstName){
-            console.log(this.enrolledChildren[z]);
-          }
-          z++;
-        }
+        //im actually proud of this code\\
+        this.currentChild = data;
        }
     }
     // console.log(panel.childNodes[3].checked);

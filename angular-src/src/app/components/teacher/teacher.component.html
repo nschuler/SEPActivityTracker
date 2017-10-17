@@ -3,7 +3,7 @@
       <div class = "act_info_box">
 
         <h2>Activities</h2>
-        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target,3)" >
+        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target,3,activity)" >
             <h1><b>{{activity.activityName}}</b></h1>
             <input type="checkbox" class = "act_checkbox" ng-model ="checkbox" >
           <p class ="act_p"><b>time:</b> {{activity.start}} - {{activity.end}}</p>
@@ -27,7 +27,7 @@
     <div class = "child_info_box">
 
               <h2>Children</h2>
-              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="clickableBoi($event.currentTarget,$event.target,1)" >
+              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="clickableBoi($event.currentTarget,$event.target,1,child)" >
                 <input type="checkbox" class = "act_checkbox_kid" ng-model ="checkbox" >
                 <h1>{{child.firstName}}</h1>
               </md-list>
