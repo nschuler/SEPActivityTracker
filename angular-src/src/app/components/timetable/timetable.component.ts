@@ -85,6 +85,7 @@ export class TimetableComponent implements OnInit {
     });
 
     this.dateToday = String(this.options.initialDate);
+    console.log(this.todayString)
   }
 
   getFamily() {
