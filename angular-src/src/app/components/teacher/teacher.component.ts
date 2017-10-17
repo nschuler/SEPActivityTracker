@@ -21,11 +21,13 @@ export class TeacherComponent implements OnInit {
   // rooms available in drop down
   myRoom: any;
   myId: any;
+  today: Date = new Date();
+  todayString: string;
   constructor( private authService: AuthService, private educatorService: EducatorService) { }
 
   ngOnInit() {
 
-
+this.todayString = this.today.getFullYear() + "-" + ((this.today.getMonth()+1 < 10) ? "0" + (this.today.getMonth()+1) : (this.today.getMonth()+1)) + "-" + ((this.today.getDate() < 10) ? "0" + this.today.getDate() : this.today.getDate());
     this.myId = JSON.parse(this.authService.loadUserData()).id;
     // this could be cleaned up
     this.educatorService.getEducators().subscribe(data => {
@@ -53,19 +55,13 @@ export class TeacherComponent implements OnInit {
       console.log("Failed to load Room By ID" + err);
   });
 
-  this.educatorService.getActivitiesByRoomId(room_id)
+  this.educatorService.getTodaysActivitiesByRoomId(room_id,this.todayString)
   .subscribe(data => {
     var i = 0;
     console.log(data.data[0]);
     while( i < data.data.length){
-      console.log(data.data[i].start_time);
-      console.log(data.data[i].end_time);
-      var sDate = new Date(data.data[i].start_time);
-      var eDate = new Date(data.data[i].end_time);
-      if(sDate.getDate()== new Date().getDate()){
-        //add a month checker so that the 31st of this month and next month and the month after done make the list
-      this.activities.push(new Activity("Activity",sDate.getHours(),eDate.getHours()));
-      }
+      this.activities.push(new Activity(data.data[i].name,data.data[i].start_time,data.data[i].end_time));
+
       i++;
     }
     console.log(this.activities);
@@ -97,13 +93,11 @@ err => {
       }else{
         panel.childNodes[i].checked = true;
       }
-      //this is not good looking bois stuff, look i get it this is poor coding in general and i would be sorry but im not cause its late at night and i need to be writing a report for 2 other subjects
       if(i==3){
         // THIS IS ACTIVITIES
 
       }else{
         //THIS IS CHILREN
-        //im actually proud of this code\\
         this.currentChild = data;
        }
     }
@@ -112,9 +106,7 @@ err => {
 
   makeChild(fName, lName, id,dob,allergens,notes,i){
     var formattedNotes = JSON.parse(notes).notes;
-    //this.enrolledChildren.push(
     var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
-    //if(this.enrolledChildren == undefined){console.log("25-8 pun2k weight 25-8 pun2k weight 25-8 pun2k weight Out yo flesh Out yo flesh")}
     this.enrolledChildren.push(temp);
   }
 

@@ -15,8 +15,12 @@ h1{
   font-size: 12pt;
 }
 
+p{
+  font-size: 10pt;
+
+}
+
 p.act_p{
-  font-size: 7pt;
   margin-left:1%;
 }
 
