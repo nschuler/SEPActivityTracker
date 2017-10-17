@@ -10,6 +10,38 @@ export class EducatorService {
 
   constructor(private http:Http) { }
 
+  getProfile(){
+    let headers = new Headers();
+    this.loadToken(); // Grab auth token from local storage
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.get('http://localhost:8080/educators/profile', {headers: headers})
+      .map(res => res.json());
+  }
+
+  getSessionData(room_id, date) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/getsessiondata', {room_id: room_id, date: date}, {headers: headers})
+      .map(res => res.json())
+  }
+
+  loadSessionData(room_id, session) {
+    this.loadToken();
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+
+    return this.http.post('http://localhost:8080/educators/getsessiondata', {room_id: room_id, session: JSON.stringify(session)}, {headers: headers})
+      .map(res => res.json())
+  }
+
   getRooms(){
     let headers = new Headers();
     this.loadToken(); // Grab auth token from local storage

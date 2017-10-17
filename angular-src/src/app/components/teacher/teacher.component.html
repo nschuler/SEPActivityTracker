@@ -1,35 +1,58 @@
-<html>
-    <!-- left side column -->
-      <div class = "act_info_box">
+<div *ngIf="room_id">
+  <div class="container">
 
-        <h2>Activities</h2>
-        <md-list class= "act_info" *ngFor="let activity of activities" (click)="clickableBoi($event.currentTarget,$event.target,3,activity)" >
-            <h1><b>{{activity.activityName}}</b></h1>
-            <input type="checkbox" class = "act_checkbox" ng-model ="checkbox" >
-          <p class ="act_p"><b>time:</b> {{activity.start}} - {{activity.end}}</p>
-        </md-list>
-
+    <div class="col-md-6">
+      <h2 class="text-center">Activities</h2>
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr style="text-align: center;">
+              <th style="text-align: center;">Activity Name</th>
+              <th style="text-align: center;">Start Time</th>
+              <th style="text-align: center;">End Time</th>
+              <th style="text-align: center;">View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let activity of activityList | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td style="text-align: center;"> {{ activity.name }} </td>
+              <td style="text-align: center;"> {{ activity.start_time }} </td>
+              <td style="text-align: center;"> {{ activity.end_time }} </td>
+              <td style="text-align: center;"><button class="btn btn-primary" (click)="viewActivity(activity)">View</button></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    <!-- middle stuff -->
-          <div class="mid_section">
-              <h3>About {{currentChild.firstName}} {{currentChild.familyName}}</h3>
-              <p><b>DOB:</b> {{currentChild.dob}}</p>
-              <br>
-              <h3><b>Information</b></h3>
-              <p><b>Allergies:</b> {{currentChild.allergens}}</p>
-              <br>
-              <h3>Notes:</h3>
-              <div class="noteDisplay">
-                <li class="list-group-item" *ngFor="let note of currentChild.notes"><b>{{note.author}}:</b> {{note.note}} (<i>{{note.date}}</i>)</li>
-              </div>
-          </div>
-    <!-- right column -->
-    <div class = "child_info_box">
+    </div>
 
-              <h2>Children</h2>
-              <md-list class= "child_info" *ngFor="let child of  enrolledChildren" (click)="clickableBoi($event.currentTarget,$event.target,1,child)" >
-                <input type="checkbox" class = "act_checkbox_kid" ng-model ="checkbox" >
-                <h1>{{child.firstName}}</h1>
-              </md-list>
-            </div>
-    </html>
+    <div class="col-md-6">
+      <h2 class="text-center">Children</h2>
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr style="text-align: center;">
+              <th style="text-align: center;">Select</th>
+              <th style="text-align: center;">Name</th>
+              <th style="text-align: center;">DOB</th>
+              <th style="text-align: center;">Allergens</th>
+              <th style="text-align: center;">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let child of childrenList">
+              <td style="text-align: center;"><input type="checkbox" value="{{ child.id }}"></td>
+              <td style="text-align: center;"> {{ child.first_name }} {{ child.last_name }}</td>
+              <td style="text-align: center;"> {{ formatDate(child.dob) }} </td>
+              <td style="text-align: center;"> {{ child.allergens }} </td>
+              <td style="text-align: center;"><button class="btn btn-primary" (click)="viewNotes(child.notes)">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!room_id">
+  <p style="text-align:center; font-size: 25px;">You are not logged into a room</p>
+</div>

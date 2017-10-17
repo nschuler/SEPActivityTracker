@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { EducatorService } from '../../services/educator.service';
 import { AuthService } from '../../services/auth.service';
 import { ParentComponent } from '../parent/parent.component';
 import { element } from 'protractor';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA} from '@angular/material';
+import { ViewNoteComponent } from '../rooms/room-admin.component';
 
 @Component({
   selector: 'app-teacher',
@@ -10,135 +12,59 @@ import { element } from 'protractor';
   styleUrls: ['./teacher.component.css']
 })
 export class TeacherComponent implements OnInit {
-
-
-  // child currently being viewed
-  currentChild: any;
-  // activities in current viewed room
-  activities: any[] = [];
-  // children in current viewed room
-  enrolledChildren: Child[] = [];
-  // rooms available in drop down
-  myRoom: any;
-  myId: any;
+  profile: any;
+  room_id: any;
+  activityList = [];
+  childrenList = [];
   today: Date = new Date();
-  todayString: string;
-  constructor( private authService: AuthService, private educatorService: EducatorService) { }
+  todayString = this.today.getFullYear() + "-" + ((this.today.getMonth()+1 < 10) ? "0" + (this.today.getMonth()+1) : (this.today.getMonth()+1)) + "-" + ((this.today.getDate() < 10) ? "0" + this.today.getDate() : this.today.getDate());
+
+  constructor( private authService: AuthService, private educatorService: EducatorService, public dialog: MdDialog) { }
 
   ngOnInit() {
+    this.educatorService.getProfile().subscribe(data => {
+      if(data.success)
+      {
+        this.profile = data.educators[0];
+        this.room_id = this.profile.room_id;
 
-this.todayString = this.today.getFullYear() + "-" + ((this.today.getMonth()+1 < 10) ? "0" + (this.today.getMonth()+1) : (this.today.getMonth()+1)) + "-" + ((this.today.getDate() < 10) ? "0" + this.today.getDate() : this.today.getDate());
-    this.myId = JSON.parse(this.authService.loadUserData()).id;
-    // this could be cleaned up
-    this.educatorService.getEducators().subscribe(data => {
-      var i =0;
-      while(i<data.educators.length){
+        this.educatorService.getTodaysActivitiesByRoomId(this.room_id, this.todayString).subscribe(activities => {
+          if(activities.success)
+          {
+            for(var i = 0; i < activities.data.length; i++)
+            {
+              this.activityList.push(activities.data[i]);
+            }
+          }
+        });
 
-        if(this.myId == data.educators[i].id){
-          //this.room_id = data.educators[i].room_id;
-          this.getRoom(data.educators[i].room_id);
-          break;
-        }
-        i++;
+        this.educatorService.getChildrenInRoom(this.room_id).subscribe(children => {
+          if(children.success)
+          {
+            for(var i = 0; i < children.children.length; i++)
+            {
+              this.childrenList.push(children.children[i]);
+            }
+          }
+        });
       }
-    }, err => {console.log(err);});
+    });
   }
 
-  getRoom(room_id){
-
-    this.educatorService.getRoomById(room_id)
-    .subscribe(data => {
-      //this.myRoom = data.data[0];
-
-    },
-    err => {
-      console.log("Failed to load Room By ID" + err);
-  });
-
-  this.educatorService.getTodaysActivitiesByRoomId(room_id,this.todayString)
-  .subscribe(data => {
-    var i = 0;
-    console.log(data.data[0]);
-    while( i < data.data.length){
-      this.activities.push(new Activity(data.data[i].name,data.data[i].start_time,data.data[i].end_time));
-
-      i++;
-    }
-    console.log(this.activities);
-},
-  err => {
-    console.log("Failed to load Room By ID" + err);
-});
-
-this.educatorService.getChildrenInRoom(room_id)
-.subscribe(data => {
-  //this.enrolledChildren = data.children;
-  var i = 0;
-  //this.enrolledChildren = data.children;
-  while(i< data.children.length ){
-    this.makeChild(data.children[i].first_name, data.children[i].last_name, data.children[i].id,data.children[i].dob,data.children[i].allergens,data.children[i].notes,i)
-    i++;
-  }
-  this.currentChild = this.enrolledChildren[0];
-},
-err => {
-  console.log("Failed to load Room By ID" + err);
-});
+  viewActivity(activity) {
+    console.log(activity);
   }
 
-  clickableBoi(panel,clicked,i,data){
-    if(clicked.tagName != "INPUT"){
-      if(panel.childNodes[i].checked == true){
-        panel.childNodes[i].checked = false;
-      }else{
-        panel.childNodes[i].checked = true;
+  viewNotes(notes) {
+    let dialogRef = this.dialog.open(ViewNoteComponent, {
+      width: '600px',
+      data: {
+          notes: JSON.parse(notes).notes,
       }
-      if(i==3){
-        // THIS IS ACTIVITIES
-
-      }else{
-        //THIS IS CHILREN
-        this.currentChild = data;
-       }
-    }
-    // console.log(panel.childNodes[3].checked);
+    });
   }
 
-  makeChild(fName, lName, id,dob,allergens,notes,i){
-    var formattedNotes = JSON.parse(notes).notes;
-    var temp = new Child(fName, lName, id, dob, allergens, formattedNotes);
-    this.enrolledChildren.push(temp);
-  }
-
-}
-class Child {
-  firstName: any;
-  familyName: any;
-  dob: any;
-  address: string;
-  allergens: any;
-  childId: any;
-  notes: any;
-
-  constructor(firstname, familyName, childId, dob, allergens, notes ) {
-    this.firstName = firstname;
-    this.familyName = familyName;
-    this.childId = childId;
-    this.dob = dob;
-    this.allergens = allergens;
-    this.notes = notes;
-
-  }
-}
-class Activity {
-  activityName: any;
-  start: any;
-  end: any;
-
-  constructor( activityName, start, end) {
-    this.activityName = activityName;
-    this.start = start;
-    this.end = end;
-
+  formatDate(date) {
+    return date.split("T")[0];
   }
 }

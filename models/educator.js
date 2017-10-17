@@ -5,6 +5,66 @@ var mysql_query = require('../connection');
 
 var EDUCATOR = 2;
 
+module.exports.getProfile = function(user, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			mysql_query('SELECT * FROM Educator WHERE id = ?', user.id, (err, educator)=>{
+				if(err) callback(err, null);
+				callback(err, educator);
+			});
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.getSessionData = function(user, room_id, date, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			callback(new Error('incomplete'), null);
+			// mysql_query('SELECT * FROM Session WHERE id = ?', room_id, (err,data) => {
+			// 	if(err) callback(err,null);
+
+			// 	if(data[0].date == date)
+			// 	{
+			// 		callback(err,data);
+			// 	}
+			// 	else
+			// 	{
+			// 		mysql_query('UPDATE Session SET date = ?, session = ? WHERE id = ?',[date,'{"session":[]}', room_id], (err,data) => {
+			// 			callback(err,"No session data");
+			// 		});
+			// 	}
+			// });
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
+module.exports.loadSessionData = function(user, room_id, session, callback) {
+	this.validateEducator(user.role_type, (valid) => { 
+		if(valid)
+		{
+			callback(new Error('incomplete'), null);
+			// mysql_query('UPDATE Session SET session = ? WHERE id = ?',[session, room_id], (err,data) => {
+			// 	if(err) throw err;
+			// 	callback(err,data);
+			// });
+		}
+		else
+		{
+			callback(new Error('User is not an Educator'),null);
+		}
+	});
+}
+
 module.exports.getEducators = function(user, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
@@ -64,9 +124,9 @@ module.exports.getChildrenInRoom = function(user, room_id, callback) {
 	this.validateEducator(user.role_type, (valid) => { 
 		if(valid)
 		{
-			this.fetchChildrenFromDB(room_id, (err, children) => {
-				if (err) callback(err, null);
-				callback(err, children);
+			mysql_query('SELECT * FROM Child WHERE room_id = ?', room_id, (err, data) => {
+				if(err) throw err;
+				callback(err,data);
 			});
 		}
 		else
@@ -239,19 +299,6 @@ module.exports.getActivityTypes = function(user, callback) {
 		else
 		{
 			callback(new Error('User is not an Educator'),null);
-		}
-	});
-}
-
-module.exports.fetchChildrenFromDB = function(room_id, callback) {
-	mysql_query('SELECT * FROM Child WHERE room_id = ?', room_id, (err, data) => {
-		if (data) 
-		{
-			callback(err, data);
-		}
-		else
-		{
-			callback(err, null);
 		}
 	});
 }

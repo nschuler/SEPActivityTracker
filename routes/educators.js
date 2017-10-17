@@ -6,6 +6,35 @@ const config = require('../config/database');
 
 var Educator = require('../models/educator')
 
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.getProfile(req.user[0], (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Educator Profile', educators:data});
+		}
+	});
+});
+
+router.post('/getsessiondata', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.getSessionData(req.user[0], req.body.room_id, req.body.date, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Session Data', session:data});
+		}
+	});
+});
+
+router.post('/loadsessiondata', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+	Educator.getSessionData(req.user[0], req.body.room_id, req.body.session, (err, data) => {
+		if(err){
+			res.json({success: false, msg:'Request failed'});
+		} else {
+			res.json({success: true, msg:'Session Data', session:data});
+		}
+	});
+});
 
 // All Educators
 router.get('/all', passport.authenticate('jwt', {session:false}), (req, res, next) => {
